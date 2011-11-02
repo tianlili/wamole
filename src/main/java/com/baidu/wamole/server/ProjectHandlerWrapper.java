@@ -27,7 +27,7 @@ public class ProjectHandlerWrapper implements HandlerWrapper {
 
 	private void build() {
 		for (Project project : list) {
-			WebAppContext context = new WebAppContext(project.getRootDir(), "/project/"
+			WebAppContext context = new WebAppContext(project.getPath(), "/project/"
 					+ project.getName() + "/view");
 			// 设定resource可在server启动后改变
 			context.setDefaultsDescriptor(Thread.currentThread().getClass()

@@ -27,7 +27,6 @@ public class Main {
 	}
 
 	public void loadConfig() {
-		System.out.println("root" + root);
 		File file = new File(root);
 		if (!file.exists() || !new File(root + "/config.xml").exists()) {
 			initWamole();

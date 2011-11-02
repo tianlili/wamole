@@ -73,7 +73,7 @@ public class TangramProcessor implements Processor<TangramKiss> {
 //		this.list.add("/project/" + project.getName()
 //				+ "/view/test/tools/br/js/UserAction.js");
 		list.add("/resource/UserAction.js");
-		this.getDepends(project.getRootDir()
+		this.getDepends(project.getPath()
 				+ kiss.getName().replace("test", "src"));
 		this.list.add(getSrcPath(kiss.getName()));
 		this.list.add(getCasePath(kiss.getName()));
@@ -114,10 +114,10 @@ public class TangramProcessor implements Processor<TangramKiss> {
 		String relativePath = null;
 		while (matcher.find()) {
 			String name = matcher.group(1);
-			path = project.getRootDir() + "/src/" + name.replace(".", "/")
+			path = project.getPath() + "/src/" + name.replace(".", "/")
 					+ ".js";
 			relativePath = "/project/" + project.getName() + "/view"
-					+ path.substring(project.getRootDir().length());
+					+ path.substring(project.getPath().length());
 			if (!list.contains(relativePath)) {
 				if (!matched.contains(path)) {
 					getDepends(path);

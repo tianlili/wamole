@@ -50,6 +50,7 @@ public class Wamole {
 	public void load() {
 		XmlFile file = this.getConfigFile();
 		try {
+			System.out.println(file.getFile().getAbsolutePath());
 			file.unmarshal(this);
 		} catch (IOException e) {
 			e.printStackTrace();

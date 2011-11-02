@@ -17,19 +17,10 @@
 	<projects>
 		<com.baidu.wamole.model.TangramProject>
 			<name>t</name>
-			<rootDir>F:\Workplaces\Workplace\Tangram-base</rootDir>
+			<path>D:\workspace\git\git\Tangram-base</path>
 			<inited>false</inited>
 			<casepattern>/test/baidu/**/*.js</casepattern>
 			<processor class="com.baidu.wamole.process.TangramProcessor" />
-		</com.baidu.wamole.model.TangramProject>
-		<com.baidu.wamole.model.TangramProject>
-			<name>tc</name>
-			<rootDir>F:\Workplaces\Workplace\Tangram-component</rootDir>
-			<inited>false</inited>
-			<casepattern>/test/baidu/**/*.js</casepattern>
-			<processor class="com.baidu.wamole.process.TangramComponentProcessor">
-				<depend>t</depend>
-			</processor>
 		</com.baidu.wamole.model.TangramProject>
 	</projects>
 </wamole>

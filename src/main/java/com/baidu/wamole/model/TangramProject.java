@@ -29,7 +29,7 @@ public class TangramProject extends AbstractProject {
 		if (!inited) {
 			matcher = new AntPathMatcher();
 			kisses = new ConcurrentHashMap<String, Kiss>();
-			File root = new File(this.getRootDir());
+			File root = new File(this.getPath());
 			if (root.isDirectory()) {
 				parse(root);
 			} else {
@@ -52,7 +52,7 @@ public class TangramProject extends AbstractProject {
 			} else {
 				String absolutePath = file2.getAbsolutePath();
 				String relativePath = absolutePath.substring(new File(this
-						.getRootDir()).getAbsolutePath().length());
+						.getPath()).getAbsolutePath().length());
 				relativePath = relativePath.replace("\\", "/");
 				System.out.println("casePattern: " + casepattern + "; relativePath:" + relativePath + " ; result" + matcher.match(casepattern, relativePath));
 				if (matcher.match(casepattern, relativePath)) {

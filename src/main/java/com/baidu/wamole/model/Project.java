@@ -17,7 +17,7 @@ public interface Project {
 	 * 
 	 * @return
 	 */
-	String getRootDir();
+	String getPath();
 
 	/**
 	 * 根据名称获取具体用例

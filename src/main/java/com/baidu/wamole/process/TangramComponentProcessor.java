@@ -30,12 +30,12 @@ public class TangramComponentProcessor extends TangramProcessor {
 		this.list.add("/project/" + project.getName()
 				+ "/view/test/tools/br/js/tools.js");
 		list.add("/resource/UserAction.js");
-		this.getDepends(project.getRootDir()
+		this.getDepends(project.getPath()
 				+ kiss.getName().replace("test", "src"));
 		this.list.add(getSrcPath(kiss.getName()));
 
 		// 添加对特定case的tools.js资源加入
-		String path = this.project.getRootDir() + kiss.getName();
+		String path = this.project.getPath() + kiss.getName();
 		path = path.replace(".js", "/tools.js");
 		if (FileUtil.existsFile(path)) {
 			this.list.add(getCasePath(kiss.getName()).replace(".js",
@@ -53,12 +53,12 @@ public class TangramComponentProcessor extends TangramProcessor {
 		String relativePath = null;
 		while (matcher.find()) {
 			String name = matcher.group(1);
-			path = project.getRootDir() + "/src/" + name.replace(".", "/")
+			path = project.getPath() + "/src/" + name.replace(".", "/")
 					+ ".js";
 			// 有项目依赖的解决方式
 			if (!FileUtil.existsFile(path)) {
-				path = path.replace(project.getRootDir(),
-						dependProject.getRootDir());
+				path = path.replace(project.getPath(),
+						dependProject.getPath());
 				if (!FileUtil.existsFile(path)) {
 					throw new ConfigException(
 							"Tangram project parse error: can't find depend resource : "
@@ -66,10 +66,10 @@ public class TangramComponentProcessor extends TangramProcessor {
 				}
 				relativePath = "/project/" + dependProject.getName()
 						+ "/view"
-						+ path.substring(dependProject.getRootDir().length());
+						+ path.substring(dependProject.getPath().length());
 			} else {
 				relativePath = "/project/" + project.getName() + "/view"
-						+ path.substring(project.getRootDir().length());
+						+ path.substring(project.getPath().length());
 			}
 
 			if (!list.contains(relativePath)) {
