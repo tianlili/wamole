@@ -43,7 +43,7 @@ public class ExecuteResource {
 				return Response.ok(instance.getExecutePage(path)).build();
 			} catch (TestException e) {
 				e.printStackTrace();
-				return Response.ok(e.getMessage() + "path：" + path).build();
+				return Response.ok(e.getMessage() + "path:" + path).build();
 			}
 		else
 			return Response.status(404).build();
