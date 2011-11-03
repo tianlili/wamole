@@ -1,9 +1,10 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>WaMole</groupId>
-  <artifactId>WaMole</artifactId>
-  <version>1.0.0</version>
-  <build>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>WaMole</groupId>
+	<artifactId>WaMole</artifactId>
+	<version>1.0.0</version>
+	<build>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -31,6 +32,13 @@
 			</plugin>
 		</plugins>
 	</build>
+	<repositories>
+		<repository>
+			<id>caucho</id>
+			<name>Caucho</name>
+			<url>http://caucho.com/m2</url>
+		</repository>
+	</repositories>
 	<dependencies>
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
@@ -54,28 +62,12 @@
 		</dependency>
 
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>jstl</artifactId>
-			<version>1.2</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
 			<version>1.6.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.json</groupId>
-			<artifactId>json</artifactId>
-			<version>20090211</version>
-		</dependency>
-		<dependency>
-			<groupId>quercus</groupId>
-			<artifactId>quercus</artifactId>
-			<version>4.0.11</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/lib/quercus.jar</systemPath>
-		</dependency>
+		</dependency><!-- <dependency> <groupId>quercus</groupId> <artifactId>quercus</artifactId> 
+			<version>4.0.11</version> <scope>system</scope> <systemPath>${project.basedir}/lib/quercus.jar</systemPath> 
+			</dependency> -->
 		<dependency>
 			<groupId>org.freemarker</groupId>
 			<artifactId>freemarker</artifactId>
@@ -107,7 +99,12 @@
 		<dependency>
 			<groupId>com.caucho</groupId>
 			<artifactId>resin</artifactId>
-			<version>3.0.9</version>
+			<version>4.0.20</version>
+		</dependency>
+		<dependency>
+			<groupId>com.caucho</groupId>
+			<artifactId>resin-quercus</artifactId>
+			<version>3.1.5</version>
 		</dependency>
 	</dependencies>
 	<properties>
