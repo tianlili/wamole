@@ -5,6 +5,7 @@ import java.io.StringWriter;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Request;
@@ -46,12 +47,12 @@ public class RootResource {
 		return Response.ok(writer.getBuffer().toString()).build();
 	}
 
-//	@Path("/project/{name}")
-//	public ProjectResource getProjectByName(@PathParam("name") String name) {
-//		ProjectResource resource = context.getResource(ProjectResource.class);
-//		resource.setName(name);
-//		return resource;
-//	}
+	@Path("/project/{name}")
+	public ProjectResource getProjectByName(@PathParam("name") String name) {
+		ProjectResource resource = context.getResource(ProjectResource.class);
+		resource.setName(name);
+		return resource;
+	}
 
 	@Path("/task")
 	public TaskResource getResourceByName() {

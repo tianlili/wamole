@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.baidu.wamole.data.Exported;
 import com.baidu.wamole.exception.TestException;
 
 public class Browser {
@@ -51,6 +52,7 @@ public class Browser {
 		return active;
 	}
 
+	@Exported
 	public String getName() {
 		return name;
 	}
@@ -59,6 +61,7 @@ public class Browser {
 		this.name = name;
 	}
 
+	@Exported
 	public String getVersion() {
 		return version;
 	}
@@ -67,6 +70,7 @@ public class Browser {
 		this.version = version;
 	}
 
+	@Exported
 	public String getOs() {
 		return os;
 	}
@@ -75,6 +79,7 @@ public class Browser {
 		this.os = os;
 	}
 
+	@Exported
 	public String getIp() {
 		return ip;
 	}
@@ -83,6 +88,7 @@ public class Browser {
 		this.ip = ip;
 	}
 
+	@Exported
 	public String getId() {
 		return id;
 	}
