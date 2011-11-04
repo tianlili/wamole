@@ -52,6 +52,11 @@ public class Browser {
 		return active;
 	}
 
+	@Exported	
+	public boolean getStatus(){
+		return active;
+	}
+
 	@Exported
 	public String getName() {
 		return name;

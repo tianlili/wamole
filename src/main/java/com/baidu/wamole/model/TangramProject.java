@@ -10,7 +10,7 @@ import com.baidu.wamole.exception.TestException;
 import com.baidu.wamole.process.Processor;
 import com.baidu.wamole.util.AntPathMatcher;
 
-public class TangramProject extends AbstractProject {
+public class TangramProject extends AbstractProject{
 
 	private ConcurrentHashMap<String, Kiss> kisses;
 	private String casepattern;

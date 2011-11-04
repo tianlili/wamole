@@ -17,6 +17,6 @@ public class BrowserDataResource {
 				BrowserManager.class);
 		List<Browser> list = bm.getBrowsers();
 
-		return Response.ok(JsonParser.toJsonList(list).toString()).build();
+		return Response.ok(JsonParser.listToJson(list).toString()).build();
 	}
 }
