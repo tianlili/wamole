@@ -45,20 +45,21 @@ public class ProjectResource {
 
 	@GET
 	public Response get() {
-		if (null == project) {
-			return Response.noContent().build();
-		}
+//		if (null == project) {
+//			return Response.noContent().build();
+//		}
 		StringWriter writer = new StringWriter();
 		try {
 			Template template = ConfigurationFactory.getInstance().getTemplate(
-					"project/project.ftl");
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("project", project);
-			template.process(map, writer);
+					"pages/page/projects.html");
+//			Map<String, Object> map = new HashMap<String, Object>();
+//			map.put("project", project);
+//			template.process(map, writer);
+			template.dump(writer);
 		} catch (IOException e) {
 			e.printStackTrace();
-		} catch (TemplateException e) {
-			e.printStackTrace();
+//		} catch (TemplateException e) {
+//			e.printStackTrace();
 		}
 		return Response.ok(writer.getBuffer().toString()).build();
 	}

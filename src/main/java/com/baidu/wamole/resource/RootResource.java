@@ -33,7 +33,7 @@ public class RootResource {
 //		List<Project> list = Wamole.getInstance().getProjectList().getView();
 		try {
 			Template template = ConfigurationFactory.getInstance().getTemplate(
-					"index.html");
+					"pages/page/index.html");
 //			Map<String, Object> map = new HashMap<String, Object>();
 //			map.put("projects", list);
 //			template.process(map, writer);
@@ -51,6 +51,13 @@ public class RootResource {
 	public ProjectResource getProjectByName(@PathParam("name") String name) {
 		ProjectResource resource = context.getResource(ProjectResource.class);
 		resource.setName(name);
+		return resource;
+	}
+	
+	@Path("/project")
+	public ProjectResource getProject() {
+		ProjectResource resource = context.getResource(ProjectResource.class);
+		resource.get();
 		return resource;
 	}
 
