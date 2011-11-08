@@ -13,7 +13,7 @@ import com.baidu.wamole.model.Project;
 import com.baidu.wamole.model.Wamole;
 
 @Produces("text/html;charset=UTF-8")
-public class ExecuteResource {
+public class FrameResource {
 	@Context
 	UriInfo uriInfo;
 
@@ -29,21 +29,22 @@ public class ExecuteResource {
 	 */
 	@GET
 	@Path("{path: .*}")
-	public Response execCase(@PathParam("path") String path) {
+	public Response importCase(@PathParam("path") String path) {
 		path = "/" + path;
-//		System.out.println("path:" + path);
-//		System.out.println(uriInfo.getPath());
 		String uri = uriInfo.getPath();
-//		System.out.println(uriInfo.getRequestUri());
 		String project = uri.substring("project/".length(),
-				uri.indexOf("/exec/"));
+				uri.indexOf("/frame/"));
 		Project<?, ?> instance = Wamole.getInstance().getProject(project);
 		if (path.endsWith(".js"))
 			try {
-				return Response.ok(instance.getExecutePage(path)).build();
+				String s = instance.getExecutePage(path);
+				String testimport = s.substring(s.lastIndexOf("<script"), s.lastIndexOf("</script>") +"</script>".length());
+				s = s.replace(testimport, "");
+//				System.out.println(s);
+				return Response.ok(s).build();
 			} catch (TestException e) {
 				e.printStackTrace();
-				return Response.ok(e.getMessage() + "path:" + path).build();
+				return Response.ok(e.getMessage() + "path：" + path).build();
 			}
 		else
 			return Response.status(404).build();

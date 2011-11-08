@@ -16,7 +16,7 @@
 	<projects>
 		<com.baidu.wamole.model.TangramProject>
 			<name>t</name>
-			<rootDir></rootDir>
+			<path></path>
 			<inited>false</inited>
 			<casepattern>test/**.js</casepattern>
 		</com.baidu.wamole.model.TangramProject>

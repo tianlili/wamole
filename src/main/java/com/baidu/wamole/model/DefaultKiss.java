@@ -1,13 +1,13 @@
 package com.baidu.wamole.model;
 
 
-public class TangramKiss implements Kiss {
+public class DefaultKiss implements Kiss {
 
-	private String name;
+	protected String name;
 
-	private Project project;
+	protected Project project;
 
-	public TangramKiss(Project project, String name) {
+	public DefaultKiss(Project project, String name) {
 		this.name = name;
 		this.project = project;
 	}

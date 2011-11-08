@@ -30,7 +30,12 @@ public class RootResource {
 	@GET
 	public Response getView() {
 		StringWriter writer = new StringWriter();
+//<<<<<<< HEAD
 //		List<Project> list = Wamole.getInstance().getProjectList().getView();
+//=======
+//		List<Project<?, ?>> list = Wamole.getInstance().getProjectList()
+//				.getView();
+//>>>>>>> refs/heads/daiqili
 		try {
 			Template template = ConfigurationFactory.getInstance().getTemplate(
 					"pages/page/index.html");
@@ -74,5 +79,10 @@ public class RootResource {
 	@Path("/data")
 	public DataResource getData(){
 		return context.getResource(DataResource.class);
+	}
+
+	@Path("/build")
+	public BuildResource build() {
+		return context.getResource(BuildResource.class);
 	}
 }

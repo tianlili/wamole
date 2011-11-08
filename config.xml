@@ -1,7 +1,7 @@
 <wamole>
 	<modules>
 		<bm>
-			<step>20</step>
+			<step>20000</step>
 			<autorun>false</autorun>
 			<statics>
 				<com.baidu.wamole.browser.StaticBrowser>
@@ -10,17 +10,39 @@
 					<invoker>com.baidu.wamole.browser.STAFInvoker</invoker>
 				</com.baidu.wamole.browser.StaticBrowser>
 			</statics>
-			<browsers/>
+			<browsers />
 		</bm>
 	</modules>
-	<config class="com.baidu.wamole.config.TangramConfig"/>
+	<config class="com.baidu.wamole.config.TangramConfig" />
 	<projects>
-		<com.baidu.wamole.model.TangramProject>
+		<com.baidu.wamole.model.JsProject>
 			<name>t</name>
 			<path>D:\workspace\git\git\Tangram-base</path>
 			<inited>false</inited>
-			<casepattern>/test/baidu/**/*.js</casepattern>
+			<parser class="com.baidu.wamole.model.TangramParser" />
 			<processor class="com.baidu.wamole.process.TangramProcessor" />
-		</com.baidu.wamole.model.TangramProject>
+
+			<buildSteps>
+				<com.baidu.wamole.task.JsBuildStep>
+					<browsers>
+						<string>MSIE6.0</string>
+						<string>MSIE7.0</string>
+						<string>MSIE8.0</string>
+						<string>CHROME</string>
+						<string>GECKO</string>
+					</browsers>
+				</com.baidu.wamole.task.JsBuildStep>
+			</buildSteps>
+			<!-- <browsers>IE6,IE7,IE8,GECKO,CHROME</browsers> -->
+		</com.baidu.wamole.model.JsProject>
+		<com.baidu.wamole.model.JsProject>
+			<name>tc</name>
+			<path>D:\workspace\git\git\Tangram-component</path>
+			<inited>false</inited>
+			<casepattern>/test/baidu/**/*.js</casepattern>
+			<processor class="com.baidu.wamole.process.TangramComponentProcessor">
+				<depend>t</depend>
+			</processor>
+		</com.baidu.wamole.model.JsProject>
 	</projects>
 </wamole>
