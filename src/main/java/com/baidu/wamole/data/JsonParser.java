@@ -32,11 +32,13 @@ public class JsonParser {
 			// 尝试转换数组
 			if (fieldObject instanceof List) {
 				value = listToJson((List<?>) fieldObject).toString();
-			} else
-				value = "\"" + m.invoke(obj).toString() + "\"";
-			if (checkExported(m, obj, URLEncode.class))
-				value = URLEncoder.encode(value,
-						m.getAnnotation(URLEncode.class).enc());
+			} else {
+				value = m.invoke(obj).toString();
+				if (checkExported(m, obj, URLEncode.class))
+					value = URLEncoder.encode(value,
+							m.getAnnotation(URLEncode.class).enc());
+				value = "\"" + value + "\"";
+			}
 			sb.append(value);
 			sb.append(",");
 		} catch (Exception e) {

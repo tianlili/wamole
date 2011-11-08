@@ -26,15 +26,15 @@ public class ProjectDataResource {
 	 */
 	@GET
 	public Response getProjectList() {
-		List<Project> list = Wamole.getInstance().getProjectList().getView();
+		List<Project<?,?>> list = Wamole.getInstance().getProjectList().getView();
 		return Response.ok(JsonParser.listToJson(list).toString()).build();
 	}
 
 	@GET
 	@Path("/{name: [^/]+}")
 	public Response getProject(@PathParam("name") String projName) {
-		List<Project> list = Wamole.getInstance().getProjectList().getView();
-		for (Project p : list)
+		List<Project<?,?>> list = Wamole.getInstance().getProjectList().getView();
+		for (Project<?,?> p : list)
 			if (p.getName().equals(projName)) {
 				return Response.ok(JsonParser.objToJson(p)).build();
 			}
@@ -45,8 +45,8 @@ public class ProjectDataResource {
 	@POST
 	@Path("/{name: [^/]+}")
 	public Response addProject(@PathParam("name") String projName) {
-		List<Project> list = Wamole.getInstance().getProjectList().getView();
-		for (Project p : list)
+		List<Project<?,?>> list = Wamole.getInstance().getProjectList().getView();
+		for (Project<?,?> p : list)
 			if (p.getName().equals(projName)) {
 				return Response.ok(JsonParser.objToJson(p)).build();
 			}
@@ -65,7 +65,7 @@ public class ProjectDataResource {
 	@Path("/{name:[^/]+}/view{path:[^?]*}")
 	public Response listView(@PathParam("name") String name,
 			@PathParam("path") String path) {
-		Project project = Wamole.getInstance().getProject(name);
+		Project<?,?> project = Wamole.getInstance().getProject(name);
 		return Response.ok(
 				JsonParser.objToJson(ProjectFileData.getData(project, path)).toString())
 				.build();

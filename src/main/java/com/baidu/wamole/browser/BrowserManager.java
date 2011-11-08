@@ -4,19 +4,72 @@ import java.util.List;
 
 import com.baidu.wamole.exception.TestException;
 import com.baidu.wamole.model.Module;
+import com.baidu.wamole.model.JsKiss;
+import com.baidu.wamole.task.BuildStep;
+import com.baidu.wamole.task.JsBuildStep;
+import com.baidu.wamole.task.Result;
 import com.baidu.wamole.xml.CopyOnWriteList;
 
 public class BrowserManager implements Module {
 	private CopyOnWriteList<StaticBrowser> statics;
 	private CopyOnWriteList<Browser> browsers;
-	/*package */BrowserManager() {
+	private JsBuildStep buildStep;
+
+	/* package */BrowserManager() {
 	}
+
 	private int step = 20;
 
 	private boolean autorun;
 
 	public List<StaticBrowser> getStaticBrowsers() {
 		return statics.getView();
+	}
+
+	public JsKiss notice(String id, Result result) throws TestException {
+		getBrowser(id).notice();
+		// 当务任务时
+		if (null == buildStep) {
+			return null;
+			//当有任务时
+		} else {
+			// 当result有结果
+			if (null != result && null != result.getName()) {
+				return (JsKiss) buildStep.getResultTable().store(result);
+				// result无结果，当前任务中需要该浏览器进行测试
+			} else if (buildStep.getResultTable().getBrowserIndex(
+					result.getBrowser()) > 0) {
+				return (JsKiss) buildStep.getResultTable()
+						.getNextExcutableKiss(result.getBrowser());
+			} else {
+				return null;
+			}
+		}
+		// else {
+		// buildStep.getResultTable().store(null);
+		// }
+		// if (null != result.getName()) {
+		// return (TangramKiss) buildStep.getResultTable().store(result);
+		// } else {
+		// return null;
+		// }
+	}
+
+	public Browser getBrowser(String id) {
+		List<Browser> brs = getBrowsers();
+		for (Browser br : brs) {
+			if (br.getId().equals(id))
+				return br;
+		}
+		return null;
+	}
+
+	public void removeBrowser(String id) {
+		List<Browser> brs = getBrowsers();
+		for (Browser br : brs) {
+			if (br.getId().equals(id))
+				browsers.remove(br);
+		}
 	}
 
 	public List<Browser> getBrowsers() {
@@ -78,5 +131,13 @@ public class BrowserManager implements Module {
 				}
 			}.start();
 		}
+	}
+
+	public BuildStep getBuildStep() {
+		return buildStep;
+	}
+
+	public void setBuildStep(JsBuildStep buildStep) {
+		this.buildStep = buildStep;
 	}
 }
