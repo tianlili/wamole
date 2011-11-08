@@ -37,7 +37,7 @@
 		</com.baidu.wamole.model.JsProject>
 		<com.baidu.wamole.model.JsProject>
 			<name>tc</name>
-			<rootDir>D:\workspace\git\git\Tangram-component</rootDir>
+			<path>D:\workspace\git\git\Tangram-component</path>
 			<inited>false</inited>
 			<casepattern>/test/baidu/**/*.js</casepattern>
 			<processor class="com.baidu.wamole.process.TangramComponentProcessor">

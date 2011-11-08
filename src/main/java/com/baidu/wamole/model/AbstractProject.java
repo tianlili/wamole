@@ -19,7 +19,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, B> ,B extends
 	private CopyOnWriteList<BuildStep> buildSteps;
 	
 	//项目
-	@Override
+	@Exported
 	public String getName() {
 		return this.name;
 	}

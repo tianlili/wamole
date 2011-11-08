@@ -16,7 +16,7 @@
 	<projects>
 		<com.baidu.wamole.model.TangramProject>
 			<name>t</name>
-			<rootDir>F:\\Workplaces\\Workplace\\Tangram-base</rootDir>
+			<path>F:\\Workplaces\\Workplace\\Tangram-base</path>
 			<inited>false</inited>
 			<casepattern>test/**.js</casepattern>
 <!-- 			<depend class=""></depend> -->
