@@ -1,0 +1,22 @@
+@charset UTF-8;
+
+.list{font-family:Arial, Helvetica, sans-serif;font-size:11px;position:relative;border:1px solid #ccc;overflow:hidden;color:#000;margin-left:auto;margin-right:auto}
+.list .hDiv{background:#fafafa url(images/fhbg.gif) repeat-x bottom;position:relative;border:1px solid #ccc;border-top:0;overflow:hidden;}
+.list .hDiv td{border-right: 1px solid #DDD;border-left: 1px solid white;font-weight: 800;font-size:11px;line-height:22px}
+.list .hDiv td div{border-bottom: 1px solid #eee;}
+.list .mDiv{border-bottom:1px solid #ccc;font-weight:700;display:block;overflow:hidden;white-space:nowrap;position:relative;height:52px;line-height:52px;}
+.list div.ftitle{font-size:20px;height:52px;line-height:52px;float:left;display:block;padding:1px}
+.list div.fbutton {border:0; float:left;height:20px;line-height:20px;margin-top:16px;margin-left:16px}
+.list div.fbutton:hover,.list div.fview:hover{border-left:1px solid #fff;border-top:1px solid #fff;border-right:1px solid #eee;border-bottom:1px solid #eee}
+.list .orow td{height:35px;border-right: 1px solid #DDD;border-left: 1px solid white;}
+.list .erow td{height:35px;background:#f7f7f7;border-bottom:1px solid #f7f7f7;border-right: 1px solid #DDD;border-left: 1px solid white;}
+.list .hDiv td div.sasc{background:url(images/up.png) no-repeat center top}
+.list .hDiv td div.sdesc{background:url(images/dn.png) no-repeat center top}
+.list .hDiv td div.sort:hover,.list .hDiv td div.sasc:hover,.list .hDiv td div.sdesc:hover{border-bottom:1px solid orange}
+
+.flexigrid div.tDiv div{height:20px;line-height:20px;}
+.flexigrid tr.orow td{height:35px}
+.flexigrid tr.erow td{height:35px}
+.flexigrid div.fbutton span{height:20px;line-height:20px}
+.flexigrid div.btnseparator{height:30px;}
+
