@@ -77,8 +77,16 @@ public class ProjectResource {
 		return Response.ok("").build();
 	}
 	@GET
-	@Path("/file")
+	@Path("/files")
 	public Response getFile() {
-		return Response.ok("test").build();
+		StringWriter writer = new StringWriter();
+		try {
+			Template template = ConfigurationFactory.getInstance().getTemplate(
+					"pages/page/files.html");
+			template.dump(writer);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return Response.ok(writer.getBuffer().toString()).build();
 	}
 }

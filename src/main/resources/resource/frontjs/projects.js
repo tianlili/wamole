@@ -4,7 +4,7 @@ $(function() {
 		document.title = ifm.contentDocument.title;
 		var subWeb = document.frames ? document.frames[id].document : ifm.contentDocument; 
 		if(ifm != null && subWeb != null) { 
-			ifm.height = subWeb.body.scrollHeight; 
+			ifm.height = subWeb.body.offsetHeight + 20; 
 		} 
 	};
 	
@@ -33,11 +33,14 @@ $(function() {
         		+'<td><div style="text-align:left;"><div style="width:20px" class="fview"><img id=' + data[i].name + '_view src="../resource/frontcss/images/view.ico" width=20px height=20px/></div></div></td></tr>'
         	$(".list tbody").append(innerhtml);
 		}
+
+		iFrameHeight("iframepage");
+		
 		asc ? $(".list thead #name").attr("class", "sasc") : $(".list thead #name").attr("class", "sdesc");
 		
 		$("[id$='_view']").click(function(){
 			var name = this.id.substring(0, this.id.indexOf("_view"));
-			window.location.href = "../../project/"+ name +"/view";
+			window.location.href = "../../project/"+ name +"/files";
 		});
 	};
 	
@@ -57,8 +60,6 @@ $(function() {
         			return;
         		}
         	});
-        	
-        	iFrameHeight("iframepage");
         }
     });
 		
