@@ -30,28 +30,29 @@ public class RootResource {
 	@GET
 	public Response getView() {
 		StringWriter writer = new StringWriter();
-//<<<<<<< HEAD
-//		List<Project> list = Wamole.getInstance().getProjectList().getView();
-//=======
-//		List<Project<?, ?>> list = Wamole.getInstance().getProjectList()
-//				.getView();
-//>>>>>>> refs/heads/daiqili
 		try {
 			Template template = ConfigurationFactory.getInstance().getTemplate(
-					"index.html");
-//			Map<String, Object> map = new HashMap<String, Object>();
-//			map.put("projects", list);
-//			template.process(map, writer);
+					"pages/page/index.html");
 			template.dump(writer);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-//		catch (TemplateException e) {
-//			e.printStackTrace();
-//		}
 		return Response.ok(writer.getBuffer().toString()).build();
 	}
-
+	@GET
+	@Path("/project")
+	public Response getProject() {
+		StringWriter writer = new StringWriter();
+		try {
+			Template template = ConfigurationFactory.getInstance().getTemplate(
+					"pages/page/projects.html");
+			template.dump(writer);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return Response.ok(writer.getBuffer().toString()).build();
+	}
+	
 	@Path("/project/{name}")
 	public ProjectResource getProjectByName(@PathParam("name") String name) {
 		ProjectResource resource = context.getResource(ProjectResource.class);
@@ -65,7 +66,7 @@ public class RootResource {
 	}
 
 	@Path("/browser")
-	public BrowserResource browser() {
+	public BrowserResource getBrowser() {
 		return context.getResource(BrowserResource.class);
 	}
 	

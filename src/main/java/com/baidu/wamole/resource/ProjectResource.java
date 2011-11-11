@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
@@ -45,19 +46,12 @@ public class ProjectResource {
 
 	@GET
 	public Response get() {
-		if (null == project) {
-			return Response.noContent().build();
-		}
 		StringWriter writer = new StringWriter();
 		try {
 			Template template = ConfigurationFactory.getInstance().getTemplate(
-					"project/project.ftl");
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("project", project);
-			template.process(map, writer);
+					"pages/page/project.html");
+			template.dump(writer);
 		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (TemplateException e) {
 			e.printStackTrace();
 		}
 		return Response.ok(writer.getBuffer().toString()).build();
@@ -81,5 +75,18 @@ public class ProjectResource {
 	public Response build() {
 		Wamole.getInstance().addBuild(project.getBuild());
 		return Response.ok("").build();
+	}
+	@GET
+	@Path("/files")
+	public Response getFile() {
+		StringWriter writer = new StringWriter();
+		try {
+			Template template = ConfigurationFactory.getInstance().getTemplate(
+					"pages/page/files.html");
+			template.dump(writer);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return Response.ok(writer.getBuffer().toString()).build();
 	}
 }

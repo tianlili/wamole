@@ -51,6 +51,27 @@ public class BrowserResource {
 	HttpServletRequest request;
 
 	@GET
+	public Response get() {
+//		if (null == project) {
+//			return Response.noContent().build();
+//		}
+		StringWriter writer = new StringWriter();
+		try {
+			Template template = ConfigurationFactory.getInstance().getTemplate(
+					"pages/page/browsers.html");
+//			Map<String, Object> map = new HashMap<String, Object>();
+//			map.put("project", project);
+//			template.process(map, writer);
+			template.dump(writer);
+		} catch (IOException e) {
+			e.printStackTrace();
+//		} catch (TemplateException e) {
+//			e.printStackTrace();
+		}
+		return Response.ok(writer.getBuffer().toString()).build();
+	}
+
+	@GET
 	@Path("/register")
 	public Response getPage() {
 		StringWriter writer = new StringWriter();
@@ -92,25 +113,25 @@ public class BrowserResource {
 		return Response.ok(instance.getId()).build();
 	}
 
-	@GET
-	public Response list() {
-		BrowserManager bm = (BrowserManager) Wamole.getInstance().getModule(
-				BrowserManager.class);
-		List<Browser> list = bm.getBrowsers();
-		StringWriter writer = new StringWriter();
-		try {
-			Template template = ConfigurationFactory.getInstance().getTemplate(
-					"browser/list.ftl");
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("browsers", list);
-			template.process(map, writer);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (TemplateException e) {
-			e.printStackTrace();
-		}
-		return Response.ok(writer.toString()).build();
-	}
+//	@GET
+//	public Response list() {
+//		BrowserManager bm = (BrowserManager) Wamole.getInstance().getModule(
+//				BrowserManager.class);
+//		List<Browser> list = bm.getBrowsers();
+//		StringWriter writer = new StringWriter();
+//		try {
+//			Template template = ConfigurationFactory.getInstance().getTemplate(
+//					"browser/list.ftl");
+//			Map<String, Object> map = new HashMap<String, Object>();
+//			map.put("browsers", list);
+//			template.process(map, writer);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		} catch (TemplateException e) {
+//			e.printStackTrace();
+//		}
+//		return Response.ok(writer.toString()).build();
+//	}
 
 	@GET
 	@Path("/capture/{ids}")

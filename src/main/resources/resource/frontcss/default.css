@@ -1,0 +1,29 @@
+@charset UTF-8;
+
+body{
+	margin : 0px 80px;
+}
+
+.navigator {
+	padding:5px 5px;
+}
+.navigator a{
+	font:12px/30px arial,sans-serif;
+	color:#666666
+}
+.nalist{
+	background-image: url(images/logo.png);
+	background-position: center bottom;
+    background-repeat: no-repeat;
+}
+.banner{
+	background-image: url(images/bodybg.jpg);
+	background-position: center top;
+    background-repeat: no-repeat;
+    height:100px
+}
+.foot{
+	font:12px/30px arial,sans-serif;
+	color:#666666;
+	border-top:1px solid #ccc
+}

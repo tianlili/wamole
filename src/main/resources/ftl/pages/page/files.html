@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Projects</title>
+	<link rel="stylesheet" type="text/css" href="../../resource/frontcss/list.css" />
+	<script type="text/javascript" src="../../resource/frontjs/jquery-1.3.2.js"></script>
+	<script type="text/javascript" src="../../resource/frontjs/files.js"></script>
+</head>
+<body>
+	<!-- <table class="flexme" style="display: none"></table> -->
+	
+	<table class="list" width="880px" cellspacing="0">
+		<thead>
+			<tr>
+				<td colspan=3>
+					<div class="mDiv">
+						<div class="ftitle"></div>
+						<div class="fbutton"><img src="../../resource/frontcss/images/exec.ico" width="20px" height="20px"></div>
+					</div>
+				</td>
+			</tr>
+			<tr class="hDiv">
+				<td>
+					<div id="path" style="text-align:left;">Path</div>
+				</td>
+				<td>
+					<div id="lastmodified" style="text-align:left;">LastModified</div>
+				</td>
+				<td>
+					<div id="size" style="text-align:left;">Size</div>
+				</td>
+			</tr>
+		</thead>
+		<tbody>
+			<!-- 数据 -->
+		</tbody>
+	</table>
+	
+	<div class="editWindow" style="width: 300px; display:none;" id="projects">
+		<div class="drag">
+			Edit The project
+		</div>
+
+		<form id="saveprojects" method="post">
+			<table width="252" border="0" align="center" cellpadding="0" cellspacing="0">
+				<tr>
+					<td>Name：</td>
+					<td><input type="text" name="name" ></td>
+				</tr>
+				<tr>
+					<td>Path：</td>
+					<td><input type="text" name="path"></td>
+				</tr>
+				<tr>
+					<td>Casepattern：</td>
+					<td><input type="text" name="casepattern"></td>
+				</tr>
+			</table>
+			<div align="center">
+				<input type="button" id="submit" class="input-button" value="提交" />
+				<input type="reset" class="input-button" value="重置" />
+			</div>
+		</form>
+	</div>
+</body>
+</html>
