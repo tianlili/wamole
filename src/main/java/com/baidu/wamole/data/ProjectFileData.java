@@ -9,31 +9,35 @@ import com.baidu.wamole.util.FileUtil;
 
 public class ProjectFileData implements FileData {
 
-	Project project;
+	Project<?, ?> project;
 	String path;
 	File file;
 	boolean exe;
 	String content;
 
-	private ProjectFileData(Project project, String path) {
+	private ProjectFileData(Project<?, ?> project, String path) {
 		this.project = project;
 		// 屏蔽可能产生的影响
 		this.file = new File(this.project.getPath(), path);
 		this.path = this.file.isDirectory() && !path.endsWith("/") ? (path + "/")
 				: path;
-		if (this.file.isFile()) {
+		if (this.isReadable()) {
 			this.content = FileUtil.readFile(file);
 		} else
 			this.content = "";
 	}
 
-	@Exported
+	@Exported(encode = true)
 	public String getPath() {
 		return this.path;
 	}
 
 	@Exported
-	@Override
+	public boolean isReadable() {
+		return this.file.isFile() && isReadable(this.path);
+	}
+
+	@Exported
 	public boolean isExe() {
 		return this.project.getKiss(this.path) != null;
 	}
@@ -53,7 +57,12 @@ public class ProjectFileData implements FileData {
 		return this.content.length();
 	}
 
-	@Exported
+	@Exported(recurse = false, encode = true)
+	public String getContent() {
+		return this.content;
+	}
+
+	@Exported(recurse = false)
 	public List<ProjectFileData> getChildren() {
 		List<ProjectFileData> children = new ArrayList<ProjectFileData>();
 		if (this.file.isDirectory())
@@ -62,7 +71,6 @@ public class ProjectFileData implements FileData {
 		return children;
 	}
 
-	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof ProjectFileData) {
 			ProjectFileData data = (ProjectFileData) obj;
@@ -74,7 +82,7 @@ public class ProjectFileData implements FileData {
 
 	private static final ArrayList<ProjectFileData> cache = new ArrayList<ProjectFileData>();
 
-	private static ProjectFileData getCache(Project project, String path) {
+	private static ProjectFileData getCache(Project<?, ?> project, String path) {
 		ProjectFileData _data = null;
 		File f = new File(project.getPath(), path);
 		if (f.isDirectory() && !path.endsWith("/"))
@@ -93,7 +101,7 @@ public class ProjectFileData implements FileData {
 	 * @param path
 	 * @return
 	 */
-	public static ProjectFileData getData(Project project, String path) {
+	public static ProjectFileData getData(Project<?, ?> project, String path) {
 
 		ProjectFileData _data = getCache(project, path);
 		if (_data == null) {
@@ -101,5 +109,12 @@ public class ProjectFileData implements FileData {
 			cache.add(_data);
 		}
 		return _data;
+	}
+
+	private static final String readableWhiteList = "_.htm_.html_.php_.js_.json_.css_.xml_.txt_";
+
+	public static boolean isReadable(String name) {
+		return readableWhiteList.indexOf("_"
+				+ name.substring(name.lastIndexOf(".")) + "_") >= 0;
 	}
 }

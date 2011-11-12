@@ -2,13 +2,10 @@ package com.baidu.wamole.resource;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
@@ -20,7 +17,6 @@ import com.baidu.wamole.template.ConfigurationFactory;
 import com.sun.jersey.api.core.ResourceContext;
 
 import freemarker.template.Template;
-import freemarker.template.TemplateException;
 
 /**
  * 项目信息资源

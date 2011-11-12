@@ -6,10 +6,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
-import com.baidu.wamole.model.Project;
-import com.baidu.wamole.model.Wamole;
-import com.baidu.wamole.task.Task;
-
 @Produces("text/html;charset=UTF-8")
 public class TaskResource {
 
@@ -21,8 +17,8 @@ public class TaskResource {
 	@GET
 	@Path("/==new==/{project}")
 	public Response addTask(@PathParam("project") String name) {
-		Project<?, ?> project = Wamole.getInstance().getProject(name);
-		Task task = new Task(project);
+//		Project<?, ?> project = Wamole.getInstance().getProject(name);
+//		Task task = new Task(project);
 		System.out.println("add");
 		return Response.ok("").build();
 	}

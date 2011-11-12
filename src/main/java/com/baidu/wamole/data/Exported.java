@@ -11,4 +11,7 @@ import java.lang.annotation.RetentionPolicy;
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Exported{
+	boolean recurse() default true;
+	boolean encode() default false;
+	String enc() default "UTF-8";
 }
