@@ -1,8 +1,9 @@
 package com.baidu.wamole.data;
 
 import java.lang.reflect.Method;
-import java.net.URLEncoder;
 import java.util.List;
+
+import org.eclipse.jetty.util.B64Code;
 
 /**
  * 
@@ -52,7 +53,7 @@ public class JsonParser {
 				Exported eAnno = m.getAnnotation(Exported.class);
 				value = m.invoke(obj).toString();
 				if (eAnno.encode())
-					value = URLEncoder.encode(value, eAnno.enc());
+					value = B64Code.encode(value, eAnno.enc());
 				value = "\"" + value + "\"";
 			}
 			sb.append(value);
