@@ -90,6 +90,8 @@ public class Wamole {
 	
 	/**
 	 * 新增项目接口，需要考虑重启等问题
+	 * <li> 追加项目信息
+	 * <li> 追加服务器信息
 	 * @param project
 	 */
 	public void addProject(Project<?, ?> project){

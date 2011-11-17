@@ -114,7 +114,7 @@ public class ProjectFileData implements FileData {
 	private static final String readableWhiteList = "_.htm_.html_.php_.js_.json_.css_.xml_.txt_";
 
 	public static boolean isReadable(String name) {
-		return readableWhiteList.indexOf("_"
+		return name.indexOf(".")>0 && readableWhiteList.indexOf("_"
 				+ name.substring(name.lastIndexOf(".")) + "_") >= 0;
 	}
 }
