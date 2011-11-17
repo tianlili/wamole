@@ -16,6 +16,7 @@ import com.baidu.wamole.model.Project;
 import com.baidu.wamole.model.Wamole;
 import com.sun.jersey.api.core.ResourceContext;
 
+@Deprecated
 public class ProjectDataResource {
 	@Context
 	ResourceContext context;

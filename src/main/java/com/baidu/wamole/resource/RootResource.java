@@ -2,16 +2,22 @@ package com.baidu.wamole.resource;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.List;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import com.baidu.wamole.data.JsonParser;
+import com.baidu.wamole.model.Project;
+import com.baidu.wamole.model.Wamole;
 import com.baidu.wamole.template.ConfigurationFactory;
 import com.sun.jersey.api.core.ResourceContext;
 
@@ -39,6 +45,7 @@ public class RootResource {
 		}
 		return Response.ok(writer.getBuffer().toString()).build();
 	}
+
 	@GET
 	@Path("/project")
 	public Response getProject() {
@@ -52,7 +59,17 @@ public class RootResource {
 		}
 		return Response.ok(writer.getBuffer().toString()).build();
 	}
-	
+
+	@GET
+	@Path("/project")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getProjectData() {
+		List<Project<?, ?>> list = Wamole.getInstance().getProjectList()
+				.getView();
+		return Response.ok(JsonParser.listToJson(list).toString()).build();
+	}
+
 	@Path("/project/{name}")
 	public ProjectResource getProjectByName(@PathParam("name") String name) {
 		ProjectResource resource = context.getResource(ProjectResource.class);
@@ -69,9 +86,9 @@ public class RootResource {
 	public BrowserResource getBrowser() {
 		return context.getResource(BrowserResource.class);
 	}
-	
+
 	@Path("/data")
-	public DataResource getData(){
+	public DataResource getData() {
 		return context.getResource(DataResource.class);
 	}
 

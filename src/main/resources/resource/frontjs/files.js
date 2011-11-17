@@ -132,6 +132,12 @@ $(function() {
         method : 'GET',
 		dataType : 'json',
         success : function(data) {
+			// added by yangbo, decode path when refresh data
+			data.path = Base64.decode(data.path);
+			// decode children's path
+			$(data.children).each(function(i, item) {
+				data.children[i].path = Base64.decode(data.children[i].path);
+			});
         	all_data = data;
         	insertData(data);
         }

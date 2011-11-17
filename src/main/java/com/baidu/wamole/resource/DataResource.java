@@ -10,6 +10,7 @@ import com.baidu.wamole.resource.data.ProjectDataResource;
 import com.sun.jersey.api.core.ResourceContext;
 
 @Produces(MediaType.APPLICATION_JSON+";charset=UTF-8")
+@Deprecated
 public class DataResource {
 
 	@Context

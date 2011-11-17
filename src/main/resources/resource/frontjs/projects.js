@@ -45,10 +45,14 @@ $(function() {
 	};
 	
 	$.ajax({
-        url : 'data/project',
+        url : location.href,
         method : 'GET',
 		dataType : 'json',
         success : function(data) {
+        	//added by yangbo, decode path when refresh data.
+        	$.each(data, function(i, item){
+        		data[i].path = Base64.decode(data[i].path);
+        	});
         	insertData(data, "name", true);
         	$(".list thead #name").click (function(){
         		if(this.className == "sasc"){
