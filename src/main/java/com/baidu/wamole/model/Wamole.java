@@ -88,6 +88,14 @@ public class Wamole {
 		return null;
 	}
 	
+	/**
+	 * 新增项目接口，需要考虑重启等问题
+	 * @param project
+	 */
+	public void addProject(Project<?, ?> project){
+		projects.getView().add(project);
+	}
+	
 	public synchronized void addBuild(Build<?, ?> build) {
 		this.buildQueue.add(build);
 	}
