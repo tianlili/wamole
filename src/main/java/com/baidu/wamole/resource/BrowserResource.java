@@ -22,9 +22,6 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.baidu.wamole.browser.Browser;
 import com.baidu.wamole.browser.BrowserManager;
 import com.baidu.wamole.data.JsonParser;
@@ -45,7 +42,6 @@ import freemarker.template.TemplateException;
  */
 @Produces("text/html;charset=UTF-8")
 public class BrowserResource {
-	Logger log = LoggerFactory.getLogger(BrowserResource.class);
 	@Context
 	UriInfo uriInfo;
 	@Context
@@ -180,9 +176,6 @@ public class BrowserResource {
 			@FormParam("fail") String fail, @FormParam("total") String total,
 			@FormParam("cov") String cov) {
 		
-//		System.out.println(name);
-//		System.out.println(endtime);
-		log.trace("capture" + new Date().getTime());
 		BrowserManager bm = (BrowserManager) Wamole.getInstance().getModule(
 				BrowserManager.class);
 		if(null == bm.getBrowser(id)) {

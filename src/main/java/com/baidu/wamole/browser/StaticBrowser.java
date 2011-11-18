@@ -1,12 +1,8 @@
 package com.baidu.wamole.browser;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.baidu.wamole.exception.TestException;
 
 public class StaticBrowser implements LifeCycle {
-	Logger logger = LoggerFactory.getLogger(StaticBrowser.class);
 	private String invoker;
 	private BrowserInvoker invokerinstance;
 	// 浏览器监听步长

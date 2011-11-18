@@ -2,14 +2,9 @@ package com.baidu.wamole.browser;
 
 import java.io.IOException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.baidu.wamole.browser.StaticBrowser;
 import com.baidu.wamole.exception.TestException;
 
 public class BatchInvoker implements BrowserInvoker {
-	Logger logger = LoggerFactory.getLogger(STAFInvoker.class);
 
 	@Override
 	public void invoke(StaticBrowser browser, TargetURL url)
@@ -22,7 +17,6 @@ public class BatchInvoker implements BrowserInvoker {
 		sb.append("\"");
 		sb.append(url.toString());
 		sb.append("\"");
-		logger.info("invoke command :" + sb.toString());
 		try {
 			Runtime.getRuntime().exec(sb.toString());
 		} catch (IOException e) {
@@ -73,7 +67,6 @@ public class BatchInvoker implements BrowserInvoker {
 		sb.append("\"");
 		sb.append(browserName);
 		sb.append("\"");
-		logger.info("invoke command :" + sb.toString());
 		try {
 			Runtime.getRuntime().exec(sb.toString());
 		} catch (IOException e) {

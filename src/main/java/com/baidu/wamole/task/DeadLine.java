@@ -2,16 +2,14 @@ package com.baidu.wamole.task;
 
 import java.util.Date;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import org.eclipse.jetty.util.log.Log;
 /**
  * 报告的超时时间
  * 
  * @author dailiqi
  */
 public class DeadLine {
-	Logger log = LoggerFactory.getLogger(DeadLine.class);
+	
 	private int interval;// 每个结果最多等待时间
 	private long deadline;// 总体超时时间
 	private int count;
@@ -29,7 +27,7 @@ public class DeadLine {
 		this.size = size;
 		this.deadline = now + interval * size + buffer;
 		this.interval = interval;
-		log.debug("constructor, deadline : " + new Date(this.deadline)
+		Log.debug("constructor, deadline : " + new Date(this.deadline)
 				+ ",\n now : " + new Date(now));
 	}
 
@@ -39,9 +37,9 @@ public class DeadLine {
 	 * @return
 	 */
 	public boolean isDead() {
-		log.debug("isDead now      : "
+		Log.debug("isDead now      : "
 				+ new Date(System.currentTimeMillis()));
-		log.debug("isDead deadline : " + new Date(deadline));
+		Log.debug("isDead deadline : " + new Date(deadline));
 		return this.count > this.size || System.currentTimeMillis() > deadline;
 	}
 
@@ -52,7 +50,7 @@ public class DeadLine {
 	 * @return
 	 */
 	public long decrease(int count) {
-		log.debug("this.count : " + this.count + ", count : "
+		Log.debug("this.count : " + this.count + ", count : "
 				+ count);
 		if (count > this.count) {
 			this.count = count;
@@ -61,9 +59,9 @@ public class DeadLine {
 		}
 		// if (count > this.count) {
 		// deadline = deadline - interval * 1000 * (count - this.count);
-		// log.debug("isDead now      : " + new
+		// Log.debug("isDead now      : " + new
 		// Date(System.currentTimeMillis()));
-		// log.debug("isDead deadline : " + new Date(deadline));
+		// Log.debug("isDead deadline : " + new Date(deadline));
 		// this.count = count;
 		// }
 		// deadline = deadline - interval * 1000;

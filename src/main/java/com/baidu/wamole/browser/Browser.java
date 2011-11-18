@@ -5,8 +5,7 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.eclipse.jetty.util.log.Log;
 
 import com.baidu.wamole.data.Exported;
 import com.baidu.wamole.exception.TestException;
@@ -19,7 +18,6 @@ public class Browser {
 		return new BrowserBuilder(browser, userAgent);
 	}
 
-	Logger logger = LoggerFactory.getLogger(Browser.class);
 	private String id;
 	// 浏览器名称
 	private String name;
@@ -34,7 +32,7 @@ public class Browser {
 
 	public void notice() throws TestException {
 		lastNoticeTime = System.currentTimeMillis();
-		logger.debug(this.getName() + " " + this.getVersion()
+		Log.debug(this.getName() + " " + this.getVersion()
 				+ " is notice!!!notice time = "
 				+ new Date(System.currentTimeMillis()));
 	}

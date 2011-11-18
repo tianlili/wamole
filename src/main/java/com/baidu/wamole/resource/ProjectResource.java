@@ -16,9 +16,13 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import javax.xml.bind.JAXBElement;
+
+import org.eclipse.jetty.util.ajax.JSON;
 
 import com.baidu.wamole.data.JsonParser;
 import com.baidu.wamole.data.ProjectFileData;
+import com.baidu.wamole.model.JsProject;
 import com.baidu.wamole.model.Project;
 import com.baidu.wamole.model.Wamole;
 import com.baidu.wamole.template.ConfigurationFactory;
@@ -67,12 +71,9 @@ public class ProjectResource {
 	}
 
 	@GET
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getData() {
-		if (project == null)
-			return Response.noContent().build();
-		return Response.ok(JsonParser.objToJson(project).toString()).build();
+	public Project<?,?> getData() {
+		return project;
 	}
 
 	/**
@@ -138,11 +139,12 @@ public class ProjectResource {
 
 	@GET
 	@Path("/files{path:[^?]*}")
-	@Consumes(MediaType.APPLICATION_JSON)
+//	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getFileData(@PathParam("path") String path) {
-		return Response.ok(
-				JsonParser.objToJson(ProjectFileData.getData(project, path))
-						.toString()).build();
+	public ProjectFileData getFileData(@PathParam("path") String path) {
+//		return Response.ok(
+//				JsonParser.objToJson(
+						return ProjectFileData.getData(project, path);
+//						.toString()).build();
 	}
 }

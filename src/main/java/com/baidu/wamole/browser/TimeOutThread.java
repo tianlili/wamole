@@ -2,9 +2,6 @@ package com.baidu.wamole.browser;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.baidu.wamole.exception.TestException;
 
 /**
@@ -13,7 +10,6 @@ import com.baidu.wamole.exception.TestException;
  * @author dailiqi
  */
 public class TimeOutThread extends Thread {
-	Logger logger = LoggerFactory.getLogger(TimeOutThread.class);
 	private List<StaticBrowser> list;
 	private int step = 10000;
 	public TimeOutThread(List<StaticBrowser> list,int step) {

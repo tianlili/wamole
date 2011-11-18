@@ -7,6 +7,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import org.eclipse.jetty.util.ajax.JSON;
+
 import com.baidu.wamole.browser.BrowserManager;
 import com.baidu.wamole.config.Config;
 import com.baidu.wamole.config.Config.NOOBConfig;
@@ -125,4 +127,8 @@ public class Wamole {
 		}
 		return projectTypeList;
 	}
+	
+//	public void addProject(JSON json, String data){
+//		getProjectList().add(json.fromJSON(data));
+//	}
 }

@@ -5,7 +5,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+
+import javax.xml.bind.annotation.XmlRootElement;
 
 import com.baidu.wamole.data.Imported;
 import com.baidu.wamole.exception.TestException;
@@ -13,6 +14,7 @@ import com.baidu.wamole.process.Processor;
 import com.baidu.wamole.task.JsBuild;
 import com.baidu.wamole.util.AntPathMatcher;
 
+@XmlRootElement
 public class JsProject extends AbstractProject<JsProject, JsBuild> {
 
 	private Map<String, Kiss> kisses;

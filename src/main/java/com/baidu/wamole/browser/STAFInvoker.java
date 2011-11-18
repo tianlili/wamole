@@ -4,8 +4,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Random;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.eclipse.jetty.util.log.Log;
 
 import com.baidu.wamole.exception.TestException;
 import com.ibm.staf.STAFHandle;
@@ -17,7 +16,6 @@ import com.ibm.staf.STAFResult;
  * @author dailiqi
  */
 public class STAFInvoker implements BrowserInvoker {
-	Logger logger = LoggerFactory.getLogger(STAFInvoker.class);
 	private STAFHandle handle = new STAFHandle(new Random().nextInt());
 
 	// public STAFInvoker() throws TestException {
@@ -41,7 +39,7 @@ public class STAFInvoker implements BrowserInvoker {
 
 	public void invoke(StaticBrowser browser, TargetURL url)
 			throws TestException {
-		logger.info("cmd:" + "start shell command \"" + browser.getPath()
+		Log.info("cmd:" + "start shell command \"" + browser.getPath()
 				+ "\" " + ampersandConverse(url.toString()));
 		STAFResult result = handle.submit2(browser.getHost(), "process",
 				"start shell command \"\\\"" + browser.getPath() + "\\\" "
@@ -51,7 +49,7 @@ public class STAFInvoker implements BrowserInvoker {
 
 	public void stop(StaticBrowser browser) throws TestException {
 		String handleNo = getHandle(browser);
-		logger.info("stop handle No:" + handleNo);
+		Log.info("stop handle No:" + handleNo);
 		if (null != handleNo) {
 			STAFResult result = handle.submit2(browser.getHost(), "process",
 					"stop handle " + handleNo);
@@ -91,7 +89,7 @@ public class STAFInvoker implements BrowserInvoker {
 			Map<String, String> map = list.get(i);
 
 			if (map.get("command").contains(browser.getPath())) {
-				logger.debug("getHandle handle no = " + map.get("handle"));
+				Log.debug("getHandle handle no = " + map.get("handle"));
 				return map.get("handle");
 			}
 		}
@@ -116,7 +114,7 @@ public class STAFInvoker implements BrowserInvoker {
 
 	private void getException(STAFResult result) throws TestException {
 		if (STAFResult.Ok != result.rc) {
-			logger.error("Error execute staf command, RC: " + result.rc + "\t"
+			Log.info("Error execute staf command, RC: " + result.rc + "\t"
 					+ result.resultContext);
 			throw new TestException("Error execute staf command, RC: "
 					+ result.rc + "\t" + result.resultContext);

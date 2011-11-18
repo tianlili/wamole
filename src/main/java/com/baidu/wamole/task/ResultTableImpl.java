@@ -14,8 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.eclipse.jetty.util.log.Log;
 
 import com.baidu.wamole.model.Kiss;
 import com.baidu.wamole.template.ConfigurationFactory;
@@ -24,7 +23,6 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
 public class ResultTableImpl implements ResultTable {
-	Logger logger = LoggerFactory.getLogger(ResultTableImpl.class);
 	protected Result[][] results; // 结果
 	protected List<String> browserList; // 浏览器列表
 	protected List<String> activeList;// 活动的浏览器列表
@@ -36,8 +34,8 @@ public class ResultTableImpl implements ResultTable {
 
 	public ResultTableImpl(List<String> browserList, List<String> activeList,
 			List<Kiss> kissList, int interval) {
-		logger.info(browserList.toString());
-		logger.info(activeList.toString());
+		Log.info(browserList.toString());
+		Log.info(activeList.toString());
 		this.browserList = browserList;
 		this.kissList = kissList;
 		converseKissName();
@@ -83,7 +81,7 @@ public class ResultTableImpl implements ResultTable {
 		result.setTotal(0);
 		result.setTimeStamp(0);
 		result.setName(kissList.get(index).getName());
-		logger.debug("store empty case : " + result.getName());
+		Log.debug("store empty case : " + result.getName());
 		int browserIndex = getBrowserIndex(result.getBrowser());
 		int kissIndex = getKissIndex(result.getName());
 		results[browserIndex][kissIndex] = result;
@@ -143,7 +141,7 @@ public class ResultTableImpl implements ResultTable {
 			kiss = kissList.get(current);
 		}
 		currentIndex[index] = ++current;
-		logger.debug("browser : " + browser + ",next case:" + kiss);
+		Log.debug("browser : " + browser + ",next case:" + kiss);
 		return kiss;
 	}
 

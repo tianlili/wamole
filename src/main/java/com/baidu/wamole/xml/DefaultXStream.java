@@ -13,7 +13,7 @@ public class DefaultXStream extends XStream {
 		//添加注册converter
 		registerConverter(new ConcurrentHashMapConverter(getMapper(),
 				getReflectionProvider()));
-		registerConverter(new CopyOnWriteList.ConverterImpl(getMapper()));
+		registerConverter(new XmlConverter(getMapper()));
 	}
 
 	public DefaultXStream(HierarchicalStreamDriver hierarchicalStreamDriver) {
