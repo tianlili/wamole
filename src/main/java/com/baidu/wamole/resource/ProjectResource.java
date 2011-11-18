@@ -5,7 +5,9 @@ import java.io.StringWriter;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -31,6 +33,7 @@ import freemarker.template.Template;
 @Produces("text/html;charset=UTF-8")
 public class ProjectResource {
 	private Project<?, ?> project;
+	String name;
 	@Context
 	UriInfo uriInfo;
 	@Context
@@ -44,11 +47,12 @@ public class ProjectResource {
 				this.project = project;
 			}
 		}
+		this.name = name;
 	}
 
 	@GET
-//	@Consumes(MediaType.TEXT_HTML)
-//	@Produces(MediaType.TEXT_HTML)
+	// @Consumes(MediaType.TEXT_HTML)
+	// @Produces(MediaType.TEXT_HTML)
 	public Response get() {
 		StringWriter writer = new StringWriter();
 		try {
@@ -68,6 +72,14 @@ public class ProjectResource {
 		if (project == null)
 			return Response.noContent().build();
 		return Response.ok(JsonParser.objToJson(project).toString()).build();
+	}
+
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)	
+	public Response newProject(@FormParam("path") String path,
+			@FormParam("parser") String parser) {
+		return Response.ok("").build();
 	}
 
 	@Path("/exec")
@@ -94,7 +106,7 @@ public class ProjectResource {
 	}
 
 	@GET
-	@Path("/files{path:[^?^/]*}")
+	@Path("/files{path:[^?]*}")
 	@Consumes(MediaType.TEXT_HTML)
 	@Produces(MediaType.TEXT_HTML)
 	public Response getFile() {
@@ -110,7 +122,7 @@ public class ProjectResource {
 	}
 
 	@GET
-	@Path("/files{path:[^?^/]*}")
+	@Path("/files{path:[^?]*}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getFileData(@PathParam("path") String path) {

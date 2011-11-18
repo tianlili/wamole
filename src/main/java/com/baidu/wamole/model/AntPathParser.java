@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.baidu.wamole.data.Exported;
 import com.baidu.wamole.util.AntPathMatcher;
 
 public class AntPathParser implements Parser<DefaultKiss, Project<?, ?>> {
@@ -42,5 +43,10 @@ public class AntPathParser implements Parser<DefaultKiss, Project<?, ?>> {
 			}
 
 		}
+	}
+
+	@Exported()
+	public static String getDescription() {
+		return "类Ant的路径解析方案";
 	}
 }

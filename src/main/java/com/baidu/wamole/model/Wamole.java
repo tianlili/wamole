@@ -2,6 +2,7 @@ package com.baidu.wamole.model;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -23,6 +24,7 @@ public class Wamole {
 	private static Wamole instance;
 	private CopyOnWriteList<Module> modules = new CopyOnWriteList<Module>();
 	private Queue<Build<?, ?>> buildQueue;
+
 	public CopyOnWriteList<Project<?, ?>> getProjectList() {
 		return projects;
 	}
@@ -31,7 +33,7 @@ public class Wamole {
 		this.root = root;
 		this.load();
 		instance = this;
-		buildQueue = new LinkedList<Build<?, ?>> ();
+		buildQueue = new LinkedList<Build<?, ?>>();
 		new BuildThread().start();
 	}
 
@@ -42,7 +44,7 @@ public class Wamole {
 	public Module getModule(Class<? extends Module> clazz) {
 		List<Module> tmp = modules.getView();
 		for (int i = 0; i < tmp.size(); i++) {
-			if(clazz.isInstance(tmp.get(i))) {
+			if (clazz.isInstance(tmp.get(i))) {
 				return clazz.cast(tmp.get(i));
 			}
 		}
@@ -87,22 +89,31 @@ public class Wamole {
 		}
 		return null;
 	}
-	
+
 	/**
-	 * 新增项目接口，需要考虑重启等问题
-	 * <li> 追加项目信息
-	 * <li> 追加服务器信息
+	 * 新增项目接口，需要考虑重启等问题 <li>追加项目信息 <li>追加服务器信息
+	 * 
 	 * @param project
 	 */
-	public void addProject(Project<?, ?> project){
+	public void addProject(Project<?, ?> project) {
 		projects.getView().add(project);
 	}
-	
+
 	public synchronized void addBuild(Build<?, ?> build) {
 		this.buildQueue.add(build);
 	}
-	
+
 	public synchronized Queue<Build<?, ?>> getBuildQueue() {
 		return this.buildQueue;
+	}
+
+	private ArrayList<Class<? extends Parser<? extends Kiss, ? extends Project<?, ?>>>> parserList = new ArrayList<Class<? extends Parser<? extends Kiss, ? extends Project<?, ?>>>>();
+
+	public ArrayList<Class<? extends Parser<? extends Kiss, ? extends Project<?, ?>>>> getParserList() {
+		if (parserList.size() == 0) {
+			parserList.add(TangramParser.class);
+			parserList.add(AntPathParser.class);
+		}
+		return parserList;
 	}
 }

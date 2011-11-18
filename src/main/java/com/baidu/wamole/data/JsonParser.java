@@ -1,7 +1,10 @@
 package com.baidu.wamole.data;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.jetty.util.B64Code;
 
@@ -17,8 +20,51 @@ public class JsonParser {
 		return objToJson(obj, true);
 	}
 
+	public static StringBuilder classToJson(Class<?> c) {
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("name", c.getSimpleName());
+		map.put("type", c.getName());
+		for (Method m : c.getDeclaredMethods()) {
+			if (m.isAnnotationPresent(Exported.class)
+					&& Modifier.isStatic(m.getModifiers())) {
+				try {
+					map.put(parseNameFromGetMethod(m), m.invoke(null)
+							.toString());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return mapToJson(map);
+	}
+
 	public static StringBuilder listToJson(List<?> list) {
 		return listToJson(list, true);
+	}
+
+	public static StringBuilder classListToJson(List<? extends Class<?>> list) {
+		StringBuilder sb = new StringBuilder();
+		for (Class<?> c : list) {
+			sb.append(classToJson(c)+",");
+		}if (sb.length() > 0) {
+			sb.setLength(sb.length() - 1);
+			sb.insert(0, "[");
+			sb.append("]");
+		}
+		return sb;
+	}
+
+	public static StringBuilder mapToJson(Map<?, ?> map) {
+		StringBuilder sb = new StringBuilder();
+		for (Object key : map.keySet()) {
+			sb.append(key + " : \"" + map.get(key) + "\",");
+		}
+		if (sb.length() > 0) {
+			sb.setLength(sb.length() - 1);
+			sb.insert(0, "{");
+			sb.append("}");
+		}
+		return sb;
 	}
 
 	private static StringBuilder objToJson(Object obj, boolean recurse) {
@@ -97,5 +143,9 @@ public class JsonParser {
 		}
 		return Character.toLowerCase(methodName.charAt(start))
 				+ methodName.substring(start + 1);
+	}
+
+	private static String parseNameFromGetMethod(Method m) {
+		return parseNameFromGetMethod(m.getName());
 	}
 }

@@ -96,4 +96,9 @@ public class RootResource {
 	public BuildResource build() {
 		return context.getResource(BuildResource.class);
 	}
+	
+	@Path("/enum")
+	public EnumResource getEnum(){
+		return context.getResource(EnumResource.class);
+	}
 }
