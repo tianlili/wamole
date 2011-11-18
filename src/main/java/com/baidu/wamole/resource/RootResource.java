@@ -86,11 +86,11 @@ public class RootResource {
 	public BrowserResource getBrowser() {
 		return context.getResource(BrowserResource.class);
 	}
-
-	@Path("/data")
-	public DataResource getData() {
-		return context.getResource(DataResource.class);
-	}
+//
+//	@Path("/data")
+//	public DataResource getData() {
+//		return context.getResource(DataResource.class);
+//	}
 
 	@Path("/build")
 	public BuildResource build() {

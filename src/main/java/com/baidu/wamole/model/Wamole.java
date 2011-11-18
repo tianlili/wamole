@@ -109,11 +109,20 @@ public class Wamole {
 
 	private ArrayList<Class<? extends Parser<? extends Kiss, ? extends Project<?, ?>>>> parserList = new ArrayList<Class<? extends Parser<? extends Kiss, ? extends Project<?, ?>>>>();
 
-	public ArrayList<Class<? extends Parser<? extends Kiss, ? extends Project<?, ?>>>> getParserList() {
+	public ArrayList<Class<? extends Parser<? extends Kiss, ? extends Project<?, ?>>>> getParserTypeList() {
 		if (parserList.size() == 0) {
 			parserList.add(TangramParser.class);
 			parserList.add(AntPathParser.class);
 		}
 		return parserList;
+	}
+	
+	private ArrayList<Class<?extends Project<?,?>>> projectTypeList = new ArrayList<Class<? extends Project<?,?>>>();
+	
+	public ArrayList<Class<? extends Project<?,?>>> getProjectTypeList() {
+		if (projectTypeList.size() == 0) {
+			projectTypeList.add(JsProject.class);			
+		}
+		return projectTypeList;
 	}
 }

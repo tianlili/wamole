@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -15,6 +17,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -24,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import com.baidu.wamole.browser.Browser;
 import com.baidu.wamole.browser.BrowserManager;
+import com.baidu.wamole.data.JsonParser;
 import com.baidu.wamole.exception.TestException;
 import com.baidu.wamole.model.JsKiss;
 import com.baidu.wamole.model.Wamole;
@@ -68,6 +72,17 @@ public class BrowserResource {
 //			e.printStackTrace();
 		}
 		return Response.ok(writer.getBuffer().toString()).build();
+	}
+	
+	@GET
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getData(){
+		BrowserManager bm = (BrowserManager) Wamole.getInstance().getModule(
+				BrowserManager.class);
+		List<Browser> list = bm.getBrowsers();
+
+		return Response.ok(JsonParser.listToJson(list).toString()).build();	
 	}
 
 	@GET

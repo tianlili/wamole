@@ -8,6 +8,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -74,11 +75,25 @@ public class ProjectResource {
 		return Response.ok(JsonParser.objToJson(project).toString()).build();
 	}
 
+	/**
+	 * 项目新增接口，不存在则新增，否则更新
+	 * @param path 项目跟路径
+	 * @param parser 项目解析器
+	 * @param type 项目类型
+	 * @return
+	 */
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)	
-	public Response newProject(@FormParam("path") String path,
-			@FormParam("parser") String parser) {
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response addProject(@FormParam("path") String path,
+			@FormParam("parser") String parser, @FormParam("type") String type) {
+		
+		return Response.ok("").build();
+	}
+	
+	@PUT
+	// TODO 后续补充
+	public Response updateProject(){
 		return Response.ok("").build();
 	}
 

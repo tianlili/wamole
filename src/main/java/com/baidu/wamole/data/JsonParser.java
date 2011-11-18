@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jetty.util.B64Code;
+import org.eclipse.jetty.util.ajax.JSON;
 
 /**
  * 
@@ -45,8 +46,9 @@ public class JsonParser {
 	public static StringBuilder classListToJson(List<? extends Class<?>> list) {
 		StringBuilder sb = new StringBuilder();
 		for (Class<?> c : list) {
-			sb.append(classToJson(c)+",");
-		}if (sb.length() > 0) {
+			sb.append(classToJson(c) + ",");
+		}
+		if (sb.length() > 0) {
 			sb.setLength(sb.length() - 1);
 			sb.insert(0, "[");
 			sb.append("]");
@@ -147,5 +149,15 @@ public class JsonParser {
 
 	private static String parseNameFromGetMethod(Method m) {
 		return parseNameFromGetMethod(m.getName());
+	}
+
+	public static Object jsonToObject(Class<?> c, JSON json) {
+		try {
+			Object o = c.newInstance();
+			return o;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

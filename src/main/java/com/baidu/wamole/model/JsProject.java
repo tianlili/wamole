@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.baidu.wamole.data.Imported;
 import com.baidu.wamole.exception.TestException;
 import com.baidu.wamole.process.Processor;
 import com.baidu.wamole.task.JsBuild;
@@ -19,6 +20,7 @@ public class JsProject extends AbstractProject<JsProject, JsBuild> {
 	private boolean inited;
 	private Processor<Kiss> processor;
 	private AntPathMatcher matcher;
+	@Imported
 	private Parser<Kiss, JsProject> parser;
 
 	public JsBuild getBuild() {
@@ -96,7 +98,7 @@ public class JsProject extends AbstractProject<JsProject, JsBuild> {
 		}
 		return new ArrayList<Kiss>(kisses.values());
 	}
-
+	
 	@Override
 	public String getExecutePage(String searchString) throws TestException {
 		Kiss kiss = this.getKiss(searchString);

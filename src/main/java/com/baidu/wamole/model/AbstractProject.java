@@ -3,6 +3,7 @@ package com.baidu.wamole.model;
 import java.util.List;
 
 import com.baidu.wamole.data.Exported;
+import com.baidu.wamole.data.Imported;
 import com.baidu.wamole.task.AbstractBuild;
 import com.baidu.wamole.task.BuildStep;
 import com.baidu.wamole.xml.CopyOnWriteList;
@@ -22,10 +23,20 @@ public abstract class AbstractProject<P extends AbstractProject<P, B>, B extends
 	public String getName() {
 		return this.name;
 	}
+	
+	@Imported
+	public void setName(String name){
+		this.name = name;
+	}
 
 	@Exported(encode = true)
 	public String getPath() {
 		return this.path;
+	}
+	
+	@Imported(decode = false)
+	public void setPath(String path){
+		this.path = path;
 	}
 
 	public List<BuildStep> getBuildSteps() {

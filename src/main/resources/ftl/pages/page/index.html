@@ -6,7 +6,14 @@
 	<title>Wamole</title>
 
 	<script type="text/javascript" language="javascript"> 
-		
+		function iFrameHeight(id) { 
+			var ifm = parent.document.getElementById(id); 
+			document.title = ifm.contentDocument.title;
+			var subWeb = document.frames ? document.frames[id].document : ifm.contentDocument; 
+			if(ifm != null && subWeb != null) { 
+				ifm.height = subWeb.body.offsetHeight + 20; 
+			} 
+		};
 		function getNavigation(navigation) { 
 			document.getElementById('iframepage').src = "../" + navigation;
 		} 
@@ -37,7 +44,7 @@
 				</div>
 			</td>
 			<td width=78% valign="top">
-				<iframe id="iframepage" src="/project" frameborder="no" border="0" width=100%>
+				<iframe id="iframepage" src="/project" frameborder="no" border="0" width=100% onload="iFrameHeight('iframepage')">
 				</iframe>
 			</td>
 		</tr>
