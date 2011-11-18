@@ -34,7 +34,7 @@ $(function() {
         		+'<td><div style="text-align:left;">' + data[i].id + '</div></td>'
         		+'<td><div style="text-align:left;">' + data[i].active + '</div></td>'
         		+'<td><div style="text-align:left;">' + data[i].version + '</div></td>'
-        		+'<td><div style="text-align:left;"><div style="width:20px" class="fview"><img id=' + data[i].name + '_view src="../resource/frontcss/images/view.ico" width=20px height=20px/></div></div></td></tr>'
+        		+'<td><div style="text-align:left;"><div style="width:16px" class="fview"><img title="detail" id=' + data[i].name + '_view src="../resource/frontcss/images/view.ico" width=16px height=16px/></div></div></td></tr>'
         	$(".list tbody").append(innerhtml);
     	}
 

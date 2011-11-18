@@ -2,6 +2,7 @@ $(function() {
 
 	var name = window.location.href.split("/");
 	name = name[name.length-2];
+	var url = location.href;
 	
 	function iFrameHeight(id) { 
 		var ifm = parent.document.getElementById(id); 
@@ -40,44 +41,72 @@ $(function() {
 	    return date.format("yyyy-MM-dd hh:mm:ss"); 
 	};
 	
-	function insertHead(data){
-		var path = data.path.split("/");
-		var apath = "";
-		var bpath = "";
-		for(var l=0; l< path.length; l++){
-			if(path[l].length != 0){
-				bpath += path[l] + "/";
-				path[l] = "<span title='" + bpath + "' class= 'ffilelink'>" + path[l] + "</span>";
-				apath += path[l] + " / ";
+	function splitPaths(data){
+		var paths = data.path.split('/');
+		for(var l=0; l<paths.length; l++){
+			if(paths[l].length == 0){
+				paths.splice(l, 1);
+				l --;
 			}
 		}
-    	$(".list thead .ftitle").html("<span title = 'root' class= 'ffilelink'>" + name + "</span>" + ' / ' + apath);
+		return paths;
+	};
+	
+	function insertHead(data){
+		var head_span = splitPaths(data);
+		var head_html = "<span title = 'root' class= 'ffilelink'>" + name + "</span>" + "/";
+		var head_path = "";
+		for(var i = 0; i < head_span.length; i ++){
+			head_path += head_span[i] + "/";
+			if(data.dir == "false")
+				head_path.substring(0, head_path.length - 2);
+			head_html += "<span title = '" + head_path + "' class= 'ffilelink'>" + head_span[i] + "</span>" + "/";
+		}
+    	$(".list thead .ftitle").html(head_html);
     	$(".list thead .ftitle span").click(function(){
-    		data = all_data;
-    		paths = this.title.split("/");
-    		for(var q=0; q<paths.length; q++){
-				if(paths[q].length == 0)
-					paths.splice(q, 1);
-			}
-    		for(var m=0; m<paths.length; m++){
-    			if(paths[m] == "root")
-    				break;
-    			data = data.children;
-				for(var n=0; n<data.length; n++){
-        			var npath = data[n].path.split("/");
-        			for(var o=0; o<npath.length; o++){
-        				if(npath[o].length == 0)
-        					npath.splice(o, 1);
-        			}
-        			if(npath[npath.length - 1] == paths[m]){
-        				data = data[n];
-        				break;
-        			}
-        		}
-			}
-			insertData(data);
+    		var add = this.title == "root" ? "" : this.title;
+    		add = data.dir == "true" ? add : add.substring(0, add.length - 1);
+    		url = url.substring(0,url.indexOf(name + '/files') + name.length + 6) + "/" + add;
+    		getData(url);
     	});
 	};
+	
+	function insertDir(data){
+
+    	data = data.children;
+    	
+    	sortData(data);
+    	
+		for(var i=0; i<data.length; i++){
+			var c = i%2 ? "erow" : "orow";
+			var p = data[i].dir == "true" ? "dir.png" : "txt.png";
+			var f = data[i].dir == "true" ? "/" : "";
+			var filenames = splitPaths(data[i]);
+			data[i].filename = filenames[filenames.length - 1];
+			data[i].path = decodeURIComponent(data[i].path);
+			
+			var innerhtml = '<tr class="' + c +'">'
+	    		+'<td><div><img style="margin-right:5px" src="../../resource/frontcss/images/' + p +'" /><span class="ffile" title="' + data[i].path + '">' + data[i].filename + f + '</span></div></td>'
+	    		+'<td><div>' + getLocalTime(data[i].lastModified) + '</div></td>'
+	    		+'<td><div>' + data[i].size + '</div></td>';
+			
+	    	$(".list tbody").append(innerhtml);
+	    	
+	    	$(".list tbody tr:eq(" + i +") td:first div span").click(function(){
+	    		for(var j = 0;j < data.length; j++){
+	    			if(data[j].path ==  this.title){
+	            		url += '/' + data[j].filename; 
+	            		getData(url);
+	    			}
+	    		}
+	    	});
+		}
+	};
+	
+	function insertFile(data){
+		$(".list tbody").append("<td colspan = 3><div class='filecontent'><pre></pre></div></td>");
+		$(".list tbody pre").append(data.content);
+	}
 	
 	function sortData(data){
 		var temp;
@@ -95,52 +124,28 @@ $(function() {
 	function insertData(data){
 		insertHead(data);
 		
-    	data = data.children;
-    	
-    	sortData(data);
-    	
     	$(".list tbody").html("");
-		for(var i=0; i<data.length; i++){
-    		var c = i%2 ? "erow" : "orow";
-    		var p = data[i].dir == "true" ? "dir.png" : "txt.png";
-    		var filenames = data[i].path.split("/");
-    		if(filenames[filenames.length - 1].length == 0)
-    			filenames.splice(filenames.length - 1, 1);
-    		var filename = filenames[filenames.length - 1];
-    		
-    		var innerhtml = '<tr class="' + c +'">'
-        		+'<td><div><img style="margin-right:5px" src="../../resource/frontcss/images/' + p +'" /><span class="ffile" title="' + data[i].path + '">' + filename + '</span></div></td>'
-        		+'<td><div>' + getLocalTime(data[i].lastModified) + '</div></td>'
-        		+'<td><div>' + data[i].size + '</div></td>';
-    		
-        	$(".list tbody").append(innerhtml);
-        	
-        	$(".list tbody tr:eq(" + i +") td:first div span").click(function(){
-        		for(var j = 0;j < data.length; j++){
-        			if(data[j].path ==  this.title){
-        				data = data[j];
-        				insertData(data);
-        			}
-        		}
-        	});
-		}
+		
+    	if(data.dir == 'true'){
+    		insertDir(data);
+    	}
+    	else{
+    		insertFile(data);
+    	}
 		iFrameHeight("iframepage");
 	};
 	
-	$.ajax({
-        url : '../../../data/project/' + name + '/view',
-        method : 'GET',
-		dataType : 'json',
-        success : function(data) {
-			// added by yangbo, decode path when refresh data
-			data.path = Base64.decode(data.path);
-			// decode children's path
-			$(data.children).each(function(i, item) {
-				data.children[i].path = Base64.decode(data.children[i].path);
-			});
-        	all_data = data;
+	function getData(url){
+		$.getJSON(url,function(data) {
+        	$.each(data.children, function(i, item){
+        		data.children[i].path = Base64.decode(data.children[i].path);
+        	});
+        	data.path = Base64.decode(data.path);
+        	data.content = Base64.decode(data.content);
         	insertData(data);
-        }
-    });
+        });
+	};
 	
+	//获取第一级目录下的数据
+	getData(url);
 }); 

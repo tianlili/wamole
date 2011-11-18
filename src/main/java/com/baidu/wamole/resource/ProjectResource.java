@@ -94,7 +94,7 @@ public class ProjectResource {
 	}
 
 	@GET
-	@Path("/files{path:[^?^/]*}")
+	@Path("/files{path:[^?]*}")
 	@Consumes(MediaType.TEXT_HTML)
 	@Produces(MediaType.TEXT_HTML)
 	public Response getFile() {
@@ -110,7 +110,7 @@ public class ProjectResource {
 	}
 
 	@GET
-	@Path("/files{path:[^?^/]*}")
+	@Path("/files{path:[^?]*}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getFileData(@PathParam("path") String path) {
