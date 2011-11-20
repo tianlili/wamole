@@ -75,6 +75,20 @@ public class RootResource {
 		resource.setName(name);
 		return resource;
 	}
+	
+	@GET
+	@Path("/addProject")
+	public Response addProject() {
+		StringWriter writer = new StringWriter();
+		try {
+			Template template = ConfigurationFactory.getInstance().getTemplate(
+					"pages/page/addProject.html");
+			template.dump(writer);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return Response.ok(writer.getBuffer().toString()).build();
+	}
 
 	@Path("/task")
 	public TaskResource getResourceByName() {
