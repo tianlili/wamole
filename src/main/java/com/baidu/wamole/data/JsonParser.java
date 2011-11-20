@@ -7,9 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jetty.util.B64Code;
-import org.eclipse.jetty.util.ajax.JSON;
-import org.eclipse.jetty.util.ajax.JSON.Convertor;
-import org.eclipse.jetty.util.ajax.JSON.Output;
 
 import com.baidu.wamole.model.Project;
 
@@ -157,32 +154,12 @@ public class JsonParser {
 
 	public static Project<?,?> jsonToObject(Class<? extends Project<?,?>> c, String data) {
 		try {
-			JSON json = new JSON();
-//			json.addConvertor(c, new ProjectConvertor<c>());
+			
 			Object o = c.newInstance();
 			return (Project<?, ?>) o;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
-	}
-	
-	private static final class ProjectConvertor<E extends Project<?,?>> implements Convertor{
-
-		@Override
-		public void toJSON(Object obj, Output out) {
-			for(Method m : obj.getClass().getDeclaredMethods()){
-				if(m.isAnnotationPresent(Exported.class)){
-					
-				}
-			}
-		}
-
-		@Override
-		public E fromJSON(Map object) {
-			
-			return null;
-		}
-		
 	}
 }

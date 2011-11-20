@@ -41,14 +41,22 @@ public class JettyServer {
 		collection.addHandler(new CommonResouceHandlerWrapper().getHandler());
 		
 		//project resource support
-		for(Project<?,?> project : Wamole.getInstance().getProjectList().getView()){
-			server.addPath(project.getPath(), "/project/"+project.getName()+"/view");
+		for(Project<?,?> project : Wamole.getInstance().getProjects()){//getProjectList().getView()){
+			addPath(project);
 		}
 		
 		//restful support
 		collection.addHandler(new RestfulHandlerWrapper().getHandler());
 		
 		server.setHandler(collection);
+	}
+	
+	public static void addPath(Project<?,?> project){
+		try {
+			server.addPath(project.getPath(), "/project/"+project.getName()+"/view").start();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private static class MainServer extends Server {
@@ -76,10 +84,11 @@ public class JettyServer {
 				super.handle(target, baseRequest, request, response);
 		}
 
-		public void addPath(String path, String uri) {
+		public SubServer addPath(String path, String uri) {
 			JettyServer.SubServer ss = new JettyServer.SubServer(path, uri, getUsablePort());
 			ss.enablePHPSupport();
 			vector.add(ss);
+			return ss;
 		}
 
 		public int getUsablePort() {

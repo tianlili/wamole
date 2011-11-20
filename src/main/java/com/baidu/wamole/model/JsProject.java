@@ -8,21 +8,17 @@ import java.util.Map;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.baidu.wamole.data.Imported;
 import com.baidu.wamole.exception.TestException;
 import com.baidu.wamole.process.Processor;
 import com.baidu.wamole.task.JsBuild;
-import com.baidu.wamole.util.AntPathMatcher;
 
 @XmlRootElement
 public class JsProject extends AbstractProject<JsProject, JsBuild> {
 
 	private Map<String, Kiss> kisses;
-	private String casepattern;
 	private boolean inited;
 	private Processor<Kiss> processor;
-	private AntPathMatcher matcher;
-	@Imported
+	
 	private Parser<Kiss, JsProject> parser;
 
 	public JsBuild getBuild() {
@@ -41,7 +37,6 @@ public class JsProject extends AbstractProject<JsProject, JsBuild> {
 	 */
 	private void init() throws TestException {
 		if (!inited) {
-			matcher = new AntPathMatcher();
 			// kisses = new ConcurrentHashMap<String, Kiss>();
 			File root = new File(this.getPath());
 			if (root.isDirectory()) {
@@ -52,29 +47,6 @@ public class JsProject extends AbstractProject<JsProject, JsBuild> {
 		}
 
 		inited = true;
-	}
-
-	/**
-	 * 递归解析项目资源
-	 * 
-	 * @param file
-	 */
-	private void parse(File file) {
-		File[] files = file.listFiles();
-		for (File file2 : files) {
-			if (file2.isDirectory()) {
-				this.parse(file2);
-			} else {
-				String absolutePath = file2.getAbsolutePath();
-				String relativePath = absolutePath.substring(new File(this
-						.getPath()).getAbsolutePath().length());
-				relativePath = relativePath.replace("\\", "/");
-				if (matcher.match(casepattern, relativePath)) {
-					kisses.put(relativePath, new JsKiss(this, relativePath));
-				}
-			}
-
-		}
 	}
 
 	@Override
@@ -99,6 +71,22 @@ public class JsProject extends AbstractProject<JsProject, JsBuild> {
 			}
 		}
 		return new ArrayList<Kiss>(kisses.values());
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void setParser(String parserType){
+		try {
+			this.parser = (Parser)Class.forName("com.baidu.wamole.model."+parserType).newInstance();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	@Override

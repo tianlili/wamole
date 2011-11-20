@@ -64,8 +64,8 @@ public class RootResource {
 	@Path("/project")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getProjectData() {
-		List<Project<?, ?>> list = Wamole.getInstance().getProjectList()
-				.getView();
+		List<Project<?, ?>> list = Wamole.getInstance().getProjects();
+				//.getProjectList().getView();
 		return Response.ok(JsonParser.listToJson(list).toString()).build();
 	}
 

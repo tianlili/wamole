@@ -2,14 +2,9 @@ package com.baidu.wamole.model;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-
 import com.baidu.wamole.exception.TestException;
 import com.baidu.wamole.task.Build;
 
-@XmlRootElement
 public interface Project<P extends Project<P ,B> , B extends Build<B ,P>> {
 	/**
 	 * project alias

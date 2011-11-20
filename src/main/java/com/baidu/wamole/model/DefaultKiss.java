@@ -5,9 +5,9 @@ public class DefaultKiss implements Kiss {
 
 	protected String name;
 
-	protected Project project;
+	protected Project<?,?> project;
 
-	public DefaultKiss(Project project, String name) {
+	public DefaultKiss(Project<?,?> project, String name) {
 		this.name = name;
 		this.project = project;
 	}
@@ -17,7 +17,7 @@ public class DefaultKiss implements Kiss {
 		return name;
 	}
 
-	public Project getProject() {
+	public Project<?,?> getProject() {
 		return this.project;
 	}
 }

@@ -16,9 +16,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import javax.xml.bind.JAXBElement;
-
-import org.eclipse.jetty.util.ajax.JSON;
+import javax.ws.rs.ext.Providers;
 
 import com.baidu.wamole.data.JsonParser;
 import com.baidu.wamole.data.ProjectFileData;
@@ -43,10 +41,12 @@ public class ProjectResource {
 	UriInfo uriInfo;
 	@Context
 	ResourceContext context;
+	@Context
+	Providers ps;
 
 	public void setName(String name) {
-		List<Project<?, ?>> list = Wamole.getInstance().getProjectList()
-				.getView();
+		List<Project<?, ?>> list = Wamole.getInstance().getProjects();
+				//getProjectList().getView();
 		for (Project<?, ?> project : list) {
 			if (project.getName().equals(name)) {
 				this.project = project;
@@ -77,21 +77,25 @@ public class ProjectResource {
 	/**
 	 * 项目新增接口，不存在则新增，否则更新
 	 * 
+	 * @param name
+	 *            项目名称
 	 * @param path
 	 *            项目跟路径
 	 * @param parser
 	 *            项目解析器
-	 * @param type
-	 *            项目类型
 	 * @return
 	 */
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
 	public Response addProject(@FormParam("path") String path,
-			@FormParam("parser") String parser, @FormParam("type") String type) {
-
-		return Response.ok("").build();
+			@FormParam("parser") String parser) {
+		JsProject project = new JsProject();
+		project.setName(name);
+		project.setPath(path);
+		project.setParser(parser);
+		Wamole.getInstance().addProject(project);
+		this.project = project;
+		return Response.ok(JsonParser.objToJson(project).toString()).build();
 	}
 
 	@PUT
@@ -142,7 +146,7 @@ public class ProjectResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getFileData(@PathParam("path") String path) {
 		return Response.ok(
-				JsonParser.objToJson(
-						ProjectFileData.getData(project, path)).toString()).build();
+				JsonParser.objToJson(ProjectFileData.getData(project, path))
+						.toString()).build();
 	}
 }

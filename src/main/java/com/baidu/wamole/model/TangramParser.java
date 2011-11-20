@@ -7,7 +7,7 @@ import java.util.Map;
 import com.baidu.wamole.data.Exported;
 
 public class TangramParser implements Parser<JsKiss, JsProject> {
-	private TangramParser(){};
+//	private TangramParser(){};
 	private static final TangramParser instance = new TangramParser();
 	public static TangramParser getInstance(){
 		return instance;
@@ -31,6 +31,7 @@ public class TangramParser implements Parser<JsKiss, JsProject> {
 			srcdir = transSeprator(project.getPath() + srcdir);
 			testdir = transSeprator(project.getPath() + testdir);
 		}
+		if(new File(srcdir).exists())
 		parseDir(new File(srcdir), project, srcdir, testdir, kisses);
 		return kisses;
 	}

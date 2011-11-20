@@ -7,11 +7,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import org.eclipse.jetty.util.ajax.JSON;
-
 import com.baidu.wamole.browser.BrowserManager;
 import com.baidu.wamole.config.Config;
 import com.baidu.wamole.config.Config.NOOBConfig;
+import com.baidu.wamole.server.JettyServer;
 import com.baidu.wamole.task.Build;
 import com.baidu.wamole.task.BuildThread;
 import com.baidu.wamole.xml.CopyOnWriteList;
@@ -26,9 +25,15 @@ public class Wamole {
 	private static Wamole instance;
 	private CopyOnWriteList<Module> modules = new CopyOnWriteList<Module>();
 	private Queue<Build<?, ?>> buildQueue;
+	
+	private ArrayList<Project<?,?>> otherProjects = new ArrayList<Project<?,?>>();
 
 	public CopyOnWriteList<Project<?, ?>> getProjectList() {
 		return projects;
+	}
+	
+	public List<Project<?,?>> getProjects(){
+		return otherProjects;
 	}
 
 	public Wamole(File root) {
@@ -60,8 +65,10 @@ public class Wamole {
 	public void load() {
 		XmlFile file = this.getConfigFile();
 		try {
-			System.out.println(file.getFile().getAbsolutePath());
+//			System.out.println(file.getFile().getAbsolutePath());
 			file.unmarshal(this);
+			for(Project<?,?> p : projects.getView())
+				otherProjects.add(p);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -83,7 +90,7 @@ public class Wamole {
 	}
 
 	public Project<?, ?> getProject(String name) {
-		List<Project<?, ?>> list = projects.getView();
+		List<Project<?, ?>> list = otherProjects;//projects.getView();
 		for (Project<?, ?> project : list) {
 			if (project.getName().equals(name)) {
 				return project;
@@ -98,7 +105,10 @@ public class Wamole {
 	 * @param project
 	 */
 	public void addProject(Project<?, ?> project) {
-		projects.getView().add(project);
+		//队列添加
+		otherProjects.add(project);
+		//启动服务
+		JettyServer.addPath(project);
 	}
 
 	public synchronized void addBuild(Build<?, ?> build) {
@@ -127,8 +137,4 @@ public class Wamole {
 		}
 		return projectTypeList;
 	}
-	
-//	public void addProject(JSON json, String data){
-//		getProjectList().add(json.fromJSON(data));
-//	}
 }
