@@ -15,6 +15,7 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import com.baidu.wamole.data.JsonParser;
 import com.baidu.wamole.model.Project;
 import com.baidu.wamole.model.Wamole;
 import com.baidu.wamole.template.ConfigurationFactory;
@@ -62,12 +63,10 @@ public class RootResource {
 	@GET
 	@Path("/project")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Project<?,?>> getProjectData() {
-//		List<Project<?, ?>> list = Wamole.getInstance().getProjectList();
-////				.getView();
-//		
-//		return list;
-		return Wamole.getInstance().getProjectList().getView();
+	public Response getProjectData() {
+		List<Project<?, ?>> list = Wamole.getInstance().getProjectList()
+				.getView();
+		return Response.ok(JsonParser.listToJson(list).toString()).build();
 	}
 
 	@Path("/project/{name}")

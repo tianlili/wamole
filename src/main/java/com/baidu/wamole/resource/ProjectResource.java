@@ -56,8 +56,6 @@ public class ProjectResource {
 	}
 
 	@GET
-	// @Consumes(MediaType.TEXT_HTML)
-	// @Produces(MediaType.TEXT_HTML)
 	public Response get() {
 		StringWriter writer = new StringWriter();
 		try {
@@ -72,15 +70,19 @@ public class ProjectResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Project<?,?> getData() {
-		return project;
+	public Response getData() {
+		return Response.ok(JsonParser.objToJson(project).toString()).build();
 	}
 
 	/**
 	 * 项目新增接口，不存在则新增，否则更新
-	 * @param path 项目跟路径
-	 * @param parser 项目解析器
-	 * @param type 项目类型
+	 * 
+	 * @param path
+	 *            项目跟路径
+	 * @param parser
+	 *            项目解析器
+	 * @param type
+	 *            项目类型
 	 * @return
 	 */
 	@POST
@@ -88,13 +90,13 @@ public class ProjectResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response addProject(@FormParam("path") String path,
 			@FormParam("parser") String parser, @FormParam("type") String type) {
-		
+
 		return Response.ok("").build();
 	}
-	
+
 	@PUT
 	// TODO 后续补充
-	public Response updateProject(){
+	public Response updateProject() {
 		return Response.ok("").build();
 	}
 
@@ -123,8 +125,6 @@ public class ProjectResource {
 
 	@GET
 	@Path("/files{path:[^?]*}")
-	@Consumes(MediaType.TEXT_HTML)
-	@Produces(MediaType.TEXT_HTML)
 	public Response getFile() {
 		StringWriter writer = new StringWriter();
 		try {
@@ -139,12 +139,10 @@ public class ProjectResource {
 
 	@GET
 	@Path("/files{path:[^?]*}")
-//	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public ProjectFileData getFileData(@PathParam("path") String path) {
-//		return Response.ok(
-//				JsonParser.objToJson(
-						return ProjectFileData.getData(project, path);
-//						.toString()).build();
+	public Response getFileData(@PathParam("path") String path) {
+		return Response.ok(
+				JsonParser.objToJson(
+						ProjectFileData.getData(project, path)).toString()).build();
 	}
 }
