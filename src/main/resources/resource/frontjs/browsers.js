@@ -66,7 +66,7 @@ $(function() {
 	}
 	
 	$.ajax({
-        url : 'data/browser',
+        url : location.href,
         method : 'GET',
 		dataType : 'json',
         success : function(data) {
