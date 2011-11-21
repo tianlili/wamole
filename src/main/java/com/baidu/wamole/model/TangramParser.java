@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.baidu.wamole.data.Exported;
+import com.baidu.wamole.data.Imported;
 
 public class TangramParser implements Parser<JsKiss, JsProject> {
 //	private TangramParser(){};
@@ -12,27 +13,37 @@ public class TangramParser implements Parser<JsKiss, JsProject> {
 	public static TangramParser getInstance(){
 		return instance;
 	}
+
+	private String src;
+	
+	private String test;
+
+	@Imported	
+	public void setSrc(String src){
+		this.src = src;
+	}
+
+	@Imported
+	public void setTest(String test){
+		this.test = test;
+	}
+	
+	@Exported
+	public String getSrc(){
+		return this.src;
+	}
+	
+	@Exported
+	public String getTest(){
+		return this.test;
+	}
 	
 	@Override
 	public Map<String, JsKiss> parse(JsProject project) {
-		String srcdir = null, testdir = null;
 		Map<String, JsKiss> kisses;
 		kisses = new HashMap<String, JsKiss>();
-		if (srcdir == null) {
-			srcdir = "/src";
-		}
-		if (testdir == null) {
-			testdir = "/test";
-		}
-		if (transSeprator(project.getPath()).endsWith("/")) {
-			srcdir = transSeprator(project.getPath() + srcdir.substring(1));
-			testdir = transSeprator(project.getPath() + srcdir.substring(1));
-		} else {
-			srcdir = transSeprator(project.getPath() + srcdir);
-			testdir = transSeprator(project.getPath() + testdir);
-		}
-		if(new File(srcdir).exists())
-		parseDir(new File(srcdir), project, srcdir, testdir, kisses);
+		if(new File(project.getPath(), src).exists())
+		parseDir(new File(project.getPath()+ src), project, src, test, kisses);
 		return kisses;
 	}
 

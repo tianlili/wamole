@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.List;
 
+import javax.jdo.PersistenceManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -20,10 +21,14 @@ import javax.ws.rs.ext.Providers;
 
 import com.baidu.wamole.data.JsonParser;
 import com.baidu.wamole.data.ProjectFileData;
+import com.baidu.wamole.model.Parser;
 import com.baidu.wamole.model.Project;
+import com.baidu.wamole.model.TangramParser;
 import com.baidu.wamole.model.Wamole;
 import com.baidu.wamole.template.ConfigurationFactory;
 import com.sun.jersey.api.core.ResourceContext;
+import com.sun.jersey.api.representation.Form;
+import com.sun.jersey.server.impl.model.method.dispatch.FormDispatchProvider;
 
 import freemarker.template.Template;
 
@@ -82,10 +87,9 @@ public class ProjectResource {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void updateProject(@Context HttpServletRequest Req) {
-		//获取参数
-		MultivaluedMap<String, String> map = uriInfo.getPathParameters();
-		System.out.println(map);
+	public void updateProject() {
+		Parser parser = JsonParser.jsonToObject(Parser.class, uriInfo);
+		
 	}
 
 	@Path("/exec")

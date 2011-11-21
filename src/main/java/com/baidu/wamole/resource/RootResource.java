@@ -5,7 +5,6 @@ import java.io.StringWriter;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -51,6 +50,7 @@ public class RootResource {
 
 	/**
 	 * 请求项目列表的HTML接口
+	 * 
 	 * @return
 	 */
 	@GET
@@ -70,6 +70,7 @@ public class RootResource {
 
 	/**
 	 * 请求项目列表的数据接口
+	 * 
 	 * @return
 	 */
 	@GET
@@ -80,9 +81,10 @@ public class RootResource {
 		List<Project<?, ?>> list = Wamole.getInstance().getProjects();
 		return Response.ok(JsonParser.listToJson(list).toString()).build();
 	}
-	
+
 	/**
 	 * 请求Project添加页
+	 * 
 	 * @return
 	 */
 	@POST
@@ -101,6 +103,7 @@ public class RootResource {
 
 	/**
 	 * Project添加接口的数据接口
+	 * 
 	 * @param name
 	 * @param path
 	 * @param parser
@@ -110,14 +113,10 @@ public class RootResource {
 	@Path("/project")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void addProject(@FormParam("name") String name,
-			@FormParam("path") String path) {
-		JsProject project = new JsProject();
-		if(name == null || path == null)
-			return;
-		project.setName(name);
-		project.setPath(path);
-		Wamole.getInstance().addProject(project);
+	public void addProject() {
+		JsProject project = JsonParser.jsonToObject(JsProject.class, uriInfo);
+		if (project != null)
+			Wamole.getInstance().addProject(project);
 	}
 
 	@Path("/project/{name}")
@@ -125,20 +124,6 @@ public class RootResource {
 		ProjectResource resource = context.getResource(ProjectResource.class);
 		resource.setName(name);
 		return resource;
-	}
-	
-	@GET
-	@Path("/addProject")
-	public Response addProject() {
-		StringWriter writer = new StringWriter();
-		try {
-			Template template = ConfigurationFactory.getInstance().getTemplate(
-					"pages/page/addProject.html");
-			template.dump(writer);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return Response.ok(writer.getBuffer().toString()).build();
 	}
 
 	@Path("/task")
@@ -150,19 +135,20 @@ public class RootResource {
 	public BrowserResource getBrowser() {
 		return context.getResource(BrowserResource.class);
 	}
-//
-//	@Path("/data")
-//	public DataResource getData() {
-//		return context.getResource(DataResource.class);
-//	}
+
+	//
+	// @Path("/data")
+	// public DataResource getData() {
+	// return context.getResource(DataResource.class);
+	// }
 
 	@Path("/build")
 	public BuildResource build() {
 		return context.getResource(BuildResource.class);
 	}
-	
+
 	@Path("/enum")
-	public EnumResource getEnum(){
+	public EnumResource getEnum() {
 		return context.getResource(EnumResource.class);
 	}
 }

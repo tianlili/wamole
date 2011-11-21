@@ -1,10 +1,15 @@
 package com.baidu.wamole.data;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.UriInfo;
 
 import org.eclipse.jetty.util.B64Code;
 
@@ -101,11 +106,11 @@ public class JsonParser {
 			} else {
 				Exported eAnno = m.getAnnotation(Exported.class);
 				value = m.invoke(obj).toString();
-				if(value == null){
+				if (value == null) {
 					sb.setLength(0);
 					return sb;
 				}
-					
+
 				if (eAnno.encode())
 					value = B64Code.encode(value, eAnno.enc());
 				value = "\"" + value + "\"";
@@ -146,9 +151,11 @@ public class JsonParser {
 	 * @return
 	 */
 	private static String parseNameFromGetMethod(String methodName) {
-		int start = 3;
+		int start = 0;
 		if (methodName.startsWith("is")) {
 			start = 2;
+		} else if (methodName.startsWith("get")) {
+			start = 3;
 		}
 		return Character.toLowerCase(methodName.charAt(start))
 				+ methodName.substring(start + 1);
@@ -158,15 +165,95 @@ public class JsonParser {
 		return parseNameFromGetMethod(m.getName());
 	}
 
-	public static Project<?, ?> jsonToObject(Class<? extends Project<?, ?>> c,
-			String data) {
+	/**
+	 * 从json到对象注入
+	 * <p>
+	 * {a.type, a.x1, a.x2, b.type, b.x1, b.x2...}
+	 * 
+	 * @param c
+	 *            希望提取的对象类
+	 * @param uriInfo
+	 * @return
+	 */
+	public static Map<String, Object> jsonToObject(UriInfo uriInfo) {
 		try {
-
-			Object o = c.newInstance();
-			return (Project<?, ?>) o;
+			MultivaluedMap<String, String> data = uriInfo.getPathParameters();
+			//拆分成三维数组，方便处理
+			HashMap<String, MultivaluedMap<String, String>> map = new HashMap<String, MultivaluedMap<String,String>>();
+			for(String key : data.keySet()){
+				String item = key.split("\\.")[0];
+				String _key = key.substring(item.length());
+				if(map.containsKey(item))
+					map.get(item).add(_key, data.getFirst(key));
+			}
+			
+			HashMap<String, Object> result = new HashMap<String, Object>();
+			for(String prefix : map.keySet()){
+				MultivaluedMap<String, String> _data = map.get(prefix);
+				Class<?> c = Class.forName(_data.getFirst("type"));
+				Object o = c.newInstance();
+				
+				
+				
+				result.put(prefix, o);
+			}
+			
+//			//取type
+//			for(String key : data.keySet()){
+//				if(key.endsWith(".type")){
+//					String item = key.substring(0, key.length()-6);
+//					Class<?> c = Class.forName(data.get(key).get(0));
+//
+//					Object o = c.newInstance();
+//					for(String item0 : data.keySet()){
+//						if(item0.startsWith(item+".") && !item0.endsWith(".type")){
+//							
+//						}
+//					}
+//					
+//				}
+//			}
+			
+//			return c.cast(o);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	private static void bindObj(Object o, MultivaluedMap<String, String> map){
+		for (Method m : o.getClass().getDeclaredMethods()) {
+			if (m.isAnnotationPresent(Imported.class))
+				try {
+					String key = map.get(parseNameFromGetMethod(m));
+					List<String> value = map.get(key);
+					if (value.size() == 1)
+						m.invoke(o, value.get(0));
+					// TODO, 数组形式后续开发
+					// else
+					// m.invoke(o, value.toArray());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+		}
+	}
+
+	private static void bindObj(Object o, String prefix,
+			MultivaluedMap<String, String> map) {
+		for (Method m : o.getClass().getDeclaredMethods()) {
+			if (m.isAnnotationPresent(Imported.class))
+				try {
+					String key = prefix + "."
+							+ map.get(parseNameFromGetMethod(m));
+					List<String> value = map.get(key);
+					if (value.size() == 1)
+						m.invoke(o, value.get(0));
+					// TODO, 数组形式后续开发
+					// else
+					// m.invoke(o, value.toArray());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+		}
 	}
 }
