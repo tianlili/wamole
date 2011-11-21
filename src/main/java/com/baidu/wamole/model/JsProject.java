@@ -15,10 +15,10 @@ import com.baidu.wamole.task.JsBuild;
 @XmlRootElement
 public class JsProject extends AbstractProject<JsProject, JsBuild> {
 
-	private Map<String, Kiss> kisses;
+	private Map<String, Kiss> kisses = null;
 	private boolean inited;
 	private Processor<Kiss> processor;
-	
+
 	private Parser<Kiss, JsProject> parser;
 
 	public JsBuild getBuild() {
@@ -40,7 +40,8 @@ public class JsProject extends AbstractProject<JsProject, JsBuild> {
 			// kisses = new ConcurrentHashMap<String, Kiss>();
 			File root = new File(this.getPath());
 			if (root.isDirectory()) {
-				kisses = parser.parse(this);
+				if (parser != null)
+					kisses = parser.parse(this);
 			} else {
 				throw new TestException("tangram project init fail!");
 			}
@@ -58,7 +59,7 @@ public class JsProject extends AbstractProject<JsProject, JsBuild> {
 				e.printStackTrace();
 			}
 		}
-		return (Kiss) kisses.get(kissName);
+		return kisses == null ? null : (Kiss) kisses.get(kissName);
 	}
 
 	@Override
@@ -72,11 +73,12 @@ public class JsProject extends AbstractProject<JsProject, JsBuild> {
 		}
 		return new ArrayList<Kiss>(kisses.values());
 	}
-	
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void setParser(String parserType){
+	public void setParser(String parserType) {
 		try {
-			this.parser = (Parser)Class.forName("com.baidu.wamole.model."+parserType).newInstance();
+			this.parser = (Parser) Class.forName(
+					"com.baidu.wamole.model." + parserType).newInstance();
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -88,7 +90,7 @@ public class JsProject extends AbstractProject<JsProject, JsBuild> {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
 	public String getExecutePage(String searchString) throws TestException {
 		Kiss kiss = this.getKiss(searchString);

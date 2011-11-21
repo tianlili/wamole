@@ -4,23 +4,22 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Providers;
 
 import com.baidu.wamole.data.JsonParser;
 import com.baidu.wamole.data.ProjectFileData;
-import com.baidu.wamole.model.JsProject;
 import com.baidu.wamole.model.Project;
 import com.baidu.wamole.model.Wamole;
 import com.baidu.wamole.template.ConfigurationFactory;
@@ -46,7 +45,7 @@ public class ProjectResource {
 
 	public void setName(String name) {
 		List<Project<?, ?>> list = Wamole.getInstance().getProjects();
-				//getProjectList().getView();
+		// getProjectList().getView();
 		for (Project<?, ?> project : list) {
 			if (project.getName().equals(name)) {
 				this.project = project;
@@ -70,38 +69,23 @@ public class ProjectResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	public Response getData() {
 		return Response.ok(JsonParser.objToJson(project).toString()).build();
 	}
 
 	/**
-	 * 项目新增接口，不存在则新增，否则更新
+	 * 项目设置接口，用于更新parser和浏览器接口
 	 * 
-	 * @param name
-	 *            项目名称
-	 * @param path
-	 *            项目跟路径
-	 * @param parser
-	 *            项目解析器
 	 * @return
 	 */
 	@POST
+	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response addProject(@FormParam("path") String path,
-			@FormParam("parser") String parser) {
-		JsProject project = new JsProject();
-		project.setName(name);
-		project.setPath(path);
-		project.setParser(parser);
-		Wamole.getInstance().addProject(project);
-		this.project = project;
-		return Response.ok(JsonParser.objToJson(project).toString()).build();
-	}
-
-	@PUT
-	// TODO 后续补充
-	public Response updateProject() {
-		return Response.ok("").build();
+	public void updateProject(@Context HttpServletRequest Req) {
+		//获取参数
+		MultivaluedMap<String, String> map = uriInfo.getPathParameters();
+		System.out.println(map);
 	}
 
 	@Path("/exec")

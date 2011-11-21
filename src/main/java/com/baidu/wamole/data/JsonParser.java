@@ -101,9 +101,15 @@ public class JsonParser {
 			} else {
 				Exported eAnno = m.getAnnotation(Exported.class);
 				value = m.invoke(obj).toString();
+				if(value == null){
+					sb.setLength(0);
+					return sb;
+				}
+					
 				if (eAnno.encode())
 					value = B64Code.encode(value, eAnno.enc());
 				value = "\"" + value + "\"";
+
 			}
 			sb.append(value);
 			sb.append(",");
@@ -152,9 +158,10 @@ public class JsonParser {
 		return parseNameFromGetMethod(m.getName());
 	}
 
-	public static Project<?,?> jsonToObject(Class<? extends Project<?,?>> c, String data) {
+	public static Project<?, ?> jsonToObject(Class<? extends Project<?, ?>> c,
+			String data) {
 		try {
-			
+
 			Object o = c.newInstance();
 			return (Project<?, ?>) o;
 		} catch (Exception e) {

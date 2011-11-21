@@ -5,7 +5,9 @@ import java.io.StringWriter;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -16,6 +18,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import com.baidu.wamole.data.JsonParser;
+import com.baidu.wamole.model.JsProject;
 import com.baidu.wamole.model.Project;
 import com.baidu.wamole.model.Wamole;
 import com.baidu.wamole.template.ConfigurationFactory;
@@ -46,9 +49,14 @@ public class RootResource {
 		return Response.ok(writer.getBuffer().toString()).build();
 	}
 
+	/**
+	 * 请求项目列表的HTML接口
+	 * @return
+	 */
 	@GET
 	@Path("/project")
-	public Response getProject() {
+	@Consumes(MediaType.TEXT_HTML)
+	public Response getProjectList() {
 		StringWriter writer = new StringWriter();
 		try {
 			Template template = ConfigurationFactory.getInstance().getTemplate(
@@ -60,13 +68,56 @@ public class RootResource {
 		return Response.ok(writer.getBuffer().toString()).build();
 	}
 
+	/**
+	 * 请求项目列表的数据接口
+	 * @return
+	 */
 	@GET
 	@Path("/project")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getProjectData() {
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response getProjectListData() {
 		List<Project<?, ?>> list = Wamole.getInstance().getProjects();
-				//.getProjectList().getView();
 		return Response.ok(JsonParser.listToJson(list).toString()).build();
+	}
+	
+	/**
+	 * 请求Project添加页
+	 * @return
+	 */
+	@POST
+	@Path("/project")
+	public Response getProjectAddPage() {
+		StringWriter writer = new StringWriter();
+		try {
+			Template template = ConfigurationFactory.getInstance().getTemplate(
+					"pages/page/addProject.html");
+			template.dump(writer);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return Response.ok(writer.getBuffer().toString()).build();
+	}
+
+	/**
+	 * Project添加接口的数据接口
+	 * @param name
+	 * @param path
+	 * @param parser
+	 * @return
+	 */
+	@POST
+	@Path("/project")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void addProject(@FormParam("name") String name,
+			@FormParam("path") String path) {
+		JsProject project = new JsProject();
+		if(name == null || path == null)
+			return;
+		project.setName(name);
+		project.setPath(path);
+		Wamole.getInstance().addProject(project);
 	}
 
 	@Path("/project/{name}")
