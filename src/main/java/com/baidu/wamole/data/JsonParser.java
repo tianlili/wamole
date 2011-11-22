@@ -1,9 +1,7 @@
 package com.baidu.wamole.data;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,8 +10,6 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriInfo;
 
 import org.eclipse.jetty.util.B64Code;
-
-import com.baidu.wamole.model.Project;
 
 /**
  * 
@@ -176,6 +172,7 @@ public class JsonParser {
 	 * @return
 	 */
 	public static Map<String, Object> jsonToObject(UriInfo uriInfo) {
+		HashMap<String, Object> result = new HashMap<String, Object>();
 		try {
 			MultivaluedMap<String, String> data = uriInfo.getPathParameters();
 			//拆分成三维数组，方便处理
@@ -187,65 +184,24 @@ public class JsonParser {
 					map.get(item).add(_key, data.getFirst(key));
 			}
 			
-			HashMap<String, Object> result = new HashMap<String, Object>();
 			for(String prefix : map.keySet()){
 				MultivaluedMap<String, String> _data = map.get(prefix);
 				Class<?> c = Class.forName(_data.getFirst("type"));
-				Object o = c.newInstance();
-				
-				
-				
+				Object o = c.newInstance();				
+				bindObj(o, _data);
 				result.put(prefix, o);
 			}
-			
-//			//取type
-//			for(String key : data.keySet()){
-//				if(key.endsWith(".type")){
-//					String item = key.substring(0, key.length()-6);
-//					Class<?> c = Class.forName(data.get(key).get(0));
-//
-//					Object o = c.newInstance();
-//					for(String item0 : data.keySet()){
-//						if(item0.startsWith(item+".") && !item0.endsWith(".type")){
-//							
-//						}
-//					}
-//					
-//				}
-//			}
-			
-//			return c.cast(o);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return null;
+		return result;
 	}
 	
 	private static void bindObj(Object o, MultivaluedMap<String, String> map){
 		for (Method m : o.getClass().getDeclaredMethods()) {
 			if (m.isAnnotationPresent(Imported.class))
 				try {
-					String key = map.get(parseNameFromGetMethod(m));
-					List<String> value = map.get(key);
-					if (value.size() == 1)
-						m.invoke(o, value.get(0));
-					// TODO, 数组形式后续开发
-					// else
-					// m.invoke(o, value.toArray());
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-		}
-	}
-
-	private static void bindObj(Object o, String prefix,
-			MultivaluedMap<String, String> map) {
-		for (Method m : o.getClass().getDeclaredMethods()) {
-			if (m.isAnnotationPresent(Imported.class))
-				try {
-					String key = prefix + "."
-							+ map.get(parseNameFromGetMethod(m));
-					List<String> value = map.get(key);
+					List<String> value = map.get(parseNameFromGetMethod(m));
 					if (value.size() == 1)
 						m.invoke(o, value.get(0));
 					// TODO, 数组形式后续开发

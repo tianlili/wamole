@@ -73,22 +73,27 @@ public class JsProject extends AbstractProject<JsProject, JsBuild> {
 		}
 		return new ArrayList<Kiss>(kisses.values());
 	}
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void setParser(String parserType) {
-		try {
-			this.parser = (Parser) Class.forName(
-					"com.baidu.wamole.model." + parserType).newInstance();
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//
+//	@SuppressWarnings({ "unchecked", "rawtypes" })
+//	public void setParser(String parserType) {
+//		try {
+//			this.parser = (Parser) Class.forName(
+//					"com.baidu.wamole.model." + parserType).newInstance();
+//		} catch (InstantiationException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (IllegalAccessException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (ClassNotFoundException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public void setParser(Parser parser){
+		this.parser = parser;
 	}
 
 	@Override

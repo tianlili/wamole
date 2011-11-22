@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.List;
 
-import javax.jdo.PersistenceManager;
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -14,21 +12,18 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Providers;
 
 import com.baidu.wamole.data.JsonParser;
 import com.baidu.wamole.data.ProjectFileData;
+import com.baidu.wamole.model.JsProject;
 import com.baidu.wamole.model.Parser;
 import com.baidu.wamole.model.Project;
-import com.baidu.wamole.model.TangramParser;
 import com.baidu.wamole.model.Wamole;
 import com.baidu.wamole.template.ConfigurationFactory;
 import com.sun.jersey.api.core.ResourceContext;
-import com.sun.jersey.api.representation.Form;
-import com.sun.jersey.server.impl.model.method.dispatch.FormDispatchProvider;
 
 import freemarker.template.Template;
 
@@ -50,7 +45,6 @@ public class ProjectResource {
 
 	public void setName(String name) {
 		List<Project<?, ?>> list = Wamole.getInstance().getProjects();
-		// getProjectList().getView();
 		for (Project<?, ?> project : list) {
 			if (project.getName().equals(name)) {
 				this.project = project;
@@ -84,12 +78,17 @@ public class ProjectResource {
 	 * 
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void updateProject() {
-		Parser parser = JsonParser.jsonToObject(Parser.class, uriInfo);
-		
+		if (project instanceof JsProject) {
+			Parser parser = (Parser) JsonParser.jsonToObject(uriInfo).get(
+					"parser");
+			if (parser != null)
+				JsProject.class.cast(parser).setParser(parser);
+		}
 	}
 
 	@Path("/exec")

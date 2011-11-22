@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.baidu.wamole.data.Exported;
+import com.baidu.wamole.data.Imported;
 import com.baidu.wamole.util.AntPathMatcher;
 
 public class AntPathParser implements Parser<DefaultKiss, Project<?, ?>> {
@@ -12,6 +13,11 @@ public class AntPathParser implements Parser<DefaultKiss, Project<?, ?>> {
 	private String filepath;
 	private AntPathMatcher matcher;
 	private Map<String, DefaultKiss> kisses;
+	
+	@Imported
+	public void setCasepattern(String pattern){
+		this.casepattern = pattern;
+	}
 
 	@Override
 	public Map<String, DefaultKiss> parse(Project<?, ?> project) {

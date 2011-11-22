@@ -87,8 +87,8 @@ public class RootResource {
 	 * 
 	 * @return
 	 */
-	@POST
-	@Path("/project")
+	@GET
+	@Path("/addproject")
 	public Response getProjectAddPage() {
 		StringWriter writer = new StringWriter();
 		try {
@@ -114,7 +114,7 @@ public class RootResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void addProject() {
-		JsProject project = JsonParser.jsonToObject(JsProject.class, uriInfo);
+		JsProject project = JsProject.class.cast(JsonParser.jsonToObject(uriInfo).get(""));
 		if (project != null)
 			Wamole.getInstance().addProject(project);
 	}
