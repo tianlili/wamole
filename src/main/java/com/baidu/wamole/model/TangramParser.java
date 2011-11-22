@@ -8,51 +8,56 @@ import com.baidu.wamole.data.Exported;
 import com.baidu.wamole.data.Imported;
 
 public class TangramParser implements Parser<JsKiss, JsProject> {
-//	private TangramParser(){};
+	// private TangramParser(){};
 	private static final TangramParser instance = new TangramParser();
-	public static TangramParser getInstance(){
+
+	public static TangramParser getInstance() {
 		return instance;
 	}
 
-	private String src;
-	
-	private String test;
+	private String src = "src";
 
-	@Imported	
-	public void setSrc(String src){
+	private String test = "test";
+
+	@Imported
+	public void setSrc(String src) {
 		this.src = src;
 	}
 
 	@Imported
-	public void setTest(String test){
+	public void setTest(String test) {
 		this.test = test;
 	}
-	
+
 	@Exported
-	public String getSrc(){
+	public String getSrc() {
+		if (this.src == null)
+			this.src = "src";
 		return this.src;
 	}
-	
+
 	@Exported
-	public String getTest(){
+	public String getTest() {
+		if (this.test == null)
+			this.test = "test";
 		return this.test;
 	}
-	
+
 	@Override
 	public Map<String, JsKiss> parse(JsProject project) {
 		Map<String, JsKiss> kisses;
 		kisses = new HashMap<String, JsKiss>();
-		if(new File(project.getPath(), src).exists())
-		parseDir(new File(project.getPath()+ src), project, src, test, kisses);
+		if (new File(project.getPath(), this.getSrc()).exists())
+			parseDir(new File(project.getPath(), this.getSrc()), project,
+					this.getSrc(), this.getTest(), kisses);
 		return kisses;
 	}
 
 	private void parseDir(File file, JsProject project, String srcdir,
 			String testdir, Map<String, JsKiss> kisses) {
-		File[] files = file.listFiles();
-		for (int i = 0; i < files.length; i++) {
-			if (!files[i].isDirectory()) {
-				String s = transSeprator(files[i].getAbsolutePath());
+		for (File f : file.listFiles()) {
+			if (!f.isDirectory()) {
+				String s = transSeprator(f.getAbsolutePath());
 				// 判断是否是js结尾
 				if (s.endsWith(".js")) {
 					// 判断文件是否存在
@@ -63,7 +68,7 @@ public class TangramParser implements Parser<JsKiss, JsProject> {
 					}
 				}
 			} else {
-				parseDir(files[i], project, srcdir, testdir, kisses);
+				parseDir(f, project, srcdir, testdir, kisses);
 			}
 		}
 	}
