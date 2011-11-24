@@ -6,17 +6,20 @@ import com.baidu.wamole.data.Exported;
 import com.baidu.wamole.data.Imported;
 import com.baidu.wamole.task.AbstractBuild;
 import com.baidu.wamole.task.BuildStep;
-import com.baidu.wamole.xml.CopyOnWriteList;
+import com.baidu.wamole.util.CopyOnWriteList;
 
-public abstract class AbstractProject<P extends AbstractProject<P, B>, B extends AbstractBuild<B, P>>
+public abstract class AbstractProject<P extends AbstractProject<P, B>, B extends AbstractBuild<B, P>> extends AbstractItem
 		implements Project<P, B> {
 
-	private String name;
+	protected AbstractProject(String name) {
+		super(Wamole.getInstance(), name);
+	}
+
 	// 项目基础路径
 	private String path;
 
 	// 项目构建步骤
-	private CopyOnWriteList<BuildStep> buildSteps;
+	private CopyOnWriteList<BuildStep<B>> buildSteps;
 
 	// 项目
 	@Exported
@@ -39,7 +42,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, B>, B extends
 		this.path = path;
 	}
 
-	public List<BuildStep> getBuildSteps() {
+	public List<BuildStep<B>> getBuildSteps() {
 		return buildSteps.getView();
 	}
 }

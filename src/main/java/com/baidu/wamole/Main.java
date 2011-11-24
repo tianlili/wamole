@@ -10,7 +10,6 @@ import com.baidu.wamole.model.Wamole;
 import com.baidu.wamole.server.JettyServer;
 
 public class Main {
-	// private List<Project<?, ?>> projects;
 	private final String root;
 
 	public static void main(String[] args) throws Exception {
@@ -29,11 +28,9 @@ public class Main {
 			initWamole();
 		}
 
-		Wamole wamole = new Wamole(file);
-		// projects = wamole.getProjectList().getView();
 		try {
-			wamole.getConfig().config();
-		} catch (ConfigException e) {
+			new Wamole(file);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -57,14 +54,6 @@ public class Main {
 
 	public void startServer() throws Exception {
 		JettyServer.setPort(8080);
-		// HandlerCollection collection = new HandlerCollection();
-		// collection.addHandler(new
-		// CommonResouceHandlerWrapper().getHandler());
-		// if(null != projects)
-		// collection.addHandler(new
-		// ProjectHandlerWrapper(projects).getHandler());
-		// collection.addHandler(new RestfulHandlerWrapper().getHandler());
-		// JettyServer.setHandler(collection);
 		JettyServer.start();
 	}
 

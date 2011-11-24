@@ -8,7 +8,7 @@ import com.baidu.wamole.model.JsKiss;
 import com.baidu.wamole.task.BuildStep;
 import com.baidu.wamole.task.JsBuildStep;
 import com.baidu.wamole.task.Result;
-import com.baidu.wamole.xml.CopyOnWriteList;
+import com.baidu.wamole.util.CopyOnWriteList;
 
 public class BrowserManager implements Module {
 	private CopyOnWriteList<StaticBrowser> statics;

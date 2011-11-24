@@ -43,5 +43,7 @@ public interface Project<P extends Project<P ,B> , B extends Build<B ,P>> {
 	 */
 	String getExecutePage(String searchString) throws TestException;
 	
-	B getBuild();
+	List<B> getBuilds();
+	
+	void addBuild();
 }

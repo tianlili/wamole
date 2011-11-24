@@ -8,26 +8,36 @@ import java.util.Map;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.baidu.wamole.data.Exported;
 import com.baidu.wamole.exception.TestException;
 import com.baidu.wamole.process.Processor;
 import com.baidu.wamole.task.JsBuild;
 
 @XmlRootElement
-public class JsProject extends AbstractProject<JsProject, JsBuild> {
+public class JsProject extends AbstractProject<JsProject, JsBuild> implements Savable{
 
 	private Map<String, Kiss> kisses = null;
 	private boolean inited;
 	private Processor<Kiss> processor;
+	private JsBuild build;
 
 	private Parser<Kiss, JsProject> parser;
 
 	public JsBuild getBuild() {
+		return build;
+	}
+
+	@Exported
+	public JsBuild getBuild(int id) {
+		return getBuilds().get(id);
+	}
+
+	public void addBuild() {
 		try {
-			return new JsBuild(this);
+			builds.add(new JsBuild(this));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return null;
 	}
 
 	/**
@@ -73,26 +83,9 @@ public class JsProject extends AbstractProject<JsProject, JsBuild> {
 		}
 		return new ArrayList<Kiss>(kisses.values());
 	}
-//
-//	@SuppressWarnings({ "unchecked", "rawtypes" })
-//	public void setParser(String parserType) {
-//		try {
-//			this.parser = (Parser) Class.forName(
-//					"com.baidu.wamole.model." + parserType).newInstance();
-//		} catch (InstantiationException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (IllegalAccessException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (ClassNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//	}
-	
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void setParser(Parser parser){
+	public void setParser(Parser parser) {
 		this.parser = parser;
 	}
 

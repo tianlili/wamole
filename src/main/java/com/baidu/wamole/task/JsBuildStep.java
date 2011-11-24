@@ -10,7 +10,7 @@ import com.baidu.wamole.browser.Browser;
 import com.baidu.wamole.browser.BrowserManager;
 import com.baidu.wamole.model.Wamole;
 import com.baidu.wamole.template.ConfigurationFactory;
-import com.baidu.wamole.xml.CopyOnWriteList;
+import com.baidu.wamole.util.CopyOnWriteList;
 
 public class JsBuildStep extends BuildStep {
 	private CopyOnWriteList<String> browsers;

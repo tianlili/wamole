@@ -3,40 +3,44 @@ package com.baidu.wamole.model;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 
 import com.baidu.wamole.browser.BrowserManager;
-import com.baidu.wamole.config.Config;
-import com.baidu.wamole.config.Config.NOOBConfig;
 import com.baidu.wamole.server.JettyServer;
 import com.baidu.wamole.task.Build;
 import com.baidu.wamole.task.BuildThread;
-import com.baidu.wamole.xml.CopyOnWriteList;
+import com.baidu.wamole.util.CopyOnWriteList;
+import com.baidu.wamole.util.CopyOnWriteMap;
 import com.baidu.wamole.xml.DefaultXStream;
 import com.baidu.wamole.xml.XmlFile;
 import com.thoughtworks.xstream.XStream;
 
-public class Wamole {
-	private Config config = new NOOBConfig();
-	private CopyOnWriteList<Project<?, ?>> projects = new CopyOnWriteList<Project<?, ?>>();
+public class Wamole implements ItemGroup<TopLevelItem> {
+	private CopyOnWriteList<Project<?, ?>> projects = new CopyOnWriteList<Project<?, ?>>();	
 	private transient final File root;
 	private static Wamole instance;
-	private CopyOnWriteList<Module> modules = new CopyOnWriteList<Module>();
 	private Queue<Build<?, ?>> buildQueue;
 	
-	private ArrayList<Project<?,?>> otherProjects = new ArrayList<Project<?,?>>();
+//	private ProjectManager pm;
+//	private BuilderManager dm;
+
+	public <T> T getModule(Class<T> clazz) {
+		return null;
+	}
 
 	public CopyOnWriteList<Project<?, ?>> getProjectList() {
 		return projects;
 	}
-	
-	public List<Project<?,?>> getProjects(){
-		return otherProjects;
+
+	public List<Project<?, ?>> getProjects() {
+		return projects.getView();
 	}
 
-	public Wamole(File root) {
+	public Wamole(File root) throws IOException {
 		this.root = root;
 		this.load();
 		instance = this;
@@ -44,34 +48,8 @@ public class Wamole {
 		new BuildThread().start();
 	}
 
-	public List<Module> getModules() {
-		return modules.getView();
-	}
-
-	public Module getModule(Class<? extends Module> clazz) {
-		List<Module> tmp = modules.getView();
-		for (int i = 0; i < tmp.size(); i++) {
-			if (clazz.isInstance(tmp.get(i))) {
-				return clazz.cast(tmp.get(i));
-			}
-		}
-		return null;
-	}
-
-	public Config getConfig() {
-		return this.config;
-	}
-
-	public void load() {
-		XmlFile file = this.getConfigFile();
-		try {
-//			System.out.println(file.getFile().getAbsolutePath());
-			file.unmarshal(this);
-			for(Project<?,?> p : projects.getView())
-				otherProjects.add(p);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public void load() throws IOException {
+		getConfigFile().unmarshal(this);
 	}
 
 	private XmlFile getConfigFile() {
@@ -90,8 +68,7 @@ public class Wamole {
 	}
 
 	public Project<?, ?> getProject(String name) {
-		List<Project<?, ?>> list = otherProjects;//projects.getView();
-		for (Project<?, ?> project : list) {
+		for (Project<?, ?> project : projects) {
 			if (project.getName().equals(name)) {
 				return project;
 			}
@@ -105,10 +82,14 @@ public class Wamole {
 	 * @param project
 	 */
 	public void addProject(Project<?, ?> project) {
-		//队列添加
-		otherProjects.add(project);
-		//启动服务
+		// 队列添加
+		projects.add(project);
+		// 启动服务
 		JettyServer.addPath(project);
+	}
+
+	public void addBuild(Project<?, ?> project) {
+
 	}
 
 	public synchronized void addBuild(Build<?, ?> build) {
@@ -119,6 +100,9 @@ public class Wamole {
 		return this.buildQueue;
 	}
 
+	/**
+	 * parser的导出解决方案
+	 */
 	private ArrayList<Class<? extends Parser<? extends Kiss, ? extends Project<?, ?>>>> parserList = new ArrayList<Class<? extends Parser<? extends Kiss, ? extends Project<?, ?>>>>();
 
 	public ArrayList<Class<? extends Parser<? extends Kiss, ? extends Project<?, ?>>>> getParserTypeList() {
@@ -128,13 +112,48 @@ public class Wamole {
 		}
 		return parserList;
 	}
-	
-	private ArrayList<Class<?extends Project<?,?>>> projectTypeList = new ArrayList<Class<? extends Project<?,?>>>();
-	
-	public ArrayList<Class<? extends Project<?,?>>> getProjectTypeList() {
+
+	/**
+	 * 项目类型的导出解决方案
+	 */
+	private ArrayList<Class<? extends Project<?, ?>>> projectTypeList = new ArrayList<Class<? extends Project<?, ?>>>();
+
+	public ArrayList<Class<? extends Project<?, ?>>> getProjectTypeList() {
 		if (projectTypeList.size() == 0) {
-			projectTypeList.add(JsProject.class);			
+			projectTypeList.add(JsProject.class);
 		}
 		return projectTypeList;
 	}
+
+	@Override
+	public File getRootDir() {
+		return null;
+	}
+
+	@Override
+	public void save() throws IOException {
+
+	}
+
+	@Override
+	public File getRootDirFor(TopLevelItem child) {
+		return getRootDirFor(child.getName());
+	}
+	
+	public File getRootDirFor(String name){
+		return new File(new File(getRootDir(),"projects"), name); 
+	}
+
+	@Override
+	public TopLevelItem getItem(String name) {
+		return items.get(name);
+	}
+
+	@Override
+	public Collection<TopLevelItem> getItems() {
+		return items.values();
+	}
+
+	/* package */transient final Map<String, TopLevelItem> items = new CopyOnWriteMap.Tree<String, TopLevelItem>(
+			CopyOnWriteMap.CaseInsensitiveComparator.INSTANCE);
 }

@@ -3,9 +3,10 @@ package com.baidu.wamole.task;
 import java.io.IOException;
 import java.util.List;
 
+import com.baidu.wamole.model.AbstractItem;
 import com.baidu.wamole.model.AbstractProject;
 
-public abstract class AbstractBuild<B extends AbstractBuild<B, P>, P extends AbstractProject<P, B>>
+public abstract class AbstractBuild<B extends AbstractBuild<B, P>, P extends AbstractProject<P, B>> extends AbstractItem
 		implements Build<B, P> {
 	protected P project;
 	protected boolean finished;
@@ -15,6 +16,7 @@ public abstract class AbstractBuild<B extends AbstractBuild<B, P>, P extends Abs
 	 * Creates a new build.
 	 */
 	protected AbstractBuild(P project) throws IOException {
+		super(project, "jsbuild");
 		this.project = project;
 	}
 
@@ -26,8 +28,8 @@ public abstract class AbstractBuild<B extends AbstractBuild<B, P>, P extends Abs
 	@Override
 	public void build() {
 		this.started = true;
-		List<BuildStep> buildSteps = project.getBuildSteps();
-		for (BuildStep step : buildSteps) {
+		List<BuildStep<B>> buildSteps = project.getBuildSteps();
+		for (BuildStep<B> step : buildSteps) {
 //			if (step.preBuild(this)) {
 //				step.perform(this);
 //			}

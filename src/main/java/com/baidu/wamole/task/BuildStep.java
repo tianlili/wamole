@@ -5,9 +5,9 @@ package com.baidu.wamole.task;
  * 
  * @author dailiqi
  */
-public abstract class BuildStep {//implements Runnable {
+public abstract class BuildStep<B extends AbstractBuild> {//implements Runnable {
 
-	public boolean preBuild(AbstractBuild<?, ?> build) {
+	public boolean preBuild(AbstractBuild<?, B> build) {
 		return true;
 	}
 
