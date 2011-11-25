@@ -1,0 +1,13 @@
+@charset UTF-8;
+
+.list{border-top:0;border-right:0}
+.tab .tDiv td div{padding:0 20px;font-family:Arial, Helvetica, sans-serif;font-size:16px;height:40px;line-height:40px;}
+.tab .tDiv .current{font-weight:700;border:1px solid #ccc;border-bottom:0;}
+.tab .tDiv .others{border-bottom:1px solid #ccc;}
+.tab .tDiv .space{border-bottom:1px solid #ccc;}
+.tab .tDiv .current:hover,.tab .tDiv .others:hover{cursor:pointer}
+.list .mDiv td{border-right:1px solid #ccc;font-weight:700;height:52px;line-height:52px;}
+.list .fcontent td{padding-left:5px}
+.list .fcontent td div{width:872px;overflow-x:scroll;font:12px/16px Arial,Helvetica,sans-serif;color:grey}
+.list div .ffilelink{color:#4183C4}
+.list div .ffile:hover,.list div .ffilelink:hover{text-decoration:underline;cursor:pointer}
