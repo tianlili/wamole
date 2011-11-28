@@ -12,14 +12,15 @@ public class BuildThread extends Thread {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			Queue<Build<?, ?>> queue = Wamole.getInstance().getBuildQueue();
+			Queue<Build<?,?>> queue = Wamole.getInstance()
+					.getModel(BuildQueue.class, "build").getQueue();
 			if (!queue.isEmpty()) {
-				Build<?, ?> build = queue.peek();
+				Build<?,?> build = queue.peek();
 				if (build.started()) {
 					if (build.finished()) {
 						queue.remove();
-						if(queue.peek() != null) {
-							queue.peek().build();	
+						if (queue.peek() != null) {
+							queue.peek().build();
 						}
 					}
 				} else {

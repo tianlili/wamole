@@ -2,39 +2,33 @@ package com.baidu.wamole.model;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.baidu.wamole.data.Exported;
 import com.baidu.wamole.exception.TestException;
 import com.baidu.wamole.process.Processor;
 import com.baidu.wamole.task.JsBuild;
 
 @XmlRootElement
-public class JsProject extends AbstractProject<JsProject, JsBuild> implements Savable{
+public class JsProject extends AbstractProject<JsProject, JsBuild>{
 
-	private Map<String, Kiss> kisses = null;
+	public void addModel(JsBuild build) {};
+	
+	public JsProject(String name, String path) {
+		super(name, path);
+	}
+	
 	private boolean inited;
 	private Processor<Kiss> processor;
-	private JsBuild build;
+	private List<JsBuild> builds;
 
-	private Parser<Kiss, JsProject> parser;
-
-	public JsBuild getBuild() {
-		return build;
-	}
-
-	@Exported
-	public JsBuild getBuild(int id) {
-		return getBuilds().get(id);
-	}
-
+	private Parser<Kiss, JsProject> parser;	
+	
 	public void addBuild() {
 		try {
-			builds.add(new JsBuild(this));
+			builds.add(new JsBuild(this, getUsableBuildId()));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -51,37 +45,13 @@ public class JsProject extends AbstractProject<JsProject, JsBuild> implements Sa
 			File root = new File(this.getPath());
 			if (root.isDirectory()) {
 				if (parser != null)
-					kisses = parser.parse(this);
+					parser.parse(this);
 			} else {
 				throw new TestException("tangram project init fail!");
 			}
 		}
 
 		inited = true;
-	}
-
-	@Override
-	public Kiss getKiss(String kissName) {
-		if (!inited) {
-			try {
-				init();
-			} catch (TestException e) {
-				e.printStackTrace();
-			}
-		}
-		return kisses == null ? null : (Kiss) kisses.get(kissName);
-	}
-
-	@Override
-	public List<Kiss> getKisses() {
-		if (!inited) {
-			try {
-				init();
-			} catch (TestException e) {
-				e.printStackTrace();
-			}
-		}
-		return new ArrayList<Kiss>(kisses.values());
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -98,5 +68,23 @@ public class JsProject extends AbstractProject<JsProject, JsBuild> implements Sa
 		} catch (Exception e) {
 			throw new TestException("请检查配置信息是否正确，可能由于资源无法匹配导致.");
 		}
+	}
+
+	@Override
+	public File getRootDir() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <TM extends Model> Collection<TM> getModels(Class<TM> clazz) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <TM extends Model> TM getModel(Class<TM> clazz, String name) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

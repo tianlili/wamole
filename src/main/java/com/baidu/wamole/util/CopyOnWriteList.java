@@ -33,6 +33,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
+import com.baidu.wamole.model.Model;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;

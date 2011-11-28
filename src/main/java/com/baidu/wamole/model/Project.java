@@ -1,11 +1,11 @@
 package com.baidu.wamole.model;
 
-import java.util.List;
+import java.util.Collection;
 
 import com.baidu.wamole.exception.TestException;
 import com.baidu.wamole.task.Build;
 
-public interface Project<P extends Project<P ,B> , B extends Build<B ,P>> {
+public interface Project<P extends Project<P, B>, B extends Build<P, B>> extends TopModel, ModelGroup {
 	/**
 	 * project alias
 	 * 
@@ -33,7 +33,7 @@ public interface Project<P extends Project<P ,B> , B extends Build<B ,P>> {
 	 * 
 	 * @return
 	 */
-	List<Kiss> getKisses();
+	Collection<Kiss> getKisses();
 
 	/**
 	 * 根据查询字符串返回可执行用例的列表页
@@ -42,8 +42,8 @@ public interface Project<P extends Project<P ,B> , B extends Build<B ,P>> {
 	 * @return
 	 */
 	String getExecutePage(String searchString) throws TestException;
-	
-	List<B> getBuilds();
-	
+
+	Collection<B> getBuilds();
+
 	void addBuild();
 }

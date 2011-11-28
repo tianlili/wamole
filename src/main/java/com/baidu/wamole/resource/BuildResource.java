@@ -12,7 +12,7 @@ public class BuildResource {
 
 	@GET
 	public Response getBuildList() {
-		Queue<Build<?, ?>> queue = Wamole.getInstance().getBuildQueue();
+		Queue<Build<?,?>> queue = Wamole.getInstance().getBuildQueue();
 		
 		return Response.ok(queue.toString()).build();
 	}

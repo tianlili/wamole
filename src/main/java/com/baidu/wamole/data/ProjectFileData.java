@@ -9,13 +9,13 @@ import com.baidu.wamole.util.FileUtil;
 
 public class ProjectFileData implements FileData {
 
-	Project<?, ?> project;
+	Project project;
 	String path;
 	File file;
 	boolean exe;
 	String content;
 
-	private ProjectFileData(Project<?, ?> project, String path) {
+	private ProjectFileData(Project project, String path) {
 		this.project = project;
 		// 屏蔽可能产生的影响
 		this.file = new File(this.project.getPath(), path);
@@ -82,7 +82,7 @@ public class ProjectFileData implements FileData {
 
 	private static final ArrayList<ProjectFileData> cache = new ArrayList<ProjectFileData>();
 
-	private static ProjectFileData getCache(Project<?, ?> project, String path) {
+	private static ProjectFileData getCache(Project project, String path) {
 		ProjectFileData _data = null;
 		File f = new File(project.getPath(), path);
 		if (f.isDirectory() && !path.endsWith("/"))
@@ -101,7 +101,7 @@ public class ProjectFileData implements FileData {
 	 * @param path
 	 * @return
 	 */
-	public static ProjectFileData getData(Project<?, ?> project, String path) {
+	public static ProjectFileData getData(Project project, String path) {
 
 		ProjectFileData _data = getCache(project, path);
 		if (_data == null) {

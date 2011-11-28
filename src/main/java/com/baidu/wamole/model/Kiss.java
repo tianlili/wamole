@@ -1,7 +1,5 @@
 package com.baidu.wamole.model;
 
-
-public interface Kiss {
+public interface Kiss extends Model{
 	String getName();
-//	public T getProject();
 }

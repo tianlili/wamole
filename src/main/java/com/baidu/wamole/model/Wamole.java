@@ -3,44 +3,36 @@ package com.baidu.wamole.model;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Queue;
 
 import com.baidu.wamole.browser.BrowserManager;
 import com.baidu.wamole.server.JettyServer;
 import com.baidu.wamole.task.Build;
 import com.baidu.wamole.task.BuildThread;
-import com.baidu.wamole.util.CopyOnWriteList;
-import com.baidu.wamole.util.CopyOnWriteMap;
 import com.baidu.wamole.xml.DefaultXStream;
-import com.baidu.wamole.xml.XmlFile;
 import com.thoughtworks.xstream.XStream;
 
-public class Wamole implements ItemGroup<TopLevelItem> {
-	private CopyOnWriteList<Project<?, ?>> projects = new CopyOnWriteList<Project<?, ?>>();	
-	private transient final File root;
+public class Wamole extends AbstractModelGroup<ModelGroup> {
+
 	private static Wamole instance;
+
+	public static Wamole getInstance() {
+		return instance;
+	}
+
+	private transient final File root;
+
+	@Override
+	public File getRootDir() {
+		return root;
+	}
+
 	private Queue<Build<?, ?>> buildQueue;
-	
-//	private ProjectManager pm;
-//	private BuilderManager dm;
-
-	public <T> T getModule(Class<T> clazz) {
-		return null;
-	}
-
-	public CopyOnWriteList<Project<?, ?>> getProjectList() {
-		return projects;
-	}
-
-	public List<Project<?, ?>> getProjects() {
-		return projects.getView();
-	}
 
 	public Wamole(File root) throws IOException {
+		super(null, "wamole");
 		this.root = root;
 		this.load();
 		instance = this;
@@ -52,28 +44,12 @@ public class Wamole implements ItemGroup<TopLevelItem> {
 		getConfigFile().unmarshal(this);
 	}
 
-	private XmlFile getConfigFile() {
-		return new XmlFile(XSTREAM, new File(root, "config.xml"));
-	}
-
 	private static final XStream XSTREAM = new DefaultXStream();
-	{
+	
+	static {
 		// 定义XML中别名
 		XSTREAM.alias("wamole", Wamole.class);
 		XSTREAM.alias("bm", BrowserManager.class);
-	}
-
-	public static Wamole getInstance() {
-		return instance;
-	}
-
-	public Project<?, ?> getProject(String name) {
-		for (Project<?, ?> project : projects) {
-			if (project.getName().equals(name)) {
-				return project;
-			}
-		}
-		return null;
 	}
 
 	/**
@@ -82,8 +58,7 @@ public class Wamole implements ItemGroup<TopLevelItem> {
 	 * @param project
 	 */
 	public void addProject(Project<?, ?> project) {
-		// 队列添加
-		projects.add(project);
+		addModel(project);
 		// 启动服务
 		JettyServer.addPath(project);
 	}
@@ -100,60 +75,10 @@ public class Wamole implements ItemGroup<TopLevelItem> {
 		return this.buildQueue;
 	}
 
-	/**
-	 * parser的导出解决方案
-	 */
-	private ArrayList<Class<? extends Parser<? extends Kiss, ? extends Project<?, ?>>>> parserList = new ArrayList<Class<? extends Parser<? extends Kiss, ? extends Project<?, ?>>>>();
-
-	public ArrayList<Class<? extends Parser<? extends Kiss, ? extends Project<?, ?>>>> getParserTypeList() {
-		if (parserList.size() == 0) {
-			parserList.add(TangramParser.class);
-			parserList.add(AntPathParser.class);
-		}
-		return parserList;
+	public List<Class<? extends Parser<?, ?>>> getParserTypeList() {
+		List<Class<? extends Parser<?, ?>>> list = new ArrayList<Class<? extends Parser<?, ?>>>();
+		list.add(TangramParser.class);
+		list.add(AntPathParser.class);
+		return list;
 	}
-
-	/**
-	 * 项目类型的导出解决方案
-	 */
-	private ArrayList<Class<? extends Project<?, ?>>> projectTypeList = new ArrayList<Class<? extends Project<?, ?>>>();
-
-	public ArrayList<Class<? extends Project<?, ?>>> getProjectTypeList() {
-		if (projectTypeList.size() == 0) {
-			projectTypeList.add(JsProject.class);
-		}
-		return projectTypeList;
-	}
-
-	@Override
-	public File getRootDir() {
-		return null;
-	}
-
-	@Override
-	public void save() throws IOException {
-
-	}
-
-	@Override
-	public File getRootDirFor(TopLevelItem child) {
-		return getRootDirFor(child.getName());
-	}
-	
-	public File getRootDirFor(String name){
-		return new File(new File(getRootDir(),"projects"), name); 
-	}
-
-	@Override
-	public TopLevelItem getItem(String name) {
-		return items.get(name);
-	}
-
-	@Override
-	public Collection<TopLevelItem> getItems() {
-		return items.values();
-	}
-
-	/* package */transient final Map<String, TopLevelItem> items = new CopyOnWriteMap.Tree<String, TopLevelItem>(
-			CopyOnWriteMap.CaseInsensitiveComparator.INSTANCE);
 }

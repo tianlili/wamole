@@ -1,21 +1,23 @@
 package com.baidu.wamole.browser;
 
+import java.io.File;
 import java.util.List;
 
 import com.baidu.wamole.exception.TestException;
-import com.baidu.wamole.model.Module;
+import com.baidu.wamole.model.AbstractModel;
 import com.baidu.wamole.model.JsKiss;
-import com.baidu.wamole.task.BuildStep;
+import com.baidu.wamole.model.Wamole;
 import com.baidu.wamole.task.JsBuildStep;
 import com.baidu.wamole.task.Result;
 import com.baidu.wamole.util.CopyOnWriteList;
 
-public class BrowserManager implements Module {
+public class BrowserManager extends AbstractModel<Wamole> {
 	private CopyOnWriteList<StaticBrowser> statics;
 	private CopyOnWriteList<Browser> browsers;
 	private JsBuildStep buildStep;
 
 	/* package */BrowserManager() {
+		super(Wamole.getInstance(), "browsers");
 	}
 
 	private int step = 20;
@@ -133,11 +135,16 @@ public class BrowserManager implements Module {
 		}
 	}
 
-	public BuildStep getBuildStep() {
+	public JsBuildStep getBuildStep() {
 		return buildStep;
 	}
 
 	public void setBuildStep(JsBuildStep buildStep) {
 		this.buildStep = buildStep;
+	}
+
+	@Override
+	public File getRootDir() {
+		return getParent().getRootDir();
 	}
 }

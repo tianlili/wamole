@@ -31,13 +31,14 @@ public class ExecuteResource {
 	@Path("{path: .*}")
 	public Response execCase(@PathParam("path") String path) {
 		path = "/" + path;
-//		System.out.println("path:" + path);
-//		System.out.println(uriInfo.getPath());
+		// System.out.println("path:" + path);
+		// System.out.println(uriInfo.getPath());
 		String uri = uriInfo.getPath();
-//		System.out.println(uriInfo.getRequestUri());
+		// System.out.println(uriInfo.getRequestUri());
 		String project = uri.substring("project/".length(),
 				uri.indexOf("/exec/"));
-		Project<?, ?> instance = Wamole.getInstance().getProject(project);
+		Project<?, ?> instance = Wamole.getInstance().getModel(Project.class,
+				project);
 		if (path.endsWith(".js"))
 			try {
 				return Response.ok(instance.getExecutePage(path)).build();

@@ -8,28 +8,42 @@ import java.util.Map;
 
 import com.baidu.wamole.browser.Browser;
 import com.baidu.wamole.browser.BrowserManager;
+import com.baidu.wamole.model.JsProject;
 import com.baidu.wamole.model.Wamole;
 import com.baidu.wamole.template.ConfigurationFactory;
 import com.baidu.wamole.util.CopyOnWriteList;
 
-public class JsBuildStep extends BuildStep {
+public class JsBuildStep implements BuildStep<JsProject, JsBuild> {
 	private CopyOnWriteList<String> browsers;
 	private List<String> actives;
 	private ResultTable resultTable;
 	private BrowserManager bm;
 	private List<String> browserList;
+	JsBuild build;
+	JsProject project;
 
 	@Override
-	public boolean preBuild(AbstractBuild<?, ?> build) {
-		bm = (BrowserManager) Wamole.getInstance().getModule(
-				BrowserManager.class);
+	public JsBuild getBuild() {
+		return build;
+	}
+	
+	@Override
+	public JsProject getProject() {
+		return project;
+	}
+	
+	@Override
+	public boolean preBuild() {
+		BrowserManager bm = Wamole.getInstance().getModel(
+				BrowserManager.class, "browsers");
 		browserList = new ArrayList<String>();
 		for (String string : browsers.getView()) {
 			browserList.add(string.toLowerCase());
 		}
 		actives = config(bm.getBrowsers());
-		resultTable = new ResultTableImpl(browserList, actives, build
-				.getProject().getKisses(), bm.getStep());
+		//TODO 结果输出待补充
+//		resultTable = new ResultTableImpl(browserList, actives, build
+//				.getProject().getKisses(), bm.getStep());
 		return actives.size() > 0;
 	}
 
@@ -38,7 +52,7 @@ public class JsBuildStep extends BuildStep {
 	}
 
 	@Override
-	public boolean perform(AbstractBuild<?, ?> build) {
+	public boolean perform() {
 		bm.setBuildStep(this);
 		while (!resultTable.isDead()) {
 			try {

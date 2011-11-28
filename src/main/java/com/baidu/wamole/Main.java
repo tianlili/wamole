@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import com.baidu.wamole.exception.ConfigException;
 import com.baidu.wamole.model.Wamole;
 import com.baidu.wamole.server.JettyServer;
 

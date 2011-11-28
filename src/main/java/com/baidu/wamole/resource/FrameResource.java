@@ -34,7 +34,7 @@ public class FrameResource {
 		String uri = uriInfo.getPath();
 		String project = uri.substring("project/".length(),
 				uri.indexOf("/frame/"));
-		Project<?, ?> instance = Wamole.getInstance().getProject(project);
+		Project<?,?> instance = Wamole.getInstance().getModel(Project.class, project);
 		if (path.endsWith(".js"))
 			try {
 				String s = instance.getExecutePage(path);

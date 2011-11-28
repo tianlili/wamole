@@ -2,7 +2,6 @@ package com.baidu.wamole.resource;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -44,12 +43,7 @@ public class ProjectResource {
 	Providers ps;
 
 	public void setName(String name) {
-		List<Project<?, ?>> list = Wamole.getInstance().getProjects();
-		for (Project<?, ?> project : list) {
-			if (project.getName().equals(name)) {
-				this.project = project;
-			}
-		}
+		this.project = Wamole.getInstance().getModel(Project.class, name);
 		this.name = name;
 	}
 
@@ -110,8 +104,7 @@ public class ProjectResource {
 	@GET
 	@Path("/build")
 	public Response build() {
-		Wamole.getInstance().addBuild(project.getBuild());
-		return Response.ok("").build();
+		return Response.ok(JsonParser.listToJson(project.getBuilds())).build();
 	}
 
 	@GET

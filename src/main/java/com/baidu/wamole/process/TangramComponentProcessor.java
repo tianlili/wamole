@@ -17,11 +17,11 @@ import com.caucho.config.ConfigException;
 public class TangramComponentProcessor extends TangramProcessor {
 
 	private String depend;
-	private Project dependProject;
+	private Project<?, ?> dependProject;
 
 	@Override
 	public void processResource(JsKiss kiss) throws ConfigException {
-		dependProject = Wamole.getInstance().getProject(depend);
+		dependProject = Wamole.getInstance().getModel(Project.class, depend);
 		this.project = kiss.getProject();
 		// Component类型特有加入 UserAction及Tools
 //		this.list.add("/project/" + project.getName()
@@ -47,7 +47,7 @@ public class TangramComponentProcessor extends TangramProcessor {
 	protected void getDepends(String path) throws ConfigException {
 		matched.add(path);
 		if (null != depend)
-			this.dependProject = Wamole.getInstance().getProject(depend);
+			dependProject = Wamole.getInstance().getModel(Project.class, depend);
 		Matcher matcher = Pattern.compile(REGEX).matcher(
 				FileUtil.readFile(path));
 		String relativePath = null;

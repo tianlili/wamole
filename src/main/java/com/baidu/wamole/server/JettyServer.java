@@ -41,7 +41,7 @@ public class JettyServer {
 		collection.addHandler(new CommonResouceHandlerWrapper().getHandler());
 		
 		//project resource support
-		for(Project<?,?> project : Wamole.getInstance().getProjects()){//getProjectList().getView()){
+		for(Project<?,?> project : Wamole.getInstance().getModels(Project.class)){//getProjectList().getView()){
 			addPath(project);
 		}
 		

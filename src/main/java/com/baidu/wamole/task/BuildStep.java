@@ -1,17 +1,21 @@
 package com.baidu.wamole.task;
 
+import com.baidu.wamole.model.Project;
+
 /**
  * 项目构建器
  * 
  * @author dailiqi
+ * @param <B>
+ *            Build类型
  */
-public abstract class BuildStep<B extends AbstractBuild> {//implements Runnable {
+public interface BuildStep<P extends Project<P, B>, B extends Build<P, B>> {
 
-	public boolean preBuild(AbstractBuild<?, B> build) {
-		return true;
-	}
+	public B getBuild();
+	
+	public P getProject();
+	
+	public boolean preBuild();
 
-	public boolean perform(AbstractBuild<?, ?> build) {
-		return false;
-	}
+	public boolean perform();
 }

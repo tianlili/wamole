@@ -2,6 +2,7 @@ package com.baidu.wamole.data;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,11 +42,11 @@ public class JsonParser {
 		return mapToJson(map);
 	}
 
-	public static StringBuilder listToJson(List<?> list) {
+	public static StringBuilder listToJson(Collection<?> list) {
 		return listToJson(list, true);
 	}
 
-	public static StringBuilder classListToJson(List<? extends Class<?>> list) {
+	public static StringBuilder classListToJson(Collection<? extends Class<?>> list) {
 		StringBuilder sb = new StringBuilder();
 		for (Class<?> c : list) {
 			sb.append(classToJson(c) + ",");
@@ -120,7 +121,7 @@ public class JsonParser {
 		return sb;
 	}
 
-	private static StringBuilder listToJson(List<?> list, boolean recurse) {
+	private static StringBuilder listToJson(Collection<?> list, boolean recurse) {
 		StringBuilder sb = new StringBuilder("[");
 		for (Object o : list) {
 			try {

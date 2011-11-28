@@ -2,7 +2,6 @@ package com.baidu.wamole.resource;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -78,8 +77,10 @@ public class RootResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response getProjectListData() {
-		List<Project<?, ?>> list = Wamole.getInstance().getProjects();
-		return Response.ok(JsonParser.listToJson(list).toString()).build();
+		return Response.ok(
+				JsonParser.listToJson(
+						Wamole.getInstance().getModels(Project.class))
+						.toString()).build();
 	}
 
 	/**
@@ -114,7 +115,8 @@ public class RootResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void addProject() {
-		JsProject project = JsProject.class.cast(JsonParser.jsonToObject(uriInfo).get(""));
+		JsProject project = JsProject.class.cast(JsonParser.jsonToObject(
+				uriInfo).get(""));
 		if (project != null)
 			Wamole.getInstance().addProject(project);
 	}
