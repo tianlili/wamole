@@ -1,17 +1,18 @@
 package com.baidu.wamole.task;
 
 import java.io.File;
+import java.util.LinkedList;
 import java.util.Queue;
 
 import com.baidu.wamole.model.AbstractModel;
 import com.baidu.wamole.model.Wamole;
 
 public class BuildQueue extends AbstractModel<Wamole>{
-	protected BuildQueue(Wamole parent, String name) {
+	public BuildQueue(Wamole parent) {
 		super(parent, name);
 	}
 
-	private Queue<Build<?,?>> queue;
+	private Queue<Build<?,?>> queue = new LinkedList<Build<?,?>>();
 	private Build<?,?> current;
 
 	public void addBuild(Build<?,?> build) {
@@ -34,4 +35,5 @@ public class BuildQueue extends AbstractModel<Wamole>{
 		return getParent().getRootDir();
 	}
 
+	public static final String name = "queue";
 }

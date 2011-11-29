@@ -43,6 +43,10 @@ public abstract class AbstractModelGroup<Parent extends ModelGroup>
 		return null;
 	}
 	
+	public <M extends Model> M getModel(Class<M> clazz){
+		return getModels(clazz).iterator().next();
+	}
+	
 	public <M extends Model> void addModel(M m) {
 		models.add(m);
 	};

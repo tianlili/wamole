@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -89,7 +90,7 @@ public class RootResource {
 	 * @return
 	 */
 	@GET
-	@Path("/addproject")
+	@Path("/addProject")
 	public Response getProjectAddPage() {
 		StringWriter writer = new StringWriter();
 		try {
@@ -103,7 +104,7 @@ public class RootResource {
 	}
 
 	/**
-	 * Project添加接口的数据接口
+	 * Project添加接口的数据接口，以form表单形式提供
 	 * 
 	 * @param name
 	 * @param path
@@ -111,14 +112,10 @@ public class RootResource {
 	 * @return
 	 */
 	@POST
-	@Path("/project")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public void addProject() {
-		JsProject project = JsProject.class.cast(JsonParser.jsonToObject(
-				uriInfo).get(""));
-		if (project != null)
-			Wamole.getInstance().addProject(project);
+	@Path("/addProject")
+	@Produces(MediaType.TEXT_HTML)
+	public void addProject(@FormParam("name") String name, @FormParam("path") String path) {
+		new JsProject(name, path);
 	}
 
 	@Path("/project/{name}")

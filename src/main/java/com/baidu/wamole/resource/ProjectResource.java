@@ -72,12 +72,12 @@ public class ProjectResource {
 	 * 
 	 * @return
 	 */
-	@SuppressWarnings("rawtypes")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void updateProject() {
 		if (project instanceof JsProject) {
+			@SuppressWarnings("rawtypes")
 			Parser parser = (Parser) JsonParser.jsonToObject(uriInfo).get(
 					"parser");
 			if (parser != null)

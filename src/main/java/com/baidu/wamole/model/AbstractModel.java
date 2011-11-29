@@ -18,6 +18,8 @@ public abstract class AbstractModel<P extends ModelGroup> implements Model, Sava
     protected AbstractModel(P parent, String name) {
     	this.parent = parent;
     	setName(name);
+    	if(parent != null)
+    	this.parent.addModel(this);
     }
     
     public P getParent() {

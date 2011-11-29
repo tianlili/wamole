@@ -3,13 +3,11 @@ package com.baidu.wamole.model;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
 import com.baidu.wamole.browser.BrowserManager;
 import com.baidu.wamole.server.JettyServer;
-import com.baidu.wamole.task.Build;
+import com.baidu.wamole.task.BuildQueue;
 import com.baidu.wamole.task.BuildThread;
 import com.baidu.wamole.xml.DefaultXStream;
 import com.thoughtworks.xstream.XStream;
@@ -29,19 +27,19 @@ public class Wamole extends AbstractModelGroup<ModelGroup> {
 		return root;
 	}
 
-	private Queue<Build<?, ?>> buildQueue;
-
 	public Wamole(File root) throws IOException {
 		super(null, "wamole");
 		this.root = root;
 		this.load();
 		instance = this;
-		buildQueue = new LinkedList<Build<?, ?>>();
 		new BuildThread().start();
 	}
 
 	public void load() throws IOException {
 		getConfigFile().unmarshal(this);
+		
+		//初始化队列
+		new BuildQueue(this);
 	}
 
 	private static final XStream XSTREAM = new DefaultXStream();
@@ -61,18 +59,6 @@ public class Wamole extends AbstractModelGroup<ModelGroup> {
 		addModel(project);
 		// 启动服务
 		JettyServer.addPath(project);
-	}
-
-	public void addBuild(Project<?, ?> project) {
-
-	}
-
-	public synchronized void addBuild(Build<?, ?> build) {
-		this.buildQueue.add(build);
-	}
-
-	public synchronized Queue<Build<?, ?>> getBuildQueue() {
-		return this.buildQueue;
 	}
 
 	public List<Class<? extends Parser<?, ?>>> getParserTypeList() {

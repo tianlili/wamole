@@ -13,7 +13,7 @@ public class BuildThread extends Thread {
 				e.printStackTrace();
 			}
 			Queue<Build<?,?>> queue = Wamole.getInstance()
-					.getModel(BuildQueue.class, "build").getQueue();
+					.getModel(BuildQueue.class).getQueue();
 			if (!queue.isEmpty()) {
 				Build<?,?> build = queue.peek();
 				if (build.started()) {
