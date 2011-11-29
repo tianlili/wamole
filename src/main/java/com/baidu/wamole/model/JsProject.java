@@ -2,7 +2,6 @@ package com.baidu.wamole.model;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
