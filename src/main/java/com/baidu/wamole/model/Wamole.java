@@ -5,12 +5,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.baidu.wamole.browser.BrowserManager;
 import com.baidu.wamole.server.JettyServer;
 import com.baidu.wamole.task.BuildQueue;
 import com.baidu.wamole.task.BuildThread;
-import com.baidu.wamole.xml.DefaultXStream;
-import com.thoughtworks.xstream.XStream;
 
 public class Wamole extends AbstractModelGroup<ModelGroup> {
 
@@ -30,8 +27,8 @@ public class Wamole extends AbstractModelGroup<ModelGroup> {
 	public Wamole(File root) throws IOException {
 		super(null, "wamole");
 		this.root = root;
-		this.load();
 		instance = this;
+		this.load();
 		new BuildThread().start();
 	}
 
@@ -40,14 +37,6 @@ public class Wamole extends AbstractModelGroup<ModelGroup> {
 		
 		//初始化队列
 		new BuildQueue(this);
-	}
-
-	private static final XStream XSTREAM = new DefaultXStream();
-	
-	static {
-		// 定义XML中别名
-		XSTREAM.alias("wamole", Wamole.class);
-		XSTREAM.alias("bm", BrowserManager.class);
 	}
 
 	/**
