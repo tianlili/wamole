@@ -2,7 +2,9 @@ package com.baidu.wamole.model;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.baidu.wamole.data.Exported;
 import com.baidu.wamole.data.Imported;
@@ -17,7 +19,7 @@ import com.baidu.wamole.util.CopyOnWriteList;
  * @param <B>
  */
 public abstract class AbstractProject<P extends AbstractProject<P, B>, B extends AbstractBuild<P, B>>
-		extends AbstractModelGroup<Wamole> implements Project<P, B>, TopModel {
+		extends AbstractModelGroup<Wamole> implements Project<P, B> {
 
 	protected AbstractProject(String name, String path) {
 		super(Wamole.getInstance(), name);
@@ -29,6 +31,8 @@ public abstract class AbstractProject<P extends AbstractProject<P, B>, B extends
 
 	// 项目构建步骤
 	private CopyOnWriteList<BuildStep<P, B>> buildSteps;
+
+	protected boolean inited = false;
 
 	// 项目
 	@Exported
@@ -55,12 +59,19 @@ public abstract class AbstractProject<P extends AbstractProject<P, B>, B extends
 		return buildSteps.getView();
 	}
 
+	@SuppressWarnings("rawtypes")
+	private static HashMap<Project, Map<String, Kiss>> kissMaps = new HashMap<Project, Map<String, Kiss>>();
+
+	@SuppressWarnings("unchecked")
 	public Kiss getKiss(String name) {
-		return getModel(Kiss.class, name);
+		if (!inited) {
+			kissMaps.put(Project.class.cast(this), getParser().parse(this));
+		}
+		return kissMaps.get(this).get(name);
 	}
 
 	public Collection<Kiss> getKisses() {
-		return getModels(Kiss.class);
+		return  kissMaps.get(this).values();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -85,14 +96,15 @@ public abstract class AbstractProject<P extends AbstractProject<P, B>, B extends
 		}
 		return id;
 	}
-//	
-//	public static <M extends AbstractProject<?, ?>> M newProject(Class<M> clazz, Object...args){
-//		M m = null;
-//		try {
-//			m = clazz.getConstructor(String.class, String.class).newInstance(args);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		return m;
-//	}
+	//
+	// public static <M extends AbstractProject<?, ?>> M newProject(Class<M>
+	// clazz, Object...args){
+	// M m = null;
+	// try {
+	// m = clazz.getConstructor(String.class, String.class).newInstance(args);
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// }
+	// return m;
+	// }
 }

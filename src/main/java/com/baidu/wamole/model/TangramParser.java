@@ -7,7 +7,7 @@ import java.util.Map;
 import com.baidu.wamole.data.Exported;
 import com.baidu.wamole.data.Imported;
 
-public class TangramParser implements Parser<JsKiss, JsProject> {
+public class TangramParser implements Parser<JsKiss> {
 	// private TangramParser(){};
 	private static final TangramParser instance = new TangramParser();
 
@@ -43,10 +43,12 @@ public class TangramParser implements Parser<JsKiss, JsProject> {
 		return this.test;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
-	public Map<String, JsKiss> parse(JsProject project) {
-		Map<String, JsKiss> kisses;
-		kisses = new HashMap<String, JsKiss>();
+	public Map<String, Kiss> parse(Project p) {
+		Map<String, Kiss> kisses;
+		JsProject project = JsProject.class.cast(p);
+		kisses = new HashMap<String, Kiss>();
 		if (new File(project.getPath(), this.getSrc()).exists())
 			parseDir(new File(project.getPath(), this.getSrc()), project,
 					this.getSrc(), this.getTest(), kisses);
@@ -54,7 +56,7 @@ public class TangramParser implements Parser<JsKiss, JsProject> {
 	}
 
 	private void parseDir(File file, JsProject project, String srcdir,
-			String testdir, Map<String, JsKiss> kisses) {
+			String testdir, Map<String, Kiss> kisses) {
 		for (File f : file.listFiles()) {
 			if (!f.isDirectory()) {
 				String s = transSeprator(f.getAbsolutePath());

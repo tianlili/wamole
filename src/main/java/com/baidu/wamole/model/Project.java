@@ -5,7 +5,8 @@ import java.util.Collection;
 import com.baidu.wamole.exception.TestException;
 import com.baidu.wamole.task.Build;
 
-public interface Project<P extends Project<P, B>, B extends Build<P, B>> extends TopModel, ModelGroup {
+public interface Project<P extends Project<P, B>, B extends Build<P, B>>
+		extends TopModel, ModelGroup {
 	/**
 	 * project alias
 	 * 
@@ -46,4 +47,7 @@ public interface Project<P extends Project<P, B>, B extends Build<P, B>> extends
 	Collection<B> getBuilds();
 
 	void addBuild();
+
+	@SuppressWarnings("rawtypes")
+	Parser getParser();
 }

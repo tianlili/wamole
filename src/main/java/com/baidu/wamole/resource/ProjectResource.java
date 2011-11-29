@@ -80,8 +80,8 @@ public class ProjectResource {
 			@SuppressWarnings("rawtypes")
 			Parser parser = (Parser) JsonParser.jsonToObject(uriInfo).get(
 					"parser");
-			if (parser != null)
-				JsProject.class.cast(parser).setParser(parser);
+			if (project != null && parser != null)
+				JsProject.class.cast(project).setParser(parser);
 		}
 	}
 

@@ -1,25 +1,24 @@
 package com.baidu.wamole.model;
 
-import java.io.File;
 
-import com.baidu.wamole.task.Build;
-
-public class DefaultKiss<P extends Project<P, B>, B extends Build<P, B>> extends AbstractModel<P> implements Kiss {
+public class DefaultKiss<P extends Project<P, ?>>
+		implements Kiss {
 
 	protected String name;
 
 	protected P project;
 
 	public DefaultKiss(P project, String name) {
-		super(project, name);
+		this.project = project;
+		this.name = name;
 	}
 
 	public P getProject() {
-		return getParent();
+		return project;
 	}
 
 	@Override
-	public File getRootDir() {
-		return getParent().getRootDir();
+	public String getName() {
+		return this.name;
 	}
 }

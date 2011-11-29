@@ -49,8 +49,8 @@ public class Wamole extends AbstractModelGroup<ModelGroup> {
 		JettyServer.addPath(new JsProject(name, path));
 	}
 
-	public List<Class<? extends Parser<?, ?>>> getParserTypeList() {
-		List<Class<? extends Parser<?, ?>>> list = new ArrayList<Class<? extends Parser<?, ?>>>();
+	public List<Class<? extends Parser<?>>> getParserTypeList() {
+		List<Class<? extends Parser<?>>> list = new ArrayList<Class<? extends Parser<?>>>();
 		list.add(TangramParser.class);
 		list.add(AntPathParser.class);
 		return list;

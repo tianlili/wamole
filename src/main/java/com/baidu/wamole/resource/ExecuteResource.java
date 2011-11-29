@@ -39,7 +39,7 @@ public class ExecuteResource {
 				uri.indexOf("/exec/"));
 		Project<?, ?> instance = Wamole.getInstance().getModel(Project.class,
 				project);
-		if (path.endsWith(".js"))
+		if (instance != null && path.endsWith(".js"))
 			try {
 				return Response.ok(instance.getExecutePage(path)).build();
 			} catch (TestException e) {
