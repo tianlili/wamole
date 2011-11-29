@@ -5,13 +5,13 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.HierarchicalStreamDriver;
 
 public class DefaultXStream extends XStream {
-	public DefaultXStream() {
+	private DefaultXStream() {
 		super();
 		alias("wamole", Wamole.class);
 		init();
 	}
 
-	public DefaultXStream(HierarchicalStreamDriver hierarchicalStreamDriver) {
+	private DefaultXStream(HierarchicalStreamDriver hierarchicalStreamDriver) {
 		super(hierarchicalStreamDriver);
 		init();
 	}
@@ -21,5 +21,9 @@ public class DefaultXStream extends XStream {
 		registerConverter(new ConcurrentHashMapConverter(getMapper(),
 				getReflectionProvider()));
 		registerConverter(new XmlConverter(getMapper()));
+	}
+	
+	public static DefaultXStream getInstance(){
+		return new DefaultXStream();
 	}
 }

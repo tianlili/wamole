@@ -11,9 +11,9 @@ import com.baidu.wamole.xml.XmlFile;
  * @author yangbo
  *
  */
-public abstract class AbstractModel<P extends ModelGroup> implements Model, Savable, Persistence{
-	protected /*final*/ transient String name;
-	P parent;
+public abstract class AbstractModel<P extends ModelGroup> implements Model{
+	protected /*final*/ String name;
+	protected transient P parent;
 	
     protected AbstractModel(P parent, String name) {
     	this.parent = parent;

@@ -17,7 +17,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import com.baidu.wamole.data.JsonParser;
-import com.baidu.wamole.model.JsProject;
 import com.baidu.wamole.model.Project;
 import com.baidu.wamole.model.Wamole;
 import com.baidu.wamole.template.ConfigurationFactory;
@@ -117,6 +116,11 @@ public class RootResource {
 	public void addProject(@FormParam("name") String name, @FormParam("path") String path) {
 //		new JsProject(name, path);
 		Wamole.getInstance().addProject(name, path);
+		try {
+			Wamole.getInstance().getModel(Project.class, name).save();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Path("/project/{name}")

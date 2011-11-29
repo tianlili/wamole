@@ -6,7 +6,7 @@ import com.baidu.wamole.exception.TestException;
 import com.baidu.wamole.task.Build;
 
 public interface Project<P extends Project<P, B>, B extends Build<P, B>>
-		extends TopModel, ModelGroup {
+		extends ModelGroup, Model{
 	/**
 	 * project alias
 	 * 

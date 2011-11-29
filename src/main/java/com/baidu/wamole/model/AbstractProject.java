@@ -1,5 +1,6 @@
 package com.baidu.wamole.model;
 
+import java.io.File;
 import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
 import java.util.HashMap;
@@ -96,15 +97,9 @@ public abstract class AbstractProject<P extends AbstractProject<P, B>, B extends
 		}
 		return id;
 	}
-	//
-	// public static <M extends AbstractProject<?, ?>> M newProject(Class<M>
-	// clazz, Object...args){
-	// M m = null;
-	// try {
-	// m = clazz.getConstructor(String.class, String.class).newInstance(args);
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// }
-	// return m;
-	// }
+	
+	@Override
+	public File getRootDir() {
+		return new File(parent.getRootDir(), "project/"+name);
+	}
 }

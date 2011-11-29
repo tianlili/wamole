@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 
 import com.baidu.wamole.xml.XmlFile;
-import com.thoughtworks.xstream.XStream;
 
 /**
  * 提供统一接口，从配置文件载入对象实例
@@ -21,7 +20,7 @@ public class Models {
      * The file we save our configuration.
      */
     public static XmlFile getConfigFile(File dir) {
-        return new XmlFile(XSTREAM,new File(dir,"config.xml"));
+        return new XmlFile(new File(dir,"config.xml"));
     }
     
     /**
@@ -31,5 +30,5 @@ public class Models {
         return getConfigFile(model.getRootDir());
     }
     
-    public static final XStream XSTREAM = new XStream();
+//    public static final XStream XSTREAM = new XStream();
 }

@@ -1,6 +1,7 @@
 package com.baidu.wamole.model;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,9 +35,12 @@ public class Wamole extends AbstractModelGroup<ModelGroup> {
 
 	public void load() throws IOException {
 		getConfigFile().unmarshal(this);
-		
-		//初始化队列
+
+		// 初始化队列
 		new BuildQueue(this);
+
+		// 初始化项目列表
+		loadProjects();
 	}
 
 	/**
@@ -44,15 +48,37 @@ public class Wamole extends AbstractModelGroup<ModelGroup> {
 	 * 
 	 * @param project
 	 */
-	public void addProject(String name, String path) {		
+	public void addProject(String name, String path) {
 		// 启动服务
 		JettyServer.addPath(new JsProject(name, path));
 	}
-
+	
 	public List<Class<? extends Parser<?>>> getParserTypeList() {
 		List<Class<? extends Parser<?>>> list = new ArrayList<Class<? extends Parser<?>>>();
 		list.add(TangramParser.class);
 		list.add(AntPathParser.class);
 		return list;
+	}
+
+	/**
+	 * load all projects
+	 * @throws IOException
+	 */
+	private synchronized void loadProjects() throws IOException {
+		File projectsDir = new File(root, "project");
+		if(!projectsDir.isDirectory() && !projectsDir.mkdirs()) {
+            if(projectsDir.exists())
+                throw new IOException(projectsDir+" is not a directory");
+            throw new IOException("Unable to create "+projectsDir+"\nPermission issue? Please create this directory manually.");
+        }
+        File[] subdirs = projectsDir.listFiles(new FileFilter() {
+            public boolean accept(File child) {
+                return child.isDirectory() && Models.getConfigFile(child).exists();
+            }
+        });
+        
+        for (final File subdir : subdirs) {
+        	this.addModel(Models.load(subdir));
+        }
 	}
 }

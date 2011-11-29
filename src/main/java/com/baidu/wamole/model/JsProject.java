@@ -1,27 +1,22 @@
 package com.baidu.wamole.model;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.baidu.wamole.exception.TestException;
-import com.baidu.wamole.process.Processor;
 import com.baidu.wamole.process.TangramProcessor;
 import com.baidu.wamole.task.JsBuild;
 
 @XmlRootElement
 public class JsProject extends AbstractProject<JsProject, JsBuild> {
 
-	public void addModel(JsBuild build) {
-	};
-
 	public JsProject(String name, String path) {
 		super(name, path);
 	}
 
-	private Processor<Kiss> processor;
+//	private Processor<Kiss> processor;
 	private List<JsBuild> builds;
 
 	private Parser<JsKiss> parser;
@@ -33,26 +28,6 @@ public class JsProject extends AbstractProject<JsProject, JsBuild> {
 			e.printStackTrace();
 		}
 	}
-
-	// /**
-	// * 项目初始化
-	// *
-	// * @throws TestException
-	// */
-	// private void init() throws TestException {
-	// if (!inited) {
-	// // kisses = new ConcurrentHashMap<String, Kiss>();
-	// File root = new File(this.getPath());
-	// if (root.isDirectory()) {
-	// if (parser != null)
-	// parser.parse(this);
-	// } else {
-	// throw new TestException("tangram project init fail!");
-	// }
-	// }
-	//
-	// inited = true;
-	// }
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void setParser(Parser parser) {
@@ -79,8 +54,4 @@ public class JsProject extends AbstractProject<JsProject, JsBuild> {
 		}
 	}
 
-	@Override
-	public File getRootDir() {
-		return parent.getRootDir();
-	}
 }
