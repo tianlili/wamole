@@ -9,5 +9,8 @@
 .list .mDiv td{border-right:1px solid #ccc;font-weight:700;height:52px;line-height:52px;}
 .list .fcontent td{padding-left:5px}
 .list .fcontent td div{width:872px;overflow-x:scroll;font:12px/16px Arial,Helvetica,sans-serif;color:grey}
-.list div .ffilelink{color:#4183C4}
-.list div .ffile:hover,.list div .ffilelink:hover{text-decoration:underline;cursor:pointer}
+.list div .ffilelink{color:#204A87}
+.list div .ffile:hover,.list div .ffilelink:hover,.bmore:hover{text-decoration:underline;cursor:pointer}
+.btitle {float:left;font-family:Arial, Helvetica, sans-serif;font-size:14px;font-weight:700;margin-top:20px;margin-bottom:10px;}
+.bmore {float:right;font-family:Arial, Helvetica, sans-serif;font-size:12px;color:#204A87;text-decoration:underline;margin-top:22px}
+.trend {width:450px;height:250px} 

@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Projects</title>
+	<link rel="stylesheet" type="text/css" href="../../resource/frontcss/list.css" />
+	<link rel="stylesheet" type="text/css" href="../../resource/frontcss/pdlist.css" />
+	<script type="text/javascript" src="../../resource/frontjs/jquery-1.3.2.js"></script>
+	<script type="text/javascript" src="../../resource/frontjs/common.js"></script>
+	<script type="text/javascript" src="../../resource/frontjs/highcharts.js"></script>
+	<script type="text/javascript" src="../../resource/frontjs/builds.js"></script>
+</head>
+<body>
+	<!-- <table class="flexme" style="display: none"></table> -->
+	<table class="tab" width="882px" cellspacing="0">
+		<tr class="tDiv">
+			<td class="others" width="89">
+				<div id="details_tab">Details</div>
+			</td>
+			<td class="others" width="79">
+				<div id="files_tab">Files</div>
+			</td>
+			<td class="current" width="83">
+				<div id="builds_tab">Builds</div>		
+			</td>
+			<td class="space">
+			</td>	
+			<td class="space">
+			</td>	
+		</tr>
+		
+		<tr valign="top">	
+			<!-- list -->
+			<td colspan=4>
+				<div class="btitle">Build History</div>
+				<div class="bmore">More ...</div>
+				<table class="list" width="380px" cellspacing="0" style="border-top:1px solid #ccc;">
+					<thead>
+						<tr class="hDiv">
+							<td>
+								<div id="status" style="text-align:left;">Status</div>
+							</td>
+							<td>
+								<div id="id" style="text-align:left;">Id</div>
+							</td>
+							<td>
+								<div id="time" style="text-align:left;">Time</div>
+							</td>
+							<td>
+								<div id="result" style="text-align:left;">Result</div>
+							</td>
+						</tr>
+					</thead>
+					<tbody>
+						<!-- 数据 -->
+					</tbody>
+				</table>
+			</td>
+			<!-- list -->
+			
+			<!-- trend -->
+			<td style="padding-left:50px;">
+				<div class="btitle">Test Result Trend</div>
+				<table width="450px" cellspacing="0">
+					<tbody>
+						<tr>
+							<td>
+								<div class="trend" id="container"></div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</td>
+			<!-- trend -->
+		</tr>
+	</table>
+</body>
+</html>

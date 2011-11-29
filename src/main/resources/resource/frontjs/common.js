@@ -7,7 +7,7 @@ $(function() {
 			window.location.href = "/project/tc/files";
 		}	
 		if(this.id == "builds_tab"){
-			window.location.href = "/project/t/files";
+			window.location.href = "/project/t/builds";
 		}
 	});
 }); 
