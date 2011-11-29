@@ -55,10 +55,9 @@ public class Wamole extends AbstractModelGroup<ModelGroup> {
 	 * 
 	 * @param project
 	 */
-	public void addProject(Project<?, ?> project) {
-		addModel(project);
+	public void addProject(String name, String path) {		
 		// 启动服务
-		JettyServer.addPath(project);
+		JettyServer.addPath(new JsProject(name, path));
 	}
 
 	public List<Class<? extends Parser<?, ?>>> getParserTypeList() {

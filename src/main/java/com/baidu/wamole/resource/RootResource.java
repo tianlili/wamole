@@ -115,7 +115,8 @@ public class RootResource {
 	@Path("/addProject")
 	@Produces(MediaType.TEXT_HTML)
 	public void addProject(@FormParam("name") String name, @FormParam("path") String path) {
-		new JsProject(name, path);
+//		new JsProject(name, path);
+		Wamole.getInstance().addProject(name, path);
 	}
 
 	@Path("/project/{name}")
