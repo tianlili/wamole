@@ -30,8 +30,10 @@ $(function() {
     		var innerhtml = '<tr class="' + c +'">'
         		+'<td><div style="text-align:left;">' + data[i].name + '</div></td>'
         		+'<td><div style="text-align:left;">' + decodeURIComponent(data[i].path) + '</div></td>'
-        		+'<td><div style="text-align:left;"><div style="width:16px" class="fview"><img title="detail" id=' + data[i].name + '_view src="../resource/frontcss/images/view.ico" width=16px height=16px/></div></div></td></tr>'
-        	$(".list tbody").append(innerhtml);
+        		+'<td><div style="text-align:left;"><div style="width:16px" class="fview"><img title="detail" id=' + data[i].name + '_view src="../resource/frontcss/images/view.ico" width=16px height=16px/></div></div></td>'
+        		+'<td><div style="text-align:left;"><div style="width:16px" class="fexec"><img title="exec" id=' + data[i].name + '_exec src="../resource/frontcss/images/exec.ico" width=16px height=16px/></div></div></td>'
+        		+'</tr>';
+            $(".list tbody").append(innerhtml);
 		}
 
 		iFrameHeight("iframepage");

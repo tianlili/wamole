@@ -3,6 +3,7 @@ $(function() {
 	var name = window.location.href.split("/");
 	name = name[name.length-2];
 	var url = location.href;
+	var thead_html = $(".list thead .hDiv")[0].innerHTML;
 	
 	function iFrameHeight(id) { 
 		var ifm = parent.document.getElementById(id); 
@@ -58,23 +59,31 @@ $(function() {
 		var head_path = "";
 		for(var i = 0; i < head_span.length; i ++){
 			head_path += head_span[i] + "/";
-			if(data.dir == "false")
-				head_path.substring(0, head_path.length - 2);
 			head_html += "<span title = '" + head_path + "' class= 'ffilelink'>" + head_span[i] + "</span>" + "/";
 		}
+		if(data.dir == "false")
+			head_html = head_html.substring(0, head_html.length - 1);
+		
+		var exec_html = '';
+    	if(data.exe == "true")
+    		exec_html = '<img title="run the case" src="../../resource/frontcss/images/exec.ico" width="16px" height="16px">';
+    	
+		
     	$(".list thead .ftitle").html(head_html);
+    	$(".list thead .fbutton").html(exec_html);
+    	
     	$(".list thead .ftitle span").click(function(){
-    		var add = this.title == "root" ? "" : this.title;
+    		var add = this.title == "root" ? "" : "/" + this.title;
     		add = data.dir == "true" ? add : add.substring(0, add.length - 1);
-    		url = url.substring(0,url.indexOf(name + '/files') + name.length + 6) + "/" + add;
+    		url = url.substring(0,url.indexOf(name + '/files') + name.length + 6) + add;
     		getData(url);
     	});
 	};
 	
 	function insertDir(data){
-
+		$(".list thead .hDiv").html(thead_html);
+		
     	data = data.children;
-    	
     	sortData(data);
     	
 		for(var i=0; i<data.length; i++){
@@ -104,7 +113,9 @@ $(function() {
 	};
 	
 	function insertFile(data){
-		$(".list tbody").append("<td colspan = 3><div class='filecontent'><pre></pre></div></td>");
+		$(".list thead .hDiv").html('<td colspan=3><div>&nbsp;</div></td>');
+		
+		$(".list tbody").append("<tr class='fcontent'><td colspan=3><div><pre></pre></div></td></tr>");
 		$(".list tbody pre").append(data.content);
 	}
 	

@@ -1,21 +1,19 @@
 @charset UTF-8;
 
-.list{font-family:Arial, Helvetica, sans-serif;font-size:11px;position:relative;border:1px solid #ccc;overflow:hidden;color:#000;margin-left:auto;margin-right:auto}
+.list{font-family:Arial, Helvetica, sans-serif;font-size:11px;position:relative;border:1px solid #ccc;overflow:hidden;color:#000}
 .list .hDiv{background:#fafafa url(images/fhbg.gif) repeat-x bottom;position:relative;border:1px solid #ccc;border-top:0;overflow:hidden;}
 .list .hDiv td{padding-left:5px;border-right: 1px solid #DDD;border-left: 1px solid white;font-weight: 800;font-size:11px;line-height:22px}
 .list .hDiv td div{border-bottom: 1px solid #eee;}
-.list .mDiv{border-bottom:1px solid #ccc;font-weight:700;display:block;overflow:hidden;white-space:nowrap;position:relative;height:52px;line-height:52px;}
+.list .mDiv{overflow:hidden;white-space:nowrap;position:relative;}
+.list .mDiv td{border-bottom:1px solid #ccc;font-weight:700;height:52px;line-height:52px;}
 .list div.ftitle{font-size:20px;height:52px;line-height:52px;float:left;display:block;padding:1px}
-.list div.fbutton {border:0; float:left;height:16px;line-height:16px;margin-top:18px;margin-left:18px}
-.list div.fbutton:hover,.list div.fview:hover{border-left:1px solid #fff;border-top:1px solid #fff;border-right:1px solid #eee;border-bottom:1px solid #eee}
+.list div.fbutton {border:0; float:left;height:16px;line-height:16px;margin-top:20px;margin-left:10px}
+.list div.fbutton:hover,.list div.fview:hover,.list div.fresult:hover,.list div.fexec:hover{border-left:1px solid #fff;border-top:1px solid #fff;border-right:1px solid #eee;border-bottom:1px solid #eee;cursor:pointer}
 .list .orow td{padding-left:5px;height:35px;border-right: 1px solid #DDD;border-left: 1px solid white;}
 .list .erow td{padding-left:5px;height:35px;background:#f7f7f7;border-bottom:1px solid #f7f7f7;border-right: 1px solid #DDD;border-left: 1px solid white;}
 .list .hDiv td div.sasc{background:url(images/up.png) no-repeat center top}
 .list .hDiv td div.sdesc{background:url(images/dn.png) no-repeat center top}
 .list .hDiv td div.sort:hover,.list .hDiv td div.sasc:hover,.list .hDiv td div.sdesc:hover{border-bottom:1px solid orange;cursor:pointer}
-.list div .ffilelink{color:#4183C4}
-.list div .ffile:hover,.list div .ffilelink:hover{text-decoration:underline;cursor:pointer}
-.list .filecontent{width:878px;overflow-x:scroll;font-family:Arial,Helvetica,sans-serif;font-size:11px;}
 
 .addP{font-family:Arial, Helvetica, sans-serif;font-size:11px;font-weight:700;position:relative;border:0;overflow:hidden;margin-left:auto;margin-right:auto}
 .addP td .bu{border:1px solid #ccc;padding:5px 10px;background:url(images/sprite.png) repeat-x;cursor:pointer}
