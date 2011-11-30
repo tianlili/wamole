@@ -43,7 +43,7 @@ public class JsProject extends AbstractProject<JsProject, JsBuild> {
 			return s;
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new TestException("请检查配置信息是否正确，可能由于资源无法匹配导致.");
+			throw new TestException("请检查配置信息是否正确，可能由于资源无法匹配导致 : "+searchString);
 		}
 	}
 

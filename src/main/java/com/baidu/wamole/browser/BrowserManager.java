@@ -45,7 +45,7 @@ public class BrowserManager extends AbstractModel<Wamole> {
 				return (JsKiss) buildStep.getResultTable().store(result);
 				// result无结果，当前任务中需要该浏览器进行测试
 			} else if (buildStep.getResultTable().getBrowserIndex(
-					result.getBrowser()) > 0) {
+					result.getBrowser()) >= 0) {
 				return (JsKiss) buildStep.getResultTable()
 						.getNextExcutableKiss(result.getBrowser());
 			} else {

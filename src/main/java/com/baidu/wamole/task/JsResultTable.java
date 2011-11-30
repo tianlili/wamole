@@ -17,9 +17,7 @@ import java.util.Map;
 import org.eclipse.jetty.util.log.Log;
 
 import com.baidu.wamole.browser.Browser;
-import com.baidu.wamole.browser.BrowserManager;
 import com.baidu.wamole.model.Kiss;
-import com.baidu.wamole.model.Wamole;
 import com.baidu.wamole.template.ConfigurationFactory;
 
 import freemarker.template.Template;
@@ -27,29 +25,23 @@ import freemarker.template.TemplateException;
 
 public class JsResultTable implements ResultTable {
 	protected Result[][] results; // 结果
-	protected List<Browser> browserList; // 浏览器列表
-	protected List<Browser> activeList;// 活动的浏览器列表
+	protected List<String> browserList; // 浏览器列表
+	protected List<String> activeList;// 活动的浏览器列表
 	protected List<Kiss> kissList; // 用例列表
 	protected List<String> kissNameList; //
 	protected DeadLine deadLine; // 超时时间
 	protected int[] currentIndex; // 当前执行index
 	protected int[] successCount;
 
-	public JsResultTable(Build<?, ?> b) {
-		
+	public JsResultTable(List<Browser> bs, Build<?, ?> b) {
 		// TODO 提供项目定制浏览器列表，目前使用全部浏览器运行
-		this(new ArrayList<Browser>(Wamole.getInstance()
-				.getModel(BrowserManager.class).getBrowsers()),
-				new ArrayList<Browser>(Wamole.getInstance()
-						.getModel(BrowserManager.class).getBrowsers()),
-				new ArrayList<Kiss>(b.getProject().getKisses()), 20);
-		
-		
+		this(bs, bs, new ArrayList<Kiss>(b.getProject().getKisses()), 20);
 	}
 
 	public JsResultTable(List<Browser> browserList, List<Browser> activeList,
 			List<Kiss> kissList, int interval) {
-		this.browserList = browserList;
+		this.browserList = convertBrowser(browserList);
+		this.activeList = convertBrowser(activeList);
 		this.kissList = kissList;
 		converseKissName();
 		results = new Result[browserList.size()][kissList.size()];
@@ -72,6 +64,13 @@ public class JsResultTable implements ResultTable {
 		}
 	}
 
+	private List<String> convertBrowser(List<Browser> browsers) {
+		List<String> list = new ArrayList<String>();
+		for (Browser b : browsers)
+			list.add(b.getName());
+		return list;
+	}
+
 	@Override
 	public synchronized Kiss store(Result result) {
 		int browserIndex = getBrowserIndex(result.getBrowser());
@@ -81,26 +80,31 @@ public class JsResultTable implements ResultTable {
 		decrease();
 		return getNextExcutableKiss(result.getBrowser());
 	}
+	
+	@Override
+	public int getBrowserIndex(String browser) {
+		return browserList.indexOf(browser);
+	}
 
-//	/**
-//	 * 对browser当前result添加一个空的结果
-//	 * 
-//	 * @param browser
-//	 */
-//	private synchronized void storeEmpty(String browser, int index) {
-//		Result result = new Result();
-//		result.setBrowser(browser);
-//		result.setFail(0);
-//		result.setTotal(0);
-//		result.setTimeStamp(0);
-//		result.setName(kissList.get(index).getName());
-//		Log.debug("store empty case : " + result.getName());
-//		int browserIndex = getBrowserIndex(result.getBrowser());
-//		int kissIndex = getKissIndex(result.getName());
-//		results[browserIndex][kissIndex] = result;
-//		++successCount[browserIndex];
-//		decrease();
-//	}
+	// /**
+	// * 对browser当前result添加一个空的结果
+	// *
+	// * @param browser
+	// */
+	// private synchronized void storeEmpty(String browser, int index) {
+	// Result result = new Result();
+	// result.setBrowser(browser);
+	// result.setFail(0);
+	// result.setTotal(0);
+	// result.setTimeStamp(0);
+	// result.setName(kissList.get(index).getName());
+	// Log.debug("store empty case : " + result.getName());
+	// int browserIndex = getBrowserIndex(result.getBrowser());
+	// int kissIndex = getKissIndex(result.getName());
+	// results[browserIndex][kissIndex] = result;
+	// ++successCount[browserIndex];
+	// decrease();
+	// }
 
 	/**
 	 * 获取各个浏览器成功执行了多少Case
@@ -114,21 +118,13 @@ public class JsResultTable implements ResultTable {
 				least = successCount[i];
 			}
 		}
-//		System.out.println(least);
+		// System.out.println(least);
 		return least;
 	}
 
 	private void decrease() {
-//		System.out.println("decrease count : " + getLeastCount());
+		// System.out.println("decrease count : " + getLeastCount());
 		deadLine.decrease(getLeastCount());
-	}
-
-	@Override
-	public int getBrowserIndex(String browser) {
-		if (browserList.contains(browser)) {
-			return browserList.lastIndexOf(browser);
-		} else
-			return -1;
 	}
 
 	@Override

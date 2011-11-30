@@ -49,5 +49,5 @@ public abstract class AbstractModelGroup<Parent extends ModelGroup>
 	
 	public <M extends Model> void addModel(M m) {
 		models.add(m);
-	};
+	}
 }
