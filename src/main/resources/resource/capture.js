@@ -43,21 +43,21 @@ var probe = {
 			data : options,
 			type : 'put',
 			success : function(text) {
-					probe.lastNotice = new Date().getTime();
-					setTimeout(function() {
-						probe.runtest(text);
-						if(null != text && "" != text) {
-							probe.kiss = text;
-						}
-					}, 0);
-				},
-			error : function(text) {
-				if(text.status == 404) {
-					window.close();
-				}
-//				alert(text);
+				console.log(text);
+				probe.lastNotice = new Date().getTime();
+				setTimeout(function() {
+					probe.runtest(text);
+					if(null != text && "" != text) {
+						probe.kiss = text;
+					}
+				}, 0);
+			},
+			error: function(xhr){
+				//在服务器重启后，此处用于重新注册浏览器到新的id
+				if(xhr.status == 404)
+					location.href = "/browser/register";
 			}
-			});
+		});
 		probe.timeoutHandle = setTimeout(probe.beat, probe.interval);
 	},
 //	register : function(id) {
