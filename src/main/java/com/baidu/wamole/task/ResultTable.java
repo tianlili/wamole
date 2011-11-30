@@ -3,13 +3,14 @@ package com.baidu.wamole.task;
 import java.io.IOException;
 
 import com.baidu.wamole.model.Kiss;
+import com.baidu.wamole.model.Savable;
 
 /**
  * 存储结果的2维表
  * 
  * @author dailiqi
  */
-public interface ResultTable {
+public interface ResultTable extends Savable{
 	/**
 	 * 存储一个结果，并且对超时时间减少一个interval,并返回下个可执行的kiss
 	 * 

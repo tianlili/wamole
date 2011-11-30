@@ -1,6 +1,8 @@
 package com.baidu.wamole.xml;
 
+import com.baidu.wamole.browser.BrowserManager;
 import com.baidu.wamole.model.Wamole;
+import com.baidu.wamole.task.BuildQueue;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.HierarchicalStreamDriver;
 
@@ -8,6 +10,8 @@ public class DefaultXStream extends XStream {
 	private DefaultXStream() {
 		super();
 		alias("wamole", Wamole.class);
+		alias("browsers", BrowserManager.class);
+		alias("queue", BuildQueue.class);
 		init();
 	}
 

@@ -1,50 +1,36 @@
 package com.baidu.wamole.task;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-import com.baidu.wamole.browser.Browser;
-import com.baidu.wamole.browser.BrowserManager;
 import com.baidu.wamole.model.JsProject;
 import com.baidu.wamole.model.Wamole;
-import com.baidu.wamole.template.ConfigurationFactory;
-import com.baidu.wamole.util.CopyOnWriteList;
 
 public class JsBuildStep implements BuildStep<JsProject, JsBuild> {
-	private CopyOnWriteList<String> browsers;
-	private List<String> actives;
-	private ResultTable resultTable;
-	private BrowserManager bm;
-	private List<String> browserList;
+	private JsResultTable resultTable;
 	JsBuild build;
 	JsProject project;
+	public JsBuildStep(JsBuild build) {
+		this.build = build;
+	}
 
 	@Override
 	public JsBuild getBuild() {
-		return build;
+		return null;
 	}
-	
+
 	@Override
 	public JsProject getProject() {
 		return project;
 	}
 	
+	/**
+	 * 此方法用于确认用例列表和浏览器列表并定制一个执行结果对象
+	 */
 	@Override
 	public boolean preBuild() {
-		BrowserManager bm = Wamole.getInstance().getModel(
-				BrowserManager.class, "browsers");
-		browserList = new ArrayList<String>();
-		for (String string : browsers.getView()) {
-			browserList.add(string.toLowerCase());
-		}
-		actives = config(bm.getBrowsers());
-		//TODO 结果输出待补充
-//		resultTable = new ResultTableImpl(browserList, actives, build
-//				.getProject().getKisses(), bm.getStep());
-		return actives.size() > 0;
+		resultTable = new JsResultTable(build);
+		
+		return  Wamole.getInstance().getBrowserManager().getBrowsers().size() > 0;
 	}
 
 	public ResultTable getResultTable() {
@@ -53,43 +39,40 @@ public class JsBuildStep implements BuildStep<JsProject, JsBuild> {
 
 	@Override
 	public boolean perform() {
-		bm.setBuildStep(this);
+		Wamole.getInstance().getBrowserManager().setBuildStep(this);
 		while (!resultTable.isDead()) {
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 		try {
 			this.resultTable.save();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		bm.setBuildStep(null);
-		System.out.println("result table :" + this.resultTable.toString());
+		Wamole.getInstance().getBrowserManager().setBuildStep(this);
 		return true;
 	}
-
-	/**
-	 * 根据配置信息配置，检测当前active的浏览器，将浏览器遍历出来
-	 * 
-	 * @param list
-	 * @return
-	 */
-	private List<String> config(List<Browser> list) {
-		List<String> result = new ArrayList<String>();
-		for (Browser browser : list) {
-			if (browserList.contains(browser.getName().toLowerCase())) {
-				if (browser.getName().toLowerCase().equals("msie")) {
-					result.add(browser.getName() + browser.getVersion());
-				} else {
-					result.add(browser.getName());
-				}
-			}
-		}
-		return result;
-	}
+//
+//	/**
+//	 * 根据配置信息配置，检测当前active的浏览器，将浏览器遍历出来
+//	 * 
+//	 * @param list
+//	 * @return
+//	 */
+//	private List<String> config(List<Browser> list) {
+//		List<String> result = new ArrayList<String>();
+//		for (Browser browser : list) {
+//			if (browserList.contains(browser.getName().toLowerCase())) {
+//				if (browser.getName().toLowerCase().equals("msie")) {
+//					result.add(browser.getName() + browser.getVersion());
+//				} else {
+//					result.add(browser.getName());
+//				}
+//			}
+//		}
+//		return result;
+//	}
 }

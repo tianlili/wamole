@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.baidu.wamole.browser.BrowserManager;
 import com.baidu.wamole.server.JettyServer;
 import com.baidu.wamole.task.BuildQueue;
 import com.baidu.wamole.task.BuildThread;
@@ -19,6 +20,10 @@ public class Wamole extends AbstractModelGroup<ModelGroup> {
 	}
 
 	private transient final File root;
+	
+	private BrowserManager browsers;
+	
+	private BuildQueue queue;
 
 	@Override
 	public File getRootDir() {
@@ -35,12 +40,24 @@ public class Wamole extends AbstractModelGroup<ModelGroup> {
 
 	public void load() throws IOException {
 		getConfigFile().unmarshal(this);
-
-		// 初始化队列
-		new BuildQueue(this);
+		boolean needSave = false;
+		
+		//初始化浏览器
+		if(browsers == null){
+			browsers = new BrowserManager();
+			needSave = true;
+		}
+		
+		//初始化队列
+		if(queue == null){
+			queue = new BuildQueue();
+		}
 
 		// 初始化项目列表
 		loadProjects();
+		
+		if(needSave)
+			save();
 	}
 
 	/**
@@ -52,7 +69,7 @@ public class Wamole extends AbstractModelGroup<ModelGroup> {
 		// 启动服务
 		JettyServer.addPath(new JsProject(name, path));
 	}
-	
+
 	public List<Class<? extends Parser<?>>> getParserTypeList() {
 		List<Class<? extends Parser<?>>> list = new ArrayList<Class<? extends Parser<?>>>();
 		list.add(TangramParser.class);
@@ -62,23 +79,36 @@ public class Wamole extends AbstractModelGroup<ModelGroup> {
 
 	/**
 	 * load all projects
+	 * 
 	 * @throws IOException
 	 */
 	private synchronized void loadProjects() throws IOException {
 		File projectsDir = new File(root, "project");
-		if(!projectsDir.isDirectory() && !projectsDir.mkdirs()) {
-            if(projectsDir.exists())
-                throw new IOException(projectsDir+" is not a directory");
-            throw new IOException("Unable to create "+projectsDir+"\nPermission issue? Please create this directory manually.");
-        }
-        File[] subdirs = projectsDir.listFiles(new FileFilter() {
-            public boolean accept(File child) {
-                return child.isDirectory() && Models.getConfigFile(child).exists();
-            }
-        });
-        
-        for (final File subdir : subdirs) {
-        	this.addModel(Models.load(subdir));
-        }
+		if (!projectsDir.isDirectory() && !projectsDir.mkdirs()) {
+			if (projectsDir.exists())
+				throw new IOException(projectsDir + " is not a directory");
+			throw new IOException(
+					"Unable to create "
+							+ projectsDir
+							+ "\nPermission issue? Please create this directory manually.");
+		}
+		File[] subdirs = projectsDir.listFiles(new FileFilter() {
+			public boolean accept(File child) {
+				return child.isDirectory()
+						&& Models.getConfigFile(child).exists();
+			}
+		});
+
+		for (final File subdir : subdirs) {
+			this.addModel(Models.load(subdir));
+		}
+	}
+
+	public BrowserManager getBrowserManager() {
+		return browsers;
+	}
+
+	public BuildQueue getBuildQueue() {
+		return queue;
 	}
 }

@@ -23,25 +23,12 @@
  */
 package com.baidu.wamole.util;
 
-import static java.util.logging.Level.WARNING;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Logger;
-
-import com.baidu.wamole.model.Model;
-import com.thoughtworks.xstream.converters.Converter;
-import com.thoughtworks.xstream.converters.MarshallingContext;
-import com.thoughtworks.xstream.converters.UnmarshallingContext;
-import com.thoughtworks.xstream.converters.collections.AbstractCollectionConverter;
-import com.thoughtworks.xstream.io.HierarchicalStreamReader;
-import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
-import com.thoughtworks.xstream.mapper.CannotResolveClassException;
-import com.thoughtworks.xstream.mapper.Mapper;
 
 /**
  * {@link List}-like implementation that has copy-on-write semantics.
@@ -163,6 +150,6 @@ public class CopyOnWriteList<E> implements Iterable<E> {
 		return core.size();
 	}
 
-	private static final Logger LOGGER = Logger.getLogger(CopyOnWriteList.class
-			.getName());
+//	private static final Logger LOGGER = Logger.getLogger(CopyOnWriteList.class
+//			.getName());
 }

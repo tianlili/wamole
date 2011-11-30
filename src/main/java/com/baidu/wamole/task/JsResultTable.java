@@ -16,33 +16,46 @@ import java.util.Map;
 
 import org.eclipse.jetty.util.log.Log;
 
+import com.baidu.wamole.browser.Browser;
+import com.baidu.wamole.browser.BrowserManager;
 import com.baidu.wamole.model.Kiss;
+import com.baidu.wamole.model.Wamole;
 import com.baidu.wamole.template.ConfigurationFactory;
 
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
-public class ResultTableImpl implements ResultTable {
+public class JsResultTable implements ResultTable {
 	protected Result[][] results; // 结果
-	protected List<String> browserList; // 浏览器列表
-	protected List<String> activeList;// 活动的浏览器列表
+	protected List<Browser> browserList; // 浏览器列表
+	protected List<Browser> activeList;// 活动的浏览器列表
 	protected List<Kiss> kissList; // 用例列表
 	protected List<String> kissNameList; //
 	protected DeadLine deadLine; // 超时时间
 	protected int[] currentIndex; // 当前执行index
 	protected int[] successCount;
 
-	public ResultTableImpl(List<String> browserList, List<String> activeList,
+	public JsResultTable(Build<?, ?> b) {
+		
+		// TODO 提供项目定制浏览器列表，目前使用全部浏览器运行
+		this(new ArrayList<Browser>(Wamole.getInstance()
+				.getModel(BrowserManager.class).getBrowsers()),
+				new ArrayList<Browser>(Wamole.getInstance()
+						.getModel(BrowserManager.class).getBrowsers()),
+				new ArrayList<Kiss>(b.getProject().getKisses()), 20);
+		
+		
+	}
+
+	public JsResultTable(List<Browser> browserList, List<Browser> activeList,
 			List<Kiss> kissList, int interval) {
-		Log.info(browserList.toString());
-		Log.info(activeList.toString());
 		this.browserList = browserList;
 		this.kissList = kissList;
 		converseKissName();
 		results = new Result[browserList.size()][kissList.size()];
 		currentIndex = new int[browserList.size()];
 		successCount = new int[browserList.size()];
-		for (String browser : browserList) {
+		for (Browser browser : browserList) {
 			// 如果注册浏览器当前并无可用浏览器，则将该浏览器count直接置为最高。
 			if (!activeList.contains(browser)) {
 				successCount[browserList.indexOf(browser)] = kissList.size() + 1;
@@ -69,25 +82,25 @@ public class ResultTableImpl implements ResultTable {
 		return getNextExcutableKiss(result.getBrowser());
 	}
 
-	/**
-	 * 对browser当前result添加一个空的结果
-	 * 
-	 * @param browser
-	 */
-	private synchronized void storeEmpty(String browser, int index) {
-		Result result = new Result();
-		result.setBrowser(browser);
-		result.setFail(0);
-		result.setTotal(0);
-		result.setTimeStamp(0);
-		result.setName(kissList.get(index).getName());
-		Log.debug("store empty case : " + result.getName());
-		int browserIndex = getBrowserIndex(result.getBrowser());
-		int kissIndex = getKissIndex(result.getName());
-		results[browserIndex][kissIndex] = result;
-		++successCount[browserIndex];
-		decrease();
-	}
+//	/**
+//	 * 对browser当前result添加一个空的结果
+//	 * 
+//	 * @param browser
+//	 */
+//	private synchronized void storeEmpty(String browser, int index) {
+//		Result result = new Result();
+//		result.setBrowser(browser);
+//		result.setFail(0);
+//		result.setTotal(0);
+//		result.setTimeStamp(0);
+//		result.setName(kissList.get(index).getName());
+//		Log.debug("store empty case : " + result.getName());
+//		int browserIndex = getBrowserIndex(result.getBrowser());
+//		int kissIndex = getKissIndex(result.getName());
+//		results[browserIndex][kissIndex] = result;
+//		++successCount[browserIndex];
+//		decrease();
+//	}
 
 	/**
 	 * 获取各个浏览器成功执行了多少Case
@@ -101,12 +114,12 @@ public class ResultTableImpl implements ResultTable {
 				least = successCount[i];
 			}
 		}
-		System.out.println(least);
+//		System.out.println(least);
 		return least;
 	}
 
 	private void decrease() {
-		System.out.println("decrease count : " + getLeastCount());
+//		System.out.println("decrease count : " + getLeastCount());
 		deadLine.decrease(getLeastCount());
 	}
 
@@ -158,8 +171,10 @@ public class ResultTableImpl implements ResultTable {
 		map.put("kisses", kissList);
 		map.put("results", results);
 		String root = System.getProperty("user.home") + "/.wamole";
-		SimpleDateFormat dateformat1=new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
-		String filePath = root + "/result/Report_" + dateformat1.format(new Date()) + ".xml";
+		SimpleDateFormat dateformat1 = new SimpleDateFormat(
+				"yyyy-MM-dd_HH-mm-ss");
+		String filePath = root + "/result/Report_"
+				+ dateformat1.format(new Date()) + ".xml";
 		File file = new File(filePath);
 		// 建立文件
 		if (!file.exists()) {

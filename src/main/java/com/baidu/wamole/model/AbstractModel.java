@@ -39,7 +39,7 @@ public abstract class AbstractModel<P extends ModelGroup> implements Model{
         getConfigFile().write(this);
     }
     
-    public final XmlFile getConfigFile() {
+    public XmlFile getConfigFile() {
         return new XmlFile(new File(getRootDir(), "config.xml"));
     }
     

@@ -2,12 +2,15 @@ package com.baidu.wamole.resource;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -15,14 +18,16 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import com.baidu.wamole.browser.Browser;
 import com.baidu.wamole.browser.BrowserManager;
 import com.baidu.wamole.data.JsonParser;
+import com.baidu.wamole.exception.TestException;
+import com.baidu.wamole.model.JsKiss;
 import com.baidu.wamole.model.Wamole;
+import com.baidu.wamole.task.Result;
 import com.baidu.wamole.template.ConfigurationFactory;
 import com.sun.jersey.api.core.ResourceContext;
 
@@ -45,9 +50,6 @@ public class BrowserResource {
 
 	@GET
 	public Response get() {
-		// if (null == project) {
-		// return Response.noContent().build();
-		// }
 		StringWriter writer = new StringWriter();
 		try {
 			Template template = ConfigurationFactory.getInstance().getTemplate(
@@ -71,8 +73,9 @@ public class BrowserResource {
 		return Response.ok(
 				JsonParser.listToJson(
 						Wamole.getInstance()
-								.getModel(BrowserManager.class, "browsers")
-								.getBrowsers()).toString()).build();
+								.getModel(BrowserManager.class,
+										BrowserManager.name).getBrowsers())
+						.toString()).build();
 	}
 
 	@GET
@@ -99,11 +102,10 @@ public class BrowserResource {
 	 */
 	@POST
 	@Path("/register")
-	public Response register(MultivaluedMap<String, String> param) {
+	public Response register(@HeaderParam("user-agent") String ua) {
 		String ip = request.getRemoteHost();
-		String userAgent = param.getFirst("userAgent");
 		// 新建一个instance
-		Browser instance = Browser.build(ip, userAgent).build();
+		Browser instance = Browser.build(ip, ua).build();
 		List<Browser> browsers = Wamole.getInstance()
 				.getModel(BrowserManager.class, "browsers").getBrowsers();
 		// 获取已存在的 list 进行对比
@@ -140,26 +142,21 @@ public class BrowserResource {
 	@GET
 	@Path("/capture/{ids}")
 	public Response getCapturePage() {
-		// StringWriter writer = new StringWriter();
-		// // 获取已存在的 list 进行对比
-		// BrowserManager bm = (BrowserManager) Wamole.getInstance().getModule(
-		// BrowserManager.class);
-		// int step = bm.getStep();
-		// try {
-		// Template template = ConfigurationFactory.getInstance().getTemplate(
-		// "browser/capture.ftl");
-		// Map<String, Object> map = new HashMap<String, Object>();
-		// map.put("step", step);
-		// try {
-		// template.process(map, writer);
-		// } catch (TemplateException e) {
-		// e.printStackTrace();
-		// }
-		// } catch (IOException e) {
-		// e.printStackTrace();
-		// }
-		// return Response.ok(writer.toString()).build();
-		return null;
+		StringWriter writer = new StringWriter();
+		try {
+			Template template = ConfigurationFactory.getInstance().getTemplate(
+					"browser/capture.ftl");
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("step", Wamole.getInstance().getBrowserManager().getStep());
+			try {
+				template.process(map, writer);
+			} catch (TemplateException e) {
+				e.printStackTrace();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return Response.ok(writer.toString()).build();
 	}
 
 	@PUT
@@ -169,32 +166,31 @@ public class BrowserResource {
 			@FormParam("starttime") String starttime,
 			@FormParam("endtime") String endtime,
 			@FormParam("fail") String fail, @FormParam("total") String total,
-			@FormParam("cov") String cov) {
-		//
-		// BrowserManager bm = (BrowserManager) Wamole.getInstance().getModule(
-		// BrowserManager.class);
-		// if (null == bm.getBrowser(id)) {
-		// return Response.status(404).build();
-		// }
-		// Result result = new Result();
-		// result.setBrowser(bm.getBrowser(id).getName());
-		// if (null != endtime && !"undefined".equals(endtime)
-		// && !"".equals(endtime)) {
-		// result.setFail(Integer.valueOf(fail));
-		// result.setTotal(Integer.valueOf(total));
-		// result.setName(name);
-		// result.setTimeStamp(Long.valueOf(endtime) - Long.valueOf(starttime));
-		// }
-		// try {
-		// JsKiss kiss = bm.notice(id, result);
-		// if (null == kiss)
-		// return Response.ok("").build();
-		// else
-		// return Response.ok(kiss.getExecUrl()).build();
-		// } catch (TestException e) {
-		// e.printStackTrace();
-		// return Response.status(500).build();
-		// }
-		return null;
+			@FormParam("cov") String cov, @HeaderParam("user-agent") String ua) {
+
+		BrowserManager bm = Wamole.getInstance().getModel(BrowserManager.class,
+				BrowserManager.name);
+		if (null == bm.getBrowser(id)) {
+			return Response.status(404).build();
+		}
+		Result result = new Result();
+		result.setBrowser(bm.getBrowser(id).getName());
+		if (null != endtime && !"undefined".equals(endtime)
+				&& !"".equals(endtime)) {
+			result.setFail(Integer.valueOf(fail));
+			result.setTotal(Integer.valueOf(total));
+			result.setName(name);
+			result.setTimeStamp(Long.valueOf(endtime) - Long.valueOf(starttime));
+		}
+		try {
+			JsKiss kiss = bm.notice(id, result);
+			if (null == kiss)
+				return Response.ok("").build();
+			else
+				return Response.ok(kiss.getExecUrl()).build();
+		} catch (TestException e) {
+			e.printStackTrace();
+			return Response.status(500).build();
+		}
 	}
 }

@@ -1,8 +1,5 @@
 package com.baidu.wamole.model;
 
-import java.io.IOException;
-import java.util.List;
-
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.baidu.wamole.exception.TestException;
@@ -16,18 +13,14 @@ public class JsProject extends AbstractProject<JsProject, JsBuild> {
 		super(name, path);
 	}
 
-//	private Processor<Kiss> processor;
-	private List<JsBuild> builds;
+	@Override
+	public void addBuild() {
+		JsBuild build = new JsBuild(this, getUsableBuildId());
+		this.addModel(build);
+		Wamole.getInstance().getBuildQueue().addBuild(build);
+	}
 
 	private Parser<JsKiss> parser;
-
-	public void addBuild() {
-		try {
-			builds.add(new JsBuild(this, getUsableBuildId()));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void setParser(Parser parser) {
@@ -37,7 +30,7 @@ public class JsProject extends AbstractProject<JsProject, JsBuild> {
 
 	@Override
 	public Parser<JsKiss> getParser() {
-		if(parser == null)
+		if (parser == null)
 			parser = new TangramParser();
 		return parser;
 	}

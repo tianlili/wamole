@@ -1,6 +1,7 @@
 package com.baidu.wamole.browser;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import com.baidu.wamole.exception.TestException;
@@ -12,17 +13,21 @@ import com.baidu.wamole.task.Result;
 import com.baidu.wamole.util.CopyOnWriteList;
 
 public class BrowserManager extends AbstractModel<Wamole> {
+	public static final String name = "browsers";
 	private CopyOnWriteList<StaticBrowser> statics;
-	private CopyOnWriteList<Browser> browsers;
+	private CopyOnWriteList<Browser> browsers;// = new CopyOnWriteList<Browser>();
 	private JsBuildStep buildStep;
 
-	/* package */BrowserManager() {
-		super(Wamole.getInstance(), "browsers");
+	public BrowserManager() {
+		super(Wamole.getInstance(), name);
 	}
 
-	private int step = 20;
+	/**
+	 * 浏览器刷新间隔
+	 */
+	private int step = 2000;
 
-	private boolean autorun;
+	private boolean autorun = true;
 
 	public List<StaticBrowser> getStaticBrowsers() {
 		return statics.getView();
@@ -47,14 +52,6 @@ public class BrowserManager extends AbstractModel<Wamole> {
 				return null;
 			}
 		}
-		// else {
-		// buildStep.getResultTable().store(null);
-		// }
-		// if (null != result.getName()) {
-		// return (TangramKiss) buildStep.getResultTable().store(result);
-		// } else {
-		// return null;
-		// }
 	}
 
 	public Browser getBrowser(String id) {
@@ -75,6 +72,8 @@ public class BrowserManager extends AbstractModel<Wamole> {
 	}
 
 	public List<Browser> getBrowsers() {
+		if(browsers == null)
+			browsers = new CopyOnWriteList<Browser>();
 		return browsers.getView();
 	}
 
@@ -135,16 +134,21 @@ public class BrowserManager extends AbstractModel<Wamole> {
 		}
 	}
 
-	public JsBuildStep getBuildStep() {
-		return buildStep;
-	}
+//	public JsBuildStep getBuildStep() {
+//		return buildStep;
+//	}
 
 	public void setBuildStep(JsBuildStep buildStep) {
 		this.buildStep = buildStep;
 	}
-
+	
 	@Override
 	public File getRootDir() {
-		return getParent().getRootDir();
+		return parent.getRootDir();
+	}
+	
+	@Override
+	public synchronized void save() throws IOException {
+		
 	}
 }

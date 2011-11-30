@@ -8,8 +8,8 @@ import com.baidu.wamole.model.AbstractModel;
 import com.baidu.wamole.model.Wamole;
 
 public class BuildQueue extends AbstractModel<Wamole>{
-	public BuildQueue(Wamole parent) {
-		super(parent, name);
+	public BuildQueue() {
+		super(Wamole.getInstance(), name);
 	}
 
 	private Queue<Build<?,?>> queue = new LinkedList<Build<?,?>>();

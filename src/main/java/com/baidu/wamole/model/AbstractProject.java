@@ -4,14 +4,11 @@ import java.io.File;
 import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.baidu.wamole.data.Exported;
 import com.baidu.wamole.data.Imported;
 import com.baidu.wamole.task.AbstractBuild;
-import com.baidu.wamole.task.BuildStep;
-import com.baidu.wamole.util.CopyOnWriteList;
 
 /**
  * @author yangbo
@@ -24,16 +21,15 @@ public abstract class AbstractProject<P extends AbstractProject<P, B>, B extends
 
 	protected AbstractProject(String name, String path) {
 		super(Wamole.getInstance(), name);
+		this.name = name;
 		this.path = path;
 	}
 
-	// 项目基础路径
-	private String path;
+	protected String name;
 
-	// 项目构建步骤
-	private CopyOnWriteList<BuildStep<P, B>> buildSteps;
+	protected String path;
 
-	protected boolean inited = false;
+	protected boolean inited;
 
 	// 项目
 	@Exported
@@ -56,23 +52,25 @@ public abstract class AbstractProject<P extends AbstractProject<P, B>, B extends
 		this.path = path;
 	}
 
-	public List<BuildStep<P, B>> getBuildSteps() {
-		return buildSteps.getView();
-	}
-
 	@SuppressWarnings("rawtypes")
 	private static HashMap<Project, Map<String, Kiss>> kissMaps = new HashMap<Project, Map<String, Kiss>>();
 
 	@SuppressWarnings("unchecked")
+	private void initKiss(){
+		kissMaps.put(this, getParser().parse(this));
+	}
+	
 	public Kiss getKiss(String name) {
 		if (!inited) {
-			kissMaps.put(Project.class.cast(this), getParser().parse(this));
+			initKiss();
 		}
 		return kissMaps.get(this).get(name);
 	}
 
 	public Collection<Kiss> getKisses() {
-		return  kissMaps.get(this).values();
+		if(!inited)
+			initKiss();
+		return kissMaps.get(this).values();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -97,9 +95,9 @@ public abstract class AbstractProject<P extends AbstractProject<P, B>, B extends
 		}
 		return id;
 	}
-	
+
 	@Override
 	public File getRootDir() {
-		return new File(parent.getRootDir(), "project/"+name);
+		return new File(parent.getRootDir(), "project/" + name);
 	}
 }
