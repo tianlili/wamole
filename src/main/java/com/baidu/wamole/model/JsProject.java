@@ -38,6 +38,8 @@ public class JsProject extends AbstractProject<JsProject, JsBuild> {
 	@Override
 	public String getExecutePage(String searchString) throws TestException {
 		Kiss kiss = this.getKiss(searchString);
+		if(kiss == null)
+			return null;
 		try {
 			String s = new TangramProcessor().process(JsKiss.class.cast(kiss));
 			return s;

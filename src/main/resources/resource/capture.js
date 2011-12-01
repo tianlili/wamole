@@ -43,7 +43,6 @@ var probe = {
 			data : options,
 			type : 'put',
 			success : function(text) {
-				console.log(text);
 				probe.lastNotice = new Date().getTime();
 				setTimeout(function() {
 					probe.runtest(text);
