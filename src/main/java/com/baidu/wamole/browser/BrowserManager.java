@@ -11,6 +11,7 @@ import com.baidu.wamole.model.Wamole;
 import com.baidu.wamole.task.JsBuildStep;
 import com.baidu.wamole.task.Result;
 import com.baidu.wamole.util.CopyOnWriteList;
+import com.caucho.quercus.UnimplementedException;
 
 public class BrowserManager extends AbstractModel<Wamole> {
 	public static final String name = "browsers";
@@ -144,7 +145,7 @@ public class BrowserManager extends AbstractModel<Wamole> {
 	
 	@Override
 	public File getRootDir() {
-		return parent.getRootDir();
+		throw new UnimplementedException();
 	}
 	
 	@Override

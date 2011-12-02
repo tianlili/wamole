@@ -6,14 +6,18 @@ import java.io.IOException;
 import com.baidu.wamole.xml.XmlFile;
 
 /**
- * 提供统一接口，从配置文件载入对象实例
+ * 提供统一接口，从配置文件载入对象实例，
  * @author yangbo
  *
  */
 public class Models {
 	
 	public static Model load(File dir) throws IOException{
-		return Model.class.cast(getConfigFile(dir).read());
+		//名称取目录路径
+		Model m = getConfigFile(dir).read();
+		m.setName(dir.getName());
+		m.setParent(Wamole.getInstance());
+		return m;
 	}
 	
     /**

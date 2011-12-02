@@ -12,7 +12,7 @@ import com.baidu.wamole.xml.XmlFile;
  *
  */
 public abstract class AbstractModel<P extends ModelGroup> implements Model{
-	protected /*final*/ String name;
+	protected transient/*final*/ String name;
 	protected transient P parent;
 	
     protected AbstractModel(P parent, String name) {
@@ -22,10 +22,16 @@ public abstract class AbstractModel<P extends ModelGroup> implements Model{
     	this.parent.addModel(this);
     }
     
+    @SuppressWarnings("unchecked")
+	@Override
+    public void setParent(ModelGroup parent) {
+    	this.parent = (P) parent;
+    }
+    
     public P getParent() {
     	return parent;
     }
-    
+        
     @Exported
     public String getName() {
         return name;

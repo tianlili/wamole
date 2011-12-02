@@ -21,15 +21,16 @@ public abstract class AbstractProject<P extends AbstractProject<P, B>, B extends
 
 	protected AbstractProject(String name, String path) {
 		super(Wamole.getInstance(), name);
-		this.name = name;
 		this.path = path;
 	}
-
-	protected String name;
 
 	protected String path;
 
 	protected boolean inited;
+	
+	public void loadBuildList(){
+		
+	}
 
 	// 项目
 	@Exported
@@ -98,6 +99,6 @@ public abstract class AbstractProject<P extends AbstractProject<P, B>, B extends
 
 	@Override
 	public File getRootDir() {
-		return new File(parent.getRootDir(), "project/" + name);
+		return new File(Wamole.getInstance().getRootDir(), "project/" + name);
 	}
 }

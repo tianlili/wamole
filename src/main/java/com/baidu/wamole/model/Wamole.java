@@ -99,7 +99,7 @@ public class Wamole extends AbstractModelGroup<ModelGroup> {
 			}
 		});
 
-		for (final File subdir : subdirs) {
+		for (final File subdir : subdirs) {			
 			this.addModel(Models.load(subdir));
 		}
 	}

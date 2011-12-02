@@ -23,6 +23,7 @@
  */
 package com.baidu.wamole.xml;
 
+import com.baidu.wamole.model.Model;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.io.StreamException;
@@ -118,12 +119,12 @@ public final class XmlFile {
 	/**
 	 * Loads the contents of this file into a new object.
 	 */
-	public Object read() throws IOException {
+	public Model read() throws IOException {
 		LOGGER.fine("Reading " + file);
 		Reader r = new BufferedReader(new InputStreamReader(
 				new FileInputStream(file), "UTF-8"));
 		try {
-			return xs.fromXML(r);
+			return Model.class.cast(xs.fromXML(r));
 		} catch (Exception e) {
 			throw new IOException("unable to read file:" + file, e);
 		} finally {

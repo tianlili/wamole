@@ -5,8 +5,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class AbstractModelGroup<Parent extends ModelGroup>
-		extends AbstractModel<Parent> implements ModelGroup {
+public abstract class AbstractModelGroup<Parent extends ModelGroup> extends
+		AbstractModel<Parent> implements ModelGroup {
 
 	protected AbstractModelGroup(Parent parent, String name) {
 		super(parent, name);
@@ -42,11 +42,17 @@ public abstract class AbstractModelGroup<Parent extends ModelGroup>
 				return m;
 		return null;
 	}
-	
-	public <M extends Model> M getModel(Class<M> clazz){
+
+	/**
+	 * 取第一个实例，用于单实例场景
+	 * 
+	 * @param clazz
+	 * @return
+	 */
+	public <M extends Model> M getModel(Class<M> clazz) {
 		return getModels(clazz).iterator().next();
 	}
-	
+
 	public <M extends Model> void addModel(M m) {
 		models.add(m);
 	}
