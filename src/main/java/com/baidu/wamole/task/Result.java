@@ -1,5 +1,10 @@
 package com.baidu.wamole.task;
 
+/**
+ * record kiss result
+ * @author yangbo
+ *
+ */
 public class Result {
 	private String name;
 	private int fail;

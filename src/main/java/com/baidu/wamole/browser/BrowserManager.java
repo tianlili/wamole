@@ -1,7 +1,6 @@
 package com.baidu.wamole.browser;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import com.baidu.wamole.exception.TestException;
@@ -135,10 +134,6 @@ public class BrowserManager extends AbstractModel<Wamole> {
 		}
 	}
 
-//	public JsBuildStep getBuildStep() {
-//		return buildStep;
-//	}
-
 	public void setBuildStep(JsBuildStep buildStep) {
 		this.buildStep = buildStep;
 	}
@@ -146,10 +141,5 @@ public class BrowserManager extends AbstractModel<Wamole> {
 	@Override
 	public File getRootDir() {
 		throw new UnimplementedException();
-	}
-	
-	@Override
-	public synchronized void save() throws IOException {
-		
 	}
 }

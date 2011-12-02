@@ -8,15 +8,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import com.baidu.wamole.xml.XmlFile;
-
 public abstract class AbstractModelGroup<Parent extends ModelGroup> extends
 		AbstractModel<Parent> implements ModelGroup {
-
-//	public AbstractModelGroup(Parent parent, String name) {
-//		super.parent = parent;
-//		super.name = name;
-//	}
 
 	protected transient List<Model> models;
 
@@ -97,12 +90,5 @@ public abstract class AbstractModelGroup<Parent extends ModelGroup> extends
 		m.setName(dir.getName());
 		m.setParent(this);
 		return m;
-	}
-
-	/**
-	 * The file we save our configuration.
-	 */
-	public static XmlFile getConfigFile(File dir) {
-		return new XmlFile(new File(dir, "config.xml"));
 	}
 }

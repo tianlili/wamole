@@ -35,7 +35,7 @@ public abstract class AbstractProject<P extends AbstractProject<P, B>, B extends
 
 	public void loadBuildList() throws IOException {
 		try {
-			loadChildren("build");
+			loadChildren("builds");			
 		} finally {
 			buildInited = true;
 		}

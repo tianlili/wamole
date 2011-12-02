@@ -6,7 +6,6 @@ import java.util.List;
 
 import com.baidu.wamole.model.AbstractModel;
 import com.baidu.wamole.model.AbstractProject;
-import com.baidu.wamole.xml.XmlFile;
 
 public abstract class AbstractBuild<P extends AbstractProject<P, B>, B extends AbstractBuild<P, B>>
 		extends AbstractModel<P> implements Build<P, B> {
@@ -57,11 +56,6 @@ public abstract class AbstractBuild<P extends AbstractProject<P, B>, B extends A
 
 	@Override
 	public File getRootDir() {
-		return new File(this.getProject().getRootDir(), "builds/"+id);
-	}
-	
-	@Override
-	public XmlFile getConfigFile() {
-		return new XmlFile(new File(getRootDir(), "build.xml"));
+		return new File(this.getProject().getRootDir(), "builds/" + id);
 	}
 }

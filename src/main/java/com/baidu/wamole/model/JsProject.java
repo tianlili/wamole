@@ -56,7 +56,7 @@ public class JsProject extends AbstractProject<JsProject, JsBuild> {
 		this.getModels().add(build);
 		Wamole.getInstance().getModel(BuildQueue.class).addBuild(build);
 		try {
-			this.save();
+			build.save();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
