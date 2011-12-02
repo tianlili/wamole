@@ -1,23 +1,24 @@
 package com.baidu.wamole.model;
 
+import java.io.IOException;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.baidu.wamole.exception.TestException;
 import com.baidu.wamole.process.TangramProcessor;
+import com.baidu.wamole.task.BuildQueue;
 import com.baidu.wamole.task.JsBuild;
 
 @XmlRootElement
 public class JsProject extends AbstractProject<JsProject, JsBuild> {
 
-	public JsProject(String name, String path) {
-		super(name, path);
+	public JsProject() {
 	}
 
-	@Override
-	public void addBuild() {
-		JsBuild build = new JsBuild(this, getUsableBuildId());
-		this.addModel(build);
-		Wamole.getInstance().getBuildQueue().addBuild(build);
+	public JsProject(String name, String path) {
+		this.parent = Wamole.getInstance();
+		this.name = name;
+		this.path = path;
 	}
 
 	private Parser<JsKiss> parser;
@@ -38,15 +39,26 @@ public class JsProject extends AbstractProject<JsProject, JsBuild> {
 	@Override
 	public String getExecutePage(String searchString) throws TestException {
 		Kiss kiss = this.getKiss(searchString);
-		if(kiss == null)
+		if (kiss == null)
 			return null;
 		try {
 			String s = new TangramProcessor().process(JsKiss.class.cast(kiss));
 			return s;
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new TestException("请检查配置信息是否正确，可能由于资源无法匹配导致 : "+searchString);
+			throw new TestException("请检查配置信息是否正确，可能由于资源无法匹配导致 : "
+					+ searchString);
 		}
 	}
 
+	public void addBuild() {
+		JsBuild build = new JsBuild(this, getUsableBuildId());
+		this.getModels().add(build);
+		Wamole.getInstance().getModel(BuildQueue.class).addBuild(build);
+		try {
+			this.save();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

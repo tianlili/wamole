@@ -4,26 +4,16 @@ import java.io.IOException;
 import java.util.List;
 
 import com.baidu.wamole.browser.Browser;
+import com.baidu.wamole.browser.BrowserManager;
 import com.baidu.wamole.model.JsProject;
 import com.baidu.wamole.model.Wamole;
 
-public class JsBuildStep implements BuildStep<JsProject, JsBuild> {
-	private JsResultTable resultTable;
-	JsBuild build;
-	JsProject project;
+public class JsBuildStep extends AbstractBuildStep<JsProject, JsBuild> {
+	private transient JsResultTable resultTable;
 
 	public JsBuildStep(JsBuild build) {
 		this.build = build;
-	}
-
-	@Override
-	public JsBuild getBuild() {
-		return null;
-	}
-
-	@Override
-	public JsProject getProject() {
-		return project;
+		this.project = build.getProject();
 	}
 
 	/**
@@ -31,7 +21,7 @@ public class JsBuildStep implements BuildStep<JsProject, JsBuild> {
 	 */
 	@Override
 	public boolean preBuild() {
-		List<Browser> bs = Wamole.getInstance().getBrowserManager()
+		List<Browser> bs = Wamole.getInstance().getModel(BrowserManager.class)
 				.getBrowsers();
 		// TODO 后续追加浏览器配置并设置
 		resultTable = new JsResultTable(bs, build);
@@ -45,7 +35,7 @@ public class JsBuildStep implements BuildStep<JsProject, JsBuild> {
 
 	@Override
 	public boolean perform() {
-		Wamole.getInstance().getBrowserManager().setBuildStep(this);
+		Wamole.getInstance().getModel(BrowserManager.class).setBuildStep(this);
 		while (!resultTable.isDead()) {
 			try {
 				Thread.sleep(1000);
@@ -58,27 +48,7 @@ public class JsBuildStep implements BuildStep<JsProject, JsBuild> {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		Wamole.getInstance().getBrowserManager().setBuildStep(this);
+		Wamole.getInstance().getModel(BrowserManager.class).setBuildStep(this);
 		return true;
 	}
-	//
-	// /**
-	// * 根据配置信息配置，检测当前active的浏览器，将浏览器遍历出来
-	// *
-	// * @param list
-	// * @return
-	// */
-	// private List<String> config(List<Browser> list) {
-	// List<String> result = new ArrayList<String>();
-	// for (Browser browser : list) {
-	// if (browserList.contains(browser.getName().toLowerCase())) {
-	// if (browser.getName().toLowerCase().equals("msie")) {
-	// result.add(browser.getName() + browser.getVersion());
-	// } else {
-	// result.add(browser.getName());
-	// }
-	// }
-	// }
-	// return result;
-	// }
 }

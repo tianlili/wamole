@@ -9,13 +9,15 @@ import com.baidu.wamole.util.FileUtil;
 
 public class ProjectFileData implements FileData {
 
+	@SuppressWarnings("rawtypes")
 	Project project;
 	String path;
 	File file;
 	boolean exe;
 	String content;
 
-	private ProjectFileData(Project project, String path) {
+	private ProjectFileData(@SuppressWarnings("rawtypes") Project project,
+			String path) {
 		this.project = project;
 		// 屏蔽可能产生的影响
 		this.file = new File(this.project.getPath(), path);
@@ -82,7 +84,8 @@ public class ProjectFileData implements FileData {
 
 	private static final ArrayList<ProjectFileData> cache = new ArrayList<ProjectFileData>();
 
-	private static ProjectFileData getCache(Project project, String path) {
+	private static ProjectFileData getCache(
+			@SuppressWarnings("rawtypes") Project project, String path) {
 		ProjectFileData _data = null;
 		File f = new File(project.getPath(), path);
 		if (f.isDirectory() && !path.endsWith("/"))
@@ -101,7 +104,8 @@ public class ProjectFileData implements FileData {
 	 * @param path
 	 * @return
 	 */
-	public static ProjectFileData getData(Project project, String path) {
+	public static ProjectFileData getData(
+			@SuppressWarnings("rawtypes") Project project, String path) {
 
 		ProjectFileData _data = getCache(project, path);
 		if (_data == null) {
@@ -114,7 +118,8 @@ public class ProjectFileData implements FileData {
 	private static final String readableWhiteList = "_.htm_.html_.php_.js_.json_.css_.xml_.txt_";
 
 	public static boolean isReadable(String name) {
-		return name.indexOf(".")>0 && readableWhiteList.indexOf("_"
-				+ name.substring(name.lastIndexOf(".")) + "_") >= 0;
+		return name.indexOf(".") > 0
+				&& readableWhiteList.indexOf("_"
+						+ name.substring(name.lastIndexOf(".")) + "_") >= 0;
 	}
 }

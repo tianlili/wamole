@@ -147,7 +147,7 @@ public class BrowserResource {
 			Template template = ConfigurationFactory.getInstance().getTemplate(
 					"browser/capture.ftl");
 			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("step", Wamole.getInstance().getBrowserManager().getStep());
+			map.put("step", Wamole.getInstance().getModel(BrowserManager.class).getStep());
 			try {
 				template.process(map, writer);
 			} catch (TemplateException e) {

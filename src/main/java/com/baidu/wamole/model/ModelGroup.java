@@ -1,9 +1,16 @@
 package com.baidu.wamole.model;
 
 import java.util.Collection;
+import java.util.List;
 
 public interface ModelGroup extends Persistence {
 
+	/**
+	 * 获取所有模型
+	 * @return
+	 */
+	List<Model> getModels();
+	
 	/**
 	 * 获取特定类型的model，readonly
 	 * 
@@ -11,13 +18,6 @@ public interface ModelGroup extends Persistence {
 	 * @return
 	 */
 	<M extends Model> Collection<M> getModels(Class<M> clazz);
-
-	// /**
-	// * 获取一个model
-	// * @param name
-	// * @return
-	// */
-	// M getModel(String name);
 
 	<M extends Model> M getModel(Class<M> clazz, String name);
 	

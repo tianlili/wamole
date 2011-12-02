@@ -9,11 +9,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import com.baidu.wamole.exception.TestException;
-import com.baidu.wamole.model.Project;
-import com.baidu.wamole.model.Wamole;
 
 @Produces("text/html;charset=UTF-8")
-public class FrameResource {
+public class FrameResource extends ProjectResource{
 	@Context
 	UriInfo uriInfo;
 
@@ -31,13 +29,9 @@ public class FrameResource {
 	@Path("{path: .*}")
 	public Response importCase(@PathParam("path") String path) {
 		path = "/" + path;
-		String uri = uriInfo.getPath();
-		String project = uri.substring("project/".length(),
-				uri.indexOf("/frame/"));
-		Project<?,?> instance = Wamole.getInstance().getModel(Project.class, project);
 		if (path.endsWith(".js"))
 			try {
-				String s = instance.getExecutePage(path);
+				String s = project.getExecutePage(path);
 				String testimport = s.substring(s.lastIndexOf("<script"), s.lastIndexOf("</script>") +"</script>".length());
 				s = s.replace(testimport, "");
 //				System.out.println(s);

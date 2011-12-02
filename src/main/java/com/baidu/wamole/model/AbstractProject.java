@@ -1,6 +1,7 @@
 package com.baidu.wamole.model;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
 import java.util.HashMap;
@@ -19,17 +20,25 @@ import com.baidu.wamole.task.AbstractBuild;
 public abstract class AbstractProject<P extends AbstractProject<P, B>, B extends AbstractBuild<P, B>>
 		extends AbstractModelGroup<Wamole> implements Project<P, B> {
 
-	protected AbstractProject(String name, String path) {
-		super(Wamole.getInstance(), name);
-		this.path = path;
-	}
+//	protected AbstractProject(String name, String path) {
+//		super(Wamole.getInstance(), name);
+//		this.path = path;
+//	}
 
 	protected String path;
+	protected String name;
 
-	protected boolean inited;
-	
-	public void loadBuildList(){
-		
+	// kiss init if needed
+	protected transient boolean kissInited;
+	// build init if needed
+	protected transient boolean buildInited;
+
+	public void loadBuildList() throws IOException {
+		try {
+			loadChildren("build");
+		} finally {
+			buildInited = true;
+		}
 	}
 
 	// 项目
@@ -57,25 +66,31 @@ public abstract class AbstractProject<P extends AbstractProject<P, B>, B extends
 	private static HashMap<Project, Map<String, Kiss>> kissMaps = new HashMap<Project, Map<String, Kiss>>();
 
 	@SuppressWarnings("unchecked")
-	private void initKiss(){
+	private void initKiss() {
 		kissMaps.put(this, getParser().parse(this));
 	}
-	
+
 	public Kiss getKiss(String name) {
-		if (!inited) {
+		if (!kissInited) {
 			initKiss();
 		}
 		return kissMaps.get(this).get(name);
 	}
 
 	public Collection<Kiss> getKisses() {
-		if(!inited)
+		if (!kissInited)
 			initKiss();
 		return kissMaps.get(this).values();
 	}
 
 	@SuppressWarnings("unchecked")
 	public Collection<B> getBuilds() {
+		if (!buildInited)
+			try {
+				loadBuildList();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		// 获取范型的实际类型
 		return getModels((Class<B>) (((ParameterizedType) getClass()
 				.getGenericSuperclass()).getActualTypeArguments()[0]));
@@ -100,5 +115,5 @@ public abstract class AbstractProject<P extends AbstractProject<P, B>, B extends
 	@Override
 	public File getRootDir() {
 		return new File(Wamole.getInstance().getRootDir(), "project/" + name);
-	}
+	}	
 }

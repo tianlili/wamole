@@ -13,7 +13,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import javax.ws.rs.ext.Providers;
 
 import com.baidu.wamole.data.JsonParser;
 import com.baidu.wamole.data.ProjectFileData;
@@ -33,20 +32,23 @@ import freemarker.template.Template;
  */
 @Produces("text/html;charset=UTF-8")
 public class ProjectResource {
-	private Project<?, ?> project;
+	protected Project<?, ?> project;
 	String name;
 	@Context
 	UriInfo uriInfo;
 	@Context
 	ResourceContext context;
-	@Context
-	Providers ps;
 
 	public void setName(String name) {
 		this.project = Wamole.getInstance().getModel(Project.class, name);
 		this.name = name;
 	}
 
+	@SuppressWarnings("rawtypes")
+	public void setProject(Project p){
+		this.project = p;
+	}
+	
 	@GET
 	public Response get() {
 		StringWriter writer = new StringWriter();
@@ -64,7 +66,7 @@ public class ProjectResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response getData() {
-		return Response.ok(JsonParser.objToJson(project).toString()).build();
+		return Response.ok(project).build();		
 	}
 
 	/**
@@ -92,19 +94,15 @@ public class ProjectResource {
 
 	@Path("/frame")
 	public FrameResource importCase() {
-		return context.getResource(FrameResource.class);
+		FrameResource fr = context.getResource(FrameResource.class);
+		fr.setProject(project);
+		return fr;
 	}
 
 	@GET
 	@Path("/detail")
 	public Response getDetail() {
 		return Response.ok("detail").build();
-	}
-
-	@GET
-	@Path("/build")
-	public Response build() {
-		return Response.ok(JsonParser.listToJson(project.getBuilds())).build();
 	}
 
 	@GET

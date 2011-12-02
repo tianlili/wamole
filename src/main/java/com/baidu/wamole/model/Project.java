@@ -45,7 +45,7 @@ public interface Project<P extends Project<P, B>, B extends Build<P, B>>
 	String getExecutePage(String searchString) throws TestException;
 
 	Collection<B> getBuilds();
-
+	
 	void addBuild();
 
 	@SuppressWarnings("rawtypes")

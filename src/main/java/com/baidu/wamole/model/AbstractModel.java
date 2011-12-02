@@ -15,7 +15,11 @@ public abstract class AbstractModel<P extends ModelGroup> implements Model{
 	protected transient/*final*/ String name;
 	protected transient P parent;
 	
+	protected AbstractModel(){		
+	}
+	
     protected AbstractModel(P parent, String name) {
+    	this();
     	this.parent = parent;
     	setName(name);
     	if(parent != null)

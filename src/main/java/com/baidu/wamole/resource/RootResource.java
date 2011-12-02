@@ -114,19 +114,14 @@ public class RootResource {
 	@Path("/addProject")
 	@Produces(MediaType.TEXT_HTML)
 	public void addProject(@FormParam("name") String name, @FormParam("path") String path) {
-//		new JsProject(name, path);
+		//TODO add return info
 		Wamole.getInstance().addProject(name, path);
-		try {
-			Wamole.getInstance().getModel(Project.class, name).save();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 	@Path("/project/{name}")
 	public ProjectResource getProjectByName(@PathParam("name") String name) {
 		ProjectResource resource = context.getResource(ProjectResource.class);
-		resource.setName(name);
+		resource.setProject(Wamole.getInstance().getModel(Project.class, name));
 		return resource;
 	}
 
@@ -140,15 +135,10 @@ public class RootResource {
 		return context.getResource(BrowserResource.class);
 	}
 
-	//
-	// @Path("/data")
-	// public DataResource getData() {
-	// return context.getResource(DataResource.class);
-	// }
-
 	@Path("/build")
 	public BuildResource build() {
-		return context.getResource(BuildResource.class);
+		BuildResource b = context.getResource(BuildResource.class);
+		return b;
 	}
 
 	@Path("/enum")

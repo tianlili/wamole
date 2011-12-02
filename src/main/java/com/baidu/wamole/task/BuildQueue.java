@@ -7,6 +7,11 @@ import java.util.Queue;
 import com.baidu.wamole.model.AbstractModel;
 import com.baidu.wamole.model.Wamole;
 
+/**
+ * Build list
+ * @author yangbo
+ *
+ */
 public class BuildQueue extends AbstractModel<Wamole>{
 	public BuildQueue() {
 		super(Wamole.getInstance(), name);
