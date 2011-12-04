@@ -35,6 +35,14 @@ public interface Project<P extends Project<P, B>, B extends Build<P, B>>
 	 * @return
 	 */
 	Collection<Kiss> getKisses();
+	
+
+	/**
+	 * 获取一个根据特定匹配规则过滤的用例列表
+	 * @param filter
+	 * @return
+	 */
+	public Collection<Kiss> getKisses(String filter);
 
 	/**
 	 * 根据查询字符串返回可执行用例的列表页
@@ -46,7 +54,7 @@ public interface Project<P extends Project<P, B>, B extends Build<P, B>>
 
 	Collection<B> getBuilds();
 	
-	void addBuild();
+	void addBuild(String filter);
 
 	@SuppressWarnings("rawtypes")
 	Parser getParser();

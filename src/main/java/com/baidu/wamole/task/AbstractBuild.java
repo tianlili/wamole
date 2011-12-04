@@ -1,9 +1,13 @@
 package com.baidu.wamole.task;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jetty.util.log.Log;
+
+import com.baidu.wamole.data.Exported;
 import com.baidu.wamole.model.AbstractModel;
 import com.baidu.wamole.model.AbstractProject;
 
@@ -15,10 +19,7 @@ public abstract class AbstractBuild<P extends AbstractProject<P, B>, B extends A
 	protected int id;
 	protected List<BuildStep<P, B>> buildSteps = new ArrayList<BuildStep<P, B>>();
 
-	public void setId(int id) {
-		this.id = id;
-	}
-
+	@Exported
 	public int getId() {
 		return this.id;
 	}
@@ -28,6 +29,7 @@ public abstract class AbstractBuild<P extends AbstractProject<P, B>, B extends A
 	 */
 	protected AbstractBuild(P project, int id) {
 		super(project, Integer.toString(id));
+		this.id = id;
 	}
 
 	public P getProject() {
@@ -42,8 +44,14 @@ public abstract class AbstractBuild<P extends AbstractProject<P, B>, B extends A
 			step.perform();
 		}
 		this.finished = true;
+		try {
+			this.save();
+		} catch (IOException e) {
+			Log.info("build saved cause IOException", e);
+		}
 	}
 
+	@Exported
 	@Override
 	public boolean finished() {
 		return this.finished;

@@ -99,7 +99,7 @@ import java.util.logging.Logger;
  * 
  * @author Kohsuke Kawaguchi
  */
-public final class XmlFile {
+public class XmlFile {
 	private final XStream xs;
 	private final File file;
 

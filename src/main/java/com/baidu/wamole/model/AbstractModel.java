@@ -54,6 +54,10 @@ public abstract class AbstractModel<P extends ModelGroup> implements Model{
     }
     
     public XmlFile getConfigFile(File dir){
-    	return new XmlFile(new File(dir, "config.xml"));
+    	return getConfigFile(dir, "config.xml");
+    }
+    
+    public XmlFile getConfigFile(File dir, String file){
+    	return new XmlFile(new File(dir, file));
     }
 }

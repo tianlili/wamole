@@ -20,10 +20,10 @@ import com.baidu.wamole.task.AbstractBuild;
 public abstract class AbstractProject<P extends AbstractProject<P, B>, B extends AbstractBuild<P, B>>
 		extends AbstractModelGroup<Wamole> implements Project<P, B> {
 
-//	protected AbstractProject(String name, String path) {
-//		super(Wamole.getInstance(), name);
-//		this.path = path;
-//	}
+	// protected AbstractProject(String name, String path) {
+	// super(Wamole.getInstance(), name);
+	// this.path = path;
+	// }
 
 	protected String path;
 	protected String name;
@@ -32,14 +32,6 @@ public abstract class AbstractProject<P extends AbstractProject<P, B>, B extends
 	protected transient boolean kissInited;
 	// build init if needed
 	protected transient boolean buildInited;
-
-	public void loadBuildList() throws IOException {
-		try {
-			loadChildren("builds");			
-		} finally {
-			buildInited = true;
-		}
-	}
 
 	// 项目
 	@Exported
@@ -87,13 +79,13 @@ public abstract class AbstractProject<P extends AbstractProject<P, B>, B extends
 	public Collection<B> getBuilds() {
 		if (!buildInited)
 			try {
-				loadBuildList();
+				load();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		// 获取范型的实际类型
 		return getModels((Class<B>) (((ParameterizedType) getClass()
-				.getGenericSuperclass()).getActualTypeArguments()[0]));
+				.getGenericSuperclass()).getActualTypeArguments()[1]));
 	}
 
 	public B getBuild(int id) {
@@ -105,15 +97,13 @@ public abstract class AbstractProject<P extends AbstractProject<P, B>, B extends
 
 	protected int getUsableBuildId() {
 		int id = 0;
-		for (B b : getBuilds()) {
-			if (id <= b.getId())
-				id++;
-		}
+		for(B b : getBuilds())
+			id = b.getId()+1;
 		return id;
 	}
 
 	@Override
 	public File getRootDir() {
 		return new File(Wamole.getInstance().getRootDir(), "project/" + name);
-	}	
+	}
 }

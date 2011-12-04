@@ -1,5 +1,6 @@
 package com.baidu.wamole.model;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
@@ -22,4 +23,6 @@ public interface ModelGroup extends Persistence {
 	<M extends Model> M getModel(Class<M> clazz, String name);
 	
 	<M extends Model> void addModel(M m);
+	
+	void load() throws IOException;
 }

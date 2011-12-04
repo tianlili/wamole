@@ -23,9 +23,9 @@ public class BrowserManager extends AbstractModel<Wamole> {
 	}
 
 	/**
-	 * 浏览器刷新间隔
+	 * 浏览器刷新间隔，单位时间秒
 	 */
-	private int step = 2000;
+	private int step = 4;
 
 	private boolean autorun = true;
 
@@ -42,10 +42,10 @@ public class BrowserManager extends AbstractModel<Wamole> {
 		} else {
 			// 当result有结果
 			if (null != result && null != result.getName()) {
-				return (JsKiss) buildStep.getResultTable().store(result);
-				// result无结果，当前任务中需要该浏览器进行测试
-			} else if (buildStep.getResultTable().getBrowserIndex(
-					result.getBrowser()) >= 0) {
+				buildStep.getResultTable().store(result);
+			}
+			// result无结果，当前任务中需要该浏览器进行测试
+			if (buildStep.getResultTable().hasKiss(result.getBrowser())) {
 				return (JsKiss) buildStep.getResultTable()
 						.getNextExcutableKiss(result.getBrowser());
 			} else {

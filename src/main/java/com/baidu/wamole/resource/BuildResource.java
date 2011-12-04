@@ -1,7 +1,10 @@
 package com.baidu.wamole.resource;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.Collection;
 
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -37,7 +40,7 @@ public class BuildResource {
 		return Response.ok(JsonParser.listToJson(p.getBuilds()).toString())
 				.build();
 	}
-	
+
 	/**
 	 * 提交一次构建，此处需要考虑参数的需求 TODO
 	 * 
@@ -45,10 +48,18 @@ public class BuildResource {
 	 */
 	@POST
 	@Path("/{project:[^/]+}")
-	public Response addBuild(@PathParam("project") String project) {
+	public Response addBuild(@PathParam("project") String project,
+			@FormParam("filter") String filter) {
 		@SuppressWarnings("rawtypes")
 		Project p = Wamole.getInstance().getModel(Project.class, project);
-		p.addBuild();
+		try {
+			if (filter == null)
+				p.addBuild(null);
+			else
+				p.addBuild(URLDecoder.decode(filter, "UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 		return Response.ok().build();
 	}
 

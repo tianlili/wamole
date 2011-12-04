@@ -9,6 +9,7 @@ import org.eclipse.jetty.util.log.Log;
 
 import com.baidu.wamole.data.Exported;
 import com.baidu.wamole.exception.TestException;
+import com.baidu.wamole.model.Executor;
 import com.baidu.wamole.model.Wamole;
 
 /**
@@ -17,7 +18,7 @@ import com.baidu.wamole.model.Wamole;
  * @author yangbo
  * 
  */
-public class Browser {
+public class Browser implements Executor{
 
 	public static BrowserBuilder build(String ip, String userAgent) {
 		Browser browser = new Browser();

@@ -16,4 +16,5 @@ public interface Build<P extends Project<P, B>, B extends Build<P, B>> extends M
 	public boolean started();
 	public boolean finished();
 	//TODO 追加数据，all kiss，failed kiss，starttime，endtime，status
+	//需要在step中追加
 }

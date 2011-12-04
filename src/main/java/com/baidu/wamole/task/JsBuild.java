@@ -4,9 +4,11 @@ import com.baidu.wamole.model.JsProject;
 
 public class JsBuild extends AbstractBuild<JsProject, JsBuild> {
 
-	public JsBuild(JsProject project, int id){
+	public String filter;
+	public JsBuild(JsProject project, int id, String filter){
 		super(project, id);
+		this.filter = filter;
 		this.buildSteps.add(new JsBuildStep(this));
 	}
-
+	
 }

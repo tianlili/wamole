@@ -13,7 +13,7 @@ var probe = {
 	 * 
 	 * @returns {___anonymous326_559}
 	 */
-	interval : $("#step").val(),
+	interval : $("#step").val()*1000,
 	/**
 	 * 一次服务器心跳
 	 * 
@@ -29,16 +29,9 @@ var probe = {
 			fail : data ? data[0] : 1,
 			total : data ? data[1] : 1,
 			cov : cov
-		// caseinfo : probe.testframe.src// ,
-		// cov : probe.js
 		} : {};
-//		options.interval = probe.interval;
-//		options.browser = probe.browserName;
-//		options.id = probe.browserId;
-//		options.name = probe.kiss;
 		delete probe.starttime;
 		$.ajax({
-//			url : probe.srvApi,
 			url : location.pathname,
 			data : options,
 			type : 'put',
@@ -59,11 +52,6 @@ var probe = {
 		});
 		probe.timeoutHandle = setTimeout(probe.beat, probe.interval);
 	},
-//	register : function(id) {
-//		var search = location.search;
-//		search = search + "&id=" +id;
-//		location.search = search;
-//	},
 	/**
 	 * 执行一个用例
 	 * 

@@ -1,6 +1,8 @@
 package com.baidu.wamole.model;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -51,14 +53,36 @@ public class JsProject extends AbstractProject<JsProject, JsBuild> {
 		}
 	}
 
-	public void addBuild() {
-		JsBuild build = new JsBuild(this, getUsableBuildId());
-		this.getModels().add(build);
-		Wamole.getInstance().getModel(BuildQueue.class).addBuild(build);
+	public void addBuild(String filter) {
+		JsBuild build = new JsBuild(this, getUsableBuildId(), filter);
 		try {
 			build.save();
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+//		this.getModels().add(build);
+		Wamole.getInstance().getModel(BuildQueue.class).addBuild(build);
+	}
+	
+	@Override
+	public Collection<Kiss> getKisses(String filter) {
+		if(filter == null)
+			return getKisses();
+		ArrayList<Kiss> kisses = new ArrayList<Kiss>();
+		for(Kiss k : this.getKisses()){
+			if(k.getName().startsWith(filter))
+				kisses.add(k);
+		}
+		return kisses;
+	}
+	
+	@Override
+	public void load() throws IOException {
+		try {
+			loadChildren("builds");
+			loadChildren("builds", "jsunit");
+		} finally {
+			buildInited = true;
 		}
 	}
 }

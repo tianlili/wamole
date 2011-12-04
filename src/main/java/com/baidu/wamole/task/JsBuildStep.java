@@ -1,7 +1,10 @@
 package com.baidu.wamole.task;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
+
+import org.eclipse.jetty.util.log.Log;
 
 import com.baidu.wamole.browser.Browser;
 import com.baidu.wamole.browser.BrowserManager;
@@ -24,7 +27,7 @@ public class JsBuildStep extends AbstractBuildStep<JsProject, JsBuild> {
 		List<Browser> bs = Wamole.getInstance().getModel(BrowserManager.class)
 				.getBrowsers();
 		// TODO 后续追加浏览器配置并设置
-		resultTable = new JsResultTable(bs, build);
+		resultTable = new JsResultTable(bs, build, this);
 
 		return bs.size() > 0;
 	}
@@ -36,6 +39,7 @@ public class JsBuildStep extends AbstractBuildStep<JsProject, JsBuild> {
 	@Override
 	public boolean perform() {
 		Wamole.getInstance().getModel(BrowserManager.class).setBuildStep(this);
+		resultTable.starttime = new Date().getTime();
 		while (!resultTable.isDead()) {
 			try {
 				Thread.sleep(1000);
@@ -44,11 +48,13 @@ public class JsBuildStep extends AbstractBuildStep<JsProject, JsBuild> {
 			}
 		}
 		try {
+			Log.info("dead and save");
+			resultTable.endtime = new Date().getTime();
 			this.resultTable.save();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		Wamole.getInstance().getModel(BrowserManager.class).setBuildStep(this);
+		Wamole.getInstance().getModel(BrowserManager.class).setBuildStep(null);
 		return true;
 	}
 }
