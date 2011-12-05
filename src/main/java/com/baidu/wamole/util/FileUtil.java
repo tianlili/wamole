@@ -1,5 +1,7 @@
 package com.baidu.wamole.util;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -14,7 +16,6 @@ import java.util.Stack;
 import java.util.StringTokenizer;
 
 import com.baidu.wamole.exception.TestException;
-
 
 public class FileUtil {
 	private List<String> filelist = new ArrayList<String>();
@@ -44,10 +45,10 @@ public class FileUtil {
 			return false;
 		}
 	}
-	
+
 	public static void deleteFile(String path) {
 		File f = new File(path);
-		if(f.exists()) {
+		if (f.exists()) {
 			f.delete();
 		}
 	}
@@ -95,11 +96,11 @@ public class FileUtil {
 		File file = new File(path);
 		BufferedWriter writer = null;
 		try {
-			
+
 			// 建立文件
 			if (!file.exists()) {
-				//建立文件夹
-				if( path.lastIndexOf("/") > 0 ) {
+				// 建立文件夹
+				if (path.lastIndexOf("/") > 0) {
 					path = path.substring(0, path.lastIndexOf("/"));
 					File dir = new File(path);
 					dir.mkdirs();
@@ -111,7 +112,7 @@ public class FileUtil {
 			writer.write(content);
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally{
+		} finally {
 			try {
 				writer.close();
 			} catch (IOException e) {
@@ -222,7 +223,8 @@ public class FileUtil {
 	 * 
 	 * @throws TestException
 	 * 
-	 * @throws java.lang.NullPointewrException if the file path is equal to null.
+	 * @throws java.lang.NullPointewrException if the file path is equal to
+	 *             null.
 	 */
 	@SuppressWarnings("unchecked")
 	public static String normalize(String path) throws TestException {
@@ -336,13 +338,53 @@ public class FileUtil {
 	 * @throws IOException
 	 */
 	public static String readJarFile(String path) throws IOException {
-		BufferedReader reader = new BufferedReader(new InputStreamReader(
-				FileUtil.class.getResourceAsStream(path), "UTF-8"));
-		String line = null;
+		BufferedReader reader = null;
 		StringBuilder sb = new StringBuilder();
-		while ((line = reader.readLine()) != null) {
-			sb.append(line + "\n");
+		try {
+			reader = new BufferedReader(new InputStreamReader(
+					FileUtil.class.getResourceAsStream(path), "UTF-8"));
+			String line = null;
+
+			while ((line = reader.readLine()) != null) {
+				sb.append(line + "\n");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (reader != null) {
+				try {
+					reader.close();
+				} catch (IOException e) {
+					// 关闭 Reader 出现的异常一般不需要处理。
+					e.printStackTrace();
+				}
+			}
 		}
 		return sb.toString();
+
+	}
+
+	public static void copyFile(File sourceFile, File targetFile)
+
+	throws IOException {
+		// 新建文件输入流并对它进行缓冲
+		FileInputStream input = new FileInputStream(sourceFile);
+		BufferedInputStream inBuff = new BufferedInputStream(input);
+		// 新建文件输出流并对它进行缓冲
+		FileOutputStream output = new FileOutputStream(targetFile);
+		BufferedOutputStream outBuff = new BufferedOutputStream(output);
+		// 缓冲数组
+		byte[] b = new byte[1024 * 5];
+		int len;
+		while ((len = inBuff.read(b)) != -1) {
+			outBuff.write(b, 0, len);
+		}
+		// 刷新此缓冲的输出流
+		outBuff.flush();
+		// 关闭流
+		inBuff.close();
+		outBuff.close();
+		output.close();
+		input.close();
 	}
 }
