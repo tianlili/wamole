@@ -60,7 +60,7 @@ public class Browser implements Executor{
 		BrowserManager bm = Wamole.getInstance().getModel(BrowserManager.class,
 				"browsers");
 		long step = bm.getStep();
-		if (buffer > step * 2) {//
+		if (buffer > step * 2000) {//
 			// 当不active时 从管理中删除
 			bm.removeBrowser(this.id);
 			return false;

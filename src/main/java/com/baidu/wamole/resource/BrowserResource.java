@@ -102,20 +102,19 @@ public class BrowserResource {
 	 */
 	@POST
 	@Path("/register")
-	public Response register(@HeaderParam("user-agent") String ua) {
+	public Response register(@HeaderParam("user-agent") String ua) {		
 		String ip = request.getRemoteHost();
 		// 新建一个instance
 		Browser instance = Browser.build(ip, ua).build();
-		List<Browser> browsers = Wamole.getInstance()
-				.getModel(BrowserManager.class, "browsers").getBrowsers();
+		BrowserManager bm = Wamole.getInstance()
+				.getModel(BrowserManager.class, "browsers");
 		// 获取已存在的 list 进行对比
-		for (Browser browser : browsers) {
+		for (Browser browser : bm.getBrowsers()) {
 			if (browser.isEqual(instance)) {
-				return Response.ok("false").build();
+				return Response.ok("browser exists in capture list").build();
 			}
 		}
-		Wamole.getInstance().getModel(BrowserManager.class, "browsers")
-				.addBrowser(instance);
+		bm.addBrowser(instance);
 		return Response.ok(instance.getId()).build();
 	}
 
