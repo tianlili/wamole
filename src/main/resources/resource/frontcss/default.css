@@ -1,7 +1,10 @@
 @charset UTF-8;
 
 body{
-	margin : 0px 80px;
+	margin:0px;
+}
+body table{
+	margin:0px auto;
 }
 
 .navigator {
@@ -22,8 +25,13 @@ body{
     background-repeat: no-repeat;
     height:100px
 }
-.foot{
+.foottable{
 	font:12px/30px arial,sans-serif;
 	color:#666666;
-	border-top:1px solid #ccc
+	border-top:1px solid #ccc;
+	margin-top:20px
 }
+.maintable{
+	background-image: url(images/logo.png);
+	background-repeat: no-repeat;
+	background-position: bottom left

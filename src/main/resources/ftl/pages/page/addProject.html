@@ -5,25 +5,28 @@
 	<title>Projects</title>
 	<link rel="stylesheet" type="text/css" href="../resource/frontcss/list.css" />
 	<script type="text/javascript" src="../resource/frontjs/jquery-1.3.2.js"></script>
+	<script type="text/javascript" src="../resource/frontjs/jquery.validate.js"></script>
 	<script type="text/javascript" src="../resource/frontjs/addProject.js"></script>
 </head>
 <body>
-	<form id="saveprojects" method="post">
+	<form id="saveprojects">
 		<table class="addP" width="880" cellpadding="0" cellspacing="10">
 			<tr>
-				<td>Name：</td>
-				<td><input type="text" name="name" size="100"></td>
+				<td><span>Name：</span></td>
+				<td><input type="text" name="name" size="80"></td>
 			</tr>
 			<tr>
-				<td>Path：</td>
-				<td><input type="text" name="path" size="100"></td>
+				<td><span>Path：</span></td>
+				<td><input type="text" name="path" size="80"></td>
 			</tr>
 			<tr>
-				<td colspan=2><input type="radio" name="type" checked="checked"> The project is a JSProject</td>
+				<td colspan=2>
+					<input type="radio" name="type" value='jsproject' checked="checked" /><span> Create a JSProject</span>
+				</td>
 			</tr>
 			<tr>
 				<td colspan=2 style="padding-top:10px">
-					<input class="bu" type="button" id="submit" value="OK" />
+					<input class="bu" type="submit" id="submit" value="OK" />
 				</td>
 			</tr>
 		</table>
