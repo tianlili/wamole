@@ -5,6 +5,8 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import nl.bitwalker.useragentutils.OperatingSystem;
+
 import org.eclipse.jetty.util.log.Log;
 
 import com.baidu.wamole.data.Exported;
@@ -127,112 +129,117 @@ public class Browser implements Executor{
 		private String ua;
 
 		public BrowserBuilder(Browser browser, String userAgent) {
-			this.ua = userAgent.toLowerCase();
+			this.ua = userAgent;//.toLowerCase();
 			this.browser = browser;
 		}
 
 		public void parseOS() {
-			if (ua.indexOf("windows nt 6.1") > -1) {
-				browser.setOs("win7");
-			} else if (ua.indexOf("windows nt 6.0") > -1) {
-				browser.setOs("vista");
-			} else if (ua.indexOf("windows nt 5.2") > -1) {
-				browser.setOs("2003");
-			} else if (ua.indexOf("windows nt 5.1") > -1) {
-				browser.setOs("xp");
-			} else if (ua.indexOf("windows nt 5.0") > -1) {
-				browser.setOs("2000");
-			} else if (ua.indexOf("blackberry") > -1) {
-				browser.setOs("blackberry");
-			} else if (ua.indexOf("iphone") > -1) {
-				browser.setOs("iphone");
-			} else if (ua.indexOf("ipod") > -1) {
-				browser.setOs("ipod");
-			} else if (ua.indexOf("ipad") > -1) {
-				browser.setOs("ipad");
-			} else if (ua.indexOf("symbian") > -1) {
-				browser.setOs("symbian");
-			} else if (ua.indexOf("webos") > -1) {
-				browser.setOs("webos");
-			} else if (ua.indexOf("android") > -1) {
-				browser.setOs("android");
-			} else if (ua.indexOf("windows phone") > -1) {
-				browser.setOs("winmo");
-			} else if (ua.indexOf("os x 10.4") > -1
-					|| ua.indexOf("os x 10_4") > -1) {
-				browser.setOs("osx10.4");
-			} else if (ua.indexOf("os x 10.5") > -1
-					|| ua.indexOf("os x 10_5") > -1) {
-				browser.setOs("osx10.5");
-			} else if (ua.indexOf("os x 10.6") > -1
-					|| ua.indexOf("os x 10_6") > -1) {
-				browser.setOs("osx10.6");
-			} else if (ua.indexOf("os x") > -1) {
-				browser.setOs("osx");
-			} else if (ua.indexOf("linux") > -1) {
-				browser.setOs("linux");
-			}
+			OperatingSystem os = OperatingSystem.parseUserAgentString(ua);
+			browser.setOs(os.getName());
+//			if (ua.indexOf("windows nt 6.1") > -1) {
+//				browser.setOs("win7");
+//			} else if (ua.indexOf("windows nt 6.0") > -1) {
+//				browser.setOs("vista");
+//			} else if (ua.indexOf("windows nt 5.2") > -1) {
+//				browser.setOs("2003");
+//			} else if (ua.indexOf("windows nt 5.1") > -1) {
+//				browser.setOs("xp");
+//			} else if (ua.indexOf("windows nt 5.0") > -1) {
+//				browser.setOs("2000");
+//			} else if (ua.indexOf("blackberry") > -1) {
+//				browser.setOs("blackberry");
+//			} else if (ua.indexOf("iphone") > -1) {
+//				browser.setOs("iphone");
+//			} else if (ua.indexOf("ipod") > -1) {
+//				browser.setOs("ipod");
+//			} else if (ua.indexOf("ipad") > -1) {
+//				browser.setOs("ipad");
+//			} else if (ua.indexOf("symbian") > -1) {
+//				browser.setOs("symbian");
+//			} else if (ua.indexOf("webos") > -1) {
+//				browser.setOs("webos");
+//			} else if (ua.indexOf("android") > -1) {
+//				browser.setOs("android");
+//			} else if (ua.indexOf("windows phone") > -1) {
+//				browser.setOs("winmo");
+//			} else if (ua.indexOf("os x 10.4") > -1
+//					|| ua.indexOf("os x 10_4") > -1) {
+//				browser.setOs("osx10.4");
+//			} else if (ua.indexOf("os x 10.5") > -1
+//					|| ua.indexOf("os x 10_5") > -1) {
+//				browser.setOs("osx10.5");
+//			} else if (ua.indexOf("os x 10.6") > -1
+//					|| ua.indexOf("os x 10_6") > -1) {
+//				browser.setOs("osx10.6");
+//			} else if (ua.indexOf("os x") > -1) {
+//				browser.setOs("osx");
+//			} else if (ua.indexOf("linux") > -1) {
+//				browser.setOs("linux");
+//			}
 		}
 
 		public void parseBrowser() {
-			if (ua.indexOf("msie") > -1 && ua.indexOf("windows phone") > -1) {
-				browser.setName("winmo");
-			} else if (ua.indexOf("msie") > -1) {
-				browser.setName("msie");
-			} else if (ua.indexOf("konqueror") > -1) {
-				browser.setName("konqueror");
-			} else if (ua.indexOf("chrome") > -1) {
-				browser.setName("chrome");
-			} else if (ua.indexOf("webos") > -1) {
-				browser.setName("webos");
-			} else if (ua.indexOf("android") > -1
-					&& ua.indexOf("mobile safari") > -1) {
-				browser.setName("android");
-			} else if (ua.indexOf("series60") > -1) {
-				browser.setName("s60");
-			} else if (ua.indexOf("blackberry") > -1) {
-				browser.setName("blackberry");
-			} else if (ua.indexOf("opera mobi") > -1) {
-				browser.setName("operamobile");
-			} else if (ua.indexOf("fennec") > -1) {
-				browser.setName("fennec");
-			} else if (ua.indexOf("webkit") > -1 && ua.indexOf("mobile") > -1) {
-				browser.setName("mobilewebkit");
-			} else if (ua.indexOf("webkit") > -1) {
-				browser.setName("webkit");
-			} else if (ua.indexOf("presto") > -1) {
-				browser.setName("presto");
-			} else if (ua.indexOf("gecko") > -1) {
-				browser.setName("gecko");
-			}
+			nl.bitwalker.useragentutils.Browser b = nl.bitwalker.useragentutils.Browser.parseUserAgentString(ua);
+			browser.setName(b.getName());
+			browser.setVersion(b.getVersion(ua).getVersion());
+//			if (ua.indexOf("msie") > -1 && ua.indexOf("windows phone") > -1) {
+//				browser.setName("winmo");
+//			} else if (ua.indexOf("msie") > -1) {
+//				browser.setName("msie");
+//			} else if (ua.indexOf("konqueror") > -1) {
+//				browser.setName("konqueror");
+//			} else if (ua.indexOf("chrome") > -1) {
+//				browser.setName("chrome");
+//			} else if (ua.indexOf("webos") > -1) {
+//				browser.setName("webos");
+//			} else if (ua.indexOf("android") > -1
+//					&& ua.indexOf("mobile safari") > -1) {
+//				browser.setName("android");
+//			} else if (ua.indexOf("series60") > -1) {
+//				browser.setName("s60");
+//			} else if (ua.indexOf("blackberry") > -1) {
+//				browser.setName("blackberry");
+//			} else if (ua.indexOf("opera mobi") > -1) {
+//				browser.setName("operamobile");
+//			} else if (ua.indexOf("fennec") > -1) {
+//				browser.setName("fennec");
+//			} else if (ua.indexOf("webkit") > -1 && ua.indexOf("mobile") > -1) {
+//				browser.setName("mobilewebkit");
+//			} else if (ua.indexOf("webkit") > -1) {
+//				browser.setName("webkit");
+//			} else if (ua.indexOf("presto") > -1) {
+//				browser.setName("presto");
+//			} else if (ua.indexOf("gecko") > -1) {
+//				browser.setName("gecko");
+//			}
 		}
 
-		public void parseVersion() {
-
-			Matcher matcher = Pattern
-					.compile(
-							".+(rv|webos|applewebkit|presto|msie|konqueror)[\\/: ]([0-9a-z.]+)")
-					.matcher(ua);
-			if (matcher.find()) {
-				browser.setVersion(matcher.group(2));
-			}
-			Matcher matcher2 = Pattern
-					.compile(
-							".*(webos|fennec|series60|blackberry[0-9]*[a-z]*)[\\/: ]([0-9a-z.]+)")
-					.matcher(ua);
-			if (matcher2.find()) {
-				browser.setVersion(matcher2.group(2));
-			}
-			Matcher matcher3 = Pattern.compile("ms-rtc lm 8").matcher(ua);
-			if (matcher3.find()) {
-				browser.setVersion("8.0as7.0");
-			}
-		}
+//		public void parseVersion() {
+//
+//			Matcher matcher = Pattern
+//					.compile(
+//							".+(rv|webos|applewebkit|presto|msie|konqueror)[\\/: ]([0-9a-z.]+)")
+//					.matcher(ua);
+//			if (matcher.find()) {
+//				browser.setVersion(matcher.group(2));
+//			}
+//			Matcher matcher2 = Pattern
+//					.compile(
+//							".*(webos|fennec|series60|blackberry[0-9]*[a-z]*)[\\/: ]([0-9a-z.]+)")
+//					.matcher(ua);
+//			if (matcher2.find()) {
+//				browser.setVersion(matcher2.group(2));
+//			}
+//			Matcher matcher3 = Pattern.compile("ms-rtc lm 8").matcher(ua);
+//			if (matcher3.find()) {
+//				browser.setVersion("8.0as7.0");
+//			}
+//		}
 
 		public Browser build() {
 			parseOS();
 			parseBrowser();
-			parseVersion();
+//			parseVersion();
 			this.browser.lastNoticeTime = System.currentTimeMillis();
 			this.browser.id = String.valueOf(new Random().nextInt(10000));
 			return browser;
