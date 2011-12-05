@@ -5,43 +5,6 @@ $(function() {
 	var url = location.href;
 	var thead_html = $(".list thead .hDiv")[0].innerHTML;
 	
-	function iFrameHeight(id) { 
-		var ifm = parent.document.getElementById(id); 
-		document.title = ifm.contentDocument.title;
-		var subWeb = document.frames ? document.frames[id].document : ifm.contentDocument; 
-		if(ifm != null && subWeb != null) { 
-			ifm.height = subWeb.body.offsetHeight + 20; 
-		} 
-	};
-
-	function getLocalTime(nS) {
-	    var date = new Date(parseInt(nS));
-	    Date.prototype.format = function(format){ 
-	    	var o = { 
-		    	"M+" : this.getMonth()+1, //month 
-		    	"d+" : this.getDate(), //day 
-		    	"h+" : this.getHours(), //hour 
-		    	"m+" : this.getMinutes(), //minute 
-		    	"s+" : this.getSeconds(), //second 
-		    	"q+" : Math.floor((this.getMonth()+3)/3), //quarter 
-		    	"S" : this.getMilliseconds() //millisecond 
-	    	} 
-
-	    	if(/(y+)/.test(format)) { 
-	    		format = format.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length)); 
-	    	} 
-
-	    	for(var k in o) { 
-		    	if(new RegExp("("+ k +")").test(format)) { 
-		    		format = format.replace(RegExp.$1, RegExp.$1.length==1 ? o[k] : ("00"+ o[k]).substr((""+ o[k]).length)); 
-		    	} 
-	    	} 
-	    	return format; 
-	    } 
-
-	    return date.format("yyyy-MM-dd hh:mm:ss"); 
-	};
-	
 	function splitPaths(data){
 		var paths = data.path.split('/');
 		for(var l=0; l<paths.length; l++){

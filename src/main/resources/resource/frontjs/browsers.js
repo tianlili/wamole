@@ -1,26 +1,4 @@
 $(function() {
-	function iFrameHeight(id) { 
-		var ifm = parent.document.getElementById(id); 
-		document.title = ifm.contentDocument.title;
-		var subWeb = document.frames ? document.frames[id].document : ifm.contentDocument; 
-		if(ifm != null && subWeb != null) { 
-			ifm.height = subWeb.body.offsetHeight + 20; 
-		} 
-	} 
-	
-	function sortData(data, col, asc){
-		var temp;
-		for(var i=0; i<data.length; i++){
-			for(var j=i+1; j<data.length; j++){
-				if(asc && data[i][col] > data[j][col] || !asc && data[i][col] < data[j][col] ){
-					temp = data[i];
-					data[i] = data[j];
-					data[j] = temp;
-				}
-			}
-		}
-		return data;
-	};
 	
 	function insertData(data, col, asc){
 		var data = sortData(data, col, asc);

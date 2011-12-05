@@ -20,12 +20,18 @@
 	</script> 
 </head>
 <body>
-	<div class="banner">
-		<img src="../resource/frontcss/images/title.png" width=300px height=90px />
-	</div>
-	<table id="bodytable" width=100% height="400px" style="background-image: url(../resource/frontcss/images/logo.png); background-repeat: no-repeat; background-position: bottom left;">
+	<table width="1206px" class="banner">
 		<tr>
-			<td width=22% valign="top">
+			<td>
+				<div>
+					<img src="../resource/frontcss/images/title.png" width=300px height=90px />
+				</div>
+			</td>
+		</tr>
+	</table>
+	<table id="bodytable" width="1206px" height="400px" class="maintable" >
+		<tr>
+			<td width="22%" valign="top">
 				<div class="navigator">
 					<span><img src="../resource/frontcss/images/projects.ico" width="20px" height="20px"></span>
 					<span><a href = "#" style="display:inline;" onclick="getNavigation('project')">Projects Management</a></span>
@@ -43,15 +49,15 @@
 					<span><a href = "#" style="display:inline;" onclick="getNavigation('report')">Reports Management</a></span>
 				</div>
 			</td>
-			<td width=78% valign="top">
-				<iframe id="iframepage" src="/project" frameborder="no" border="0" width=100% onload="iFrameHeight('iframepage')">
+			<td width="78%" valign="top">
+				<iframe id="iframepage" src="/project" frameborder="no" border="0" width="100%" onload="iFrameHeight('iframepage')">
 				</iframe>
 			</td>
 		</tr>
 	</table>
-	<table width=100% style="padding-top:30px">
+	<table width="1206px" class="foottable">
 		<tr>
-			<td align="center"  class="foot">
+			<td align="center">
 				Powered by ge-qa &nbsp;&nbsp;&nbsp; 2011 &nbsp;&nbsp;&nbsp; &lt;ge-qa@baidu.com&gt;
 			</td>
 		</tr>
