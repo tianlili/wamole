@@ -45,10 +45,10 @@ public class ProjectResource {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public void setProject(Project p){
+	public void setProject(Project p) {
 		this.project = p;
 	}
-	
+
 	@GET
 	public Response get() {
 		StringWriter writer = new StringWriter();
@@ -66,7 +66,7 @@ public class ProjectResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response getData() {
-		return Response.ok(project).build();		
+		return Response.ok(project).build();
 	}
 
 	/**
@@ -104,6 +104,15 @@ public class ProjectResource {
 	public Response getDetail() {
 		return Response.ok("detail").build();
 	}
+
+	@GET
+	@Path("/parser")
+	public Response getParserType() {
+		return Response.ok(
+				JsonParser.classListToJson(
+						Wamole.getInstance().getParserTypeList()).toString())
+				.build();
+	}	
 
 	@GET
 	@Path("/files{path:[^?]*}")
