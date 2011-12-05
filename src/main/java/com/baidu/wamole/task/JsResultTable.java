@@ -1,6 +1,7 @@
 package com.baidu.wamole.task;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -13,14 +14,13 @@ import com.baidu.wamole.model.JsProject;
 import com.baidu.wamole.model.Kiss;
 import com.baidu.wamole.xml.XmlFile;
 import com.caucho.quercus.UnimplementedException;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 
 public class JsResultTable extends AbstractModel<JsProject> implements
 		ResultTable {
-	int fail;
-	int total;
-	long starttime;
-	long endtime;
+	transient int fail;
+	transient int total;
+	transient long starttime;
+	transient long endtime;
 	/**
 	 * 结果记录
 	 */
@@ -29,6 +29,7 @@ public class JsResultTable extends AbstractModel<JsProject> implements
 	private transient DeadLine deadLine; // 超时处理
 	private transient HashMap<String, JsResultBrowser> resultMap;
 	private transient final JsBuild b;
+	@SuppressWarnings("unused")
 	private transient final JsBuildStep bs;
 
 	public JsResultTable(List<Browser> browsers, JsBuild b, JsBuildStep bs) {
@@ -101,6 +102,10 @@ public class JsResultTable extends AbstractModel<JsProject> implements
 		return new XmlFile(new File(b.getRootDir(), "jsunit.xml"));
 	}
 	
+	public static JsResultTable  load() throws IOException{
+		return (JsResultTable) new XmlFile(new File("jsunit.xml")).read();
+	}
+	
 	@Exported
 	@Override
 	public long getEndtime() {
@@ -121,5 +126,13 @@ public class JsResultTable extends AbstractModel<JsProject> implements
 	@Exported
 	public int getFail(){
 		return this.fail;
+	}
+	
+	public static void main(String[] args) {
+		try {
+			JsResultTable table = JsResultTable.load();
+			System.out.println(table);
+		} catch (IOException e) {
+		}
 	}
 }

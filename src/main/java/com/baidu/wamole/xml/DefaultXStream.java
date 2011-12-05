@@ -21,13 +21,18 @@ public class DefaultXStream extends XStream {
 		alias("testcase", Result.class);
 		alias("jsunit", JsBuildStep.class);
 		
-		aliasAttribute(JsResultBrowser.class, "name", "browser");
+		aliasAttribute(JsResultBrowser.class, "name", "name");
+		aliasAttribute(JsResultBrowser.class, "tests", "tests");
+		aliasAttribute(JsResultBrowser.class, "failures", "failures");
+		aliasAttribute(JsResultBrowser.class, "errors", "errors");
+		aliasAttribute(JsResultBrowser.class, "time", "time");
 		aliasAttribute(JsResultBrowser.class, "total", "total");
-		aliasAttribute(JsResultBrowser.class, "fail", "fail");
-		aliasAttribute(JsResultTable.class, "total", "total");
-		aliasAttribute(JsResultTable.class, "fail", "fail");
-		aliasAttribute(JsResultTable.class, "starttime", "starttime");
-		aliasAttribute(JsResultTable.class, "endtime", "enttime");		
+		aliasAttribute(JsResultBrowser.class, "starttime", "starttime");
+		aliasAttribute(Result.class, "name", "name");
+		aliasAttribute(Result.class, "time", "time");
+		aliasAttribute(Result.class, "error", "error");
+		aliasAttribute(Result.class, "failure", "failure");
+		aliasAttribute(Result.class, "total", "total");
 		
 		addImplicitCollection(JsResultTable.class, "testsuites");
 		addImplicitCollection(JsResultBrowser.class, "testsuite");
