@@ -1,109 +1,88 @@
 package com.baidu.wamole.model;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.Collection;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.baidu.wamole.exception.TestException;
-import com.baidu.wamole.process.Processor;
+import com.baidu.wamole.process.TangramProcessor;
+import com.baidu.wamole.task.BuildQueue;
 import com.baidu.wamole.task.JsBuild;
 
 @XmlRootElement
 public class JsProject extends AbstractProject<JsProject, JsBuild> {
 
-	private Map<String, Kiss> kisses = null;
-	private boolean inited;
-	private Processor<Kiss> processor;
-
-	private Parser<Kiss, JsProject> parser;
-
-	public JsBuild getBuild() {
-		try {
-			return new JsBuild(this);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
+	public JsProject() {
 	}
 
-	/**
-	 * 项目初始化
-	 * 
-	 * @throws TestException
-	 */
-	private void init() throws TestException {
-		if (!inited) {
-			// kisses = new ConcurrentHashMap<String, Kiss>();
-			File root = new File(this.getPath());
-			if (root.isDirectory()) {
-				if (parser != null)
-					kisses = parser.parse(this);
-			} else {
-				throw new TestException("tangram project init fail!");
-			}
-		}
-
-		inited = true;
+	public JsProject(String name, String path) {
+		this.parent = Wamole.getInstance();
+		this.name = name;
+		this.path = path;
 	}
 
-	@Override
-	public Kiss getKiss(String kissName) {
-		if (!inited) {
-			try {
-				init();
-			} catch (TestException e) {
-				e.printStackTrace();
-			}
-		}
-		return kisses == null ? null : (Kiss) kisses.get(kissName);
-	}
+	private Parser<JsKiss> parser;
 
-	@Override
-	public List<Kiss> getKisses() {
-		if (!inited) {
-			try {
-				init();
-			} catch (TestException e) {
-				e.printStackTrace();
-			}
-		}
-		return new ArrayList<Kiss>(kisses.values());
-	}
-//
-//	@SuppressWarnings({ "unchecked", "rawtypes" })
-//	public void setParser(String parserType) {
-//		try {
-//			this.parser = (Parser) Class.forName(
-//					"com.baidu.wamole.model." + parserType).newInstance();
-//		} catch (InstantiationException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (IllegalAccessException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (ClassNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//	}
-	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void setParser(Parser parser){
+	public void setParser(Parser parser) {
 		this.parser = parser;
+		this.parser.parse(this);
+	}
+
+	@Override
+	public Parser<JsKiss> getParser() {
+		if (parser == null)
+			parser = new TangramParser();
+		return parser;
 	}
 
 	@Override
 	public String getExecutePage(String searchString) throws TestException {
 		Kiss kiss = this.getKiss(searchString);
+		if (kiss == null)
+			return null;
 		try {
-			String s = processor.process(kiss);
+			String s = new TangramProcessor().process(JsKiss.class.cast(kiss));
 			return s;
 		} catch (Exception e) {
-			throw new TestException("请检查配置信息是否正确，可能由于资源无法匹配导致.");
+			e.printStackTrace();
+			throw new TestException("请检查配置信息是否正确，可能由于资源无法匹配导致 : "
+					+ searchString);
+		}
+	}
+
+	public void addBuild(String filter) {
+		JsBuild build = new JsBuild(this, getUsableBuildId(), filter);
+		try {
+			build.save();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+//		this.getModels().add(build);
+		Wamole.getInstance().getModel(BuildQueue.class).addBuild(build);
+	}
+	
+	@Override
+	public Collection<Kiss> getKisses(String filter) {
+		if(filter == null)
+			return getKisses();
+		ArrayList<Kiss> kisses = new ArrayList<Kiss>();
+		for(Kiss k : this.getKisses()){
+			if(k.getName().startsWith(filter))
+				kisses.add(k);
+		}
+		return kisses;
+	}
+	
+	@Override
+	public void load() throws IOException {
+		try {
+			loadChildren("builds");
+			loadChildren("builds", "jsunit");
+		} finally {
+			buildInited = true;
 		}
 	}
 }

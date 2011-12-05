@@ -8,18 +8,20 @@ public class BuildThread extends Thread {
 	public void run() {
 		while (true) {
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(10);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			Queue<Build<?, ?>> queue = Wamole.getInstance().getBuildQueue();
+			Queue<Build<?,?>> queue = Wamole.getInstance()
+					.getModel(BuildQueue.class).getQueue();
 			if (!queue.isEmpty()) {
-				Build<?, ?> build = queue.peek();
+				System.out.println("queue running "+queue.size());
+				Build<?,?> build = queue.peek();
 				if (build.started()) {
 					if (build.finished()) {
 						queue.remove();
-						if(queue.peek() != null) {
-							queue.peek().build();	
+						if (queue.peek() != null) {
+							queue.peek().build();
 						}
 					}
 				} else {

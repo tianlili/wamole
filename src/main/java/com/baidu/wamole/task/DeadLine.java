@@ -10,7 +10,7 @@ import org.eclipse.jetty.util.log.Log;
  */
 public class DeadLine {
 	
-	private int interval;// 每个结果最多等待时间
+	private int interval;// 每个结果最多等待时间，单位时间秒
 	private long deadline;// 总体超时时间
 	private int count;
 	private long buffer;
@@ -22,12 +22,12 @@ public class DeadLine {
 	 * @param interval
 	 */
 	public DeadLine(int interval, int size) {
+		this.interval = interval*1000;
 		long now = System.currentTimeMillis();
-		buffer = interval * 2;
+		buffer = this.interval * 10;
 		this.size = size;
-		this.deadline = now + interval * size + buffer;
-		this.interval = interval;
-		Log.debug("constructor, deadline : " + new Date(this.deadline)
+		this.deadline = now + this.interval * size + buffer;
+		Log.info("constructor, deadline : " + new Date(this.deadline)
 				+ ",\n now : " + new Date(now));
 	}
 
@@ -37,9 +37,9 @@ public class DeadLine {
 	 * @return
 	 */
 	public boolean isDead() {
-		Log.debug("isDead now      : "
+		Log.info("isDead now      : "
 				+ new Date(System.currentTimeMillis()));
-		Log.debug("isDead deadline : " + new Date(deadline));
+		Log.info("isDead deadline : " + new Date(deadline));
 		return this.count > this.size || System.currentTimeMillis() > deadline;
 	}
 
@@ -50,7 +50,7 @@ public class DeadLine {
 	 * @return
 	 */
 	public long decrease(int count) {
-		Log.debug("this.count : " + this.count + ", count : "
+		Log.info("this.count : " + this.count + ", count : "
 				+ count);
 		if (count > this.count) {
 			this.count = count;
@@ -59,9 +59,9 @@ public class DeadLine {
 		}
 		// if (count > this.count) {
 		// deadline = deadline - interval * 1000 * (count - this.count);
-		// Log.debug("isDead now      : " + new
+		// Log.info("isDead now      : " + new
 		// Date(System.currentTimeMillis()));
-		// Log.debug("isDead deadline : " + new Date(deadline));
+		// Log.info("isDead deadline : " + new Date(deadline));
 		// this.count = count;
 		// }
 		// deadline = deadline - interval * 1000;

@@ -1,18 +1,20 @@
 package com.baidu.wamole.task;
 
+import com.baidu.wamole.model.Model;
 import com.baidu.wamole.model.Project;
 
 /**
  * 项目构建
  * @author dailiqi
  *
- * @param <B>
- * @param <P>
+ * @param <B> Build类型
+ * @param <P> Project类型
  */
-public interface Build<B extends Build<B ,P>, P extends Project<P ,B>> {
-	
+public interface Build<P extends Project<P, B>, B extends Build<P, B>> extends Model{
 	public P getProject();
 	public void build();
 	public boolean started();
 	public boolean finished();
+	//TODO 追加数据，all kiss，failed kiss，starttime，endtime，status
+	//需要在step中追加
 }

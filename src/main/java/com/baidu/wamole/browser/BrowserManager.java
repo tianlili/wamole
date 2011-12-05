@@ -1,26 +1,33 @@
 package com.baidu.wamole.browser;
 
+import java.io.File;
 import java.util.List;
 
 import com.baidu.wamole.exception.TestException;
-import com.baidu.wamole.model.Module;
+import com.baidu.wamole.model.AbstractModel;
 import com.baidu.wamole.model.JsKiss;
-import com.baidu.wamole.task.BuildStep;
+import com.baidu.wamole.model.Wamole;
 import com.baidu.wamole.task.JsBuildStep;
 import com.baidu.wamole.task.Result;
-import com.baidu.wamole.xml.CopyOnWriteList;
+import com.baidu.wamole.util.CopyOnWriteList;
+import com.caucho.quercus.UnimplementedException;
 
-public class BrowserManager implements Module {
+public class BrowserManager extends AbstractModel<Wamole> {
+	public static final String name = "browsers";
 	private CopyOnWriteList<StaticBrowser> statics;
-	private CopyOnWriteList<Browser> browsers;
+	private CopyOnWriteList<Browser> browsers;// = new CopyOnWriteList<Browser>();
 	private JsBuildStep buildStep;
 
-	/* package */BrowserManager() {
+	public BrowserManager() {
+		super(Wamole.getInstance(), name);
 	}
 
-	private int step = 20;
+	/**
+	 * 浏览器刷新间隔，单位时间秒
+	 */
+	private int step = 4;
 
-	private boolean autorun;
+	private boolean autorun = true;
 
 	public List<StaticBrowser> getStaticBrowsers() {
 		return statics.getView();
@@ -35,24 +42,16 @@ public class BrowserManager implements Module {
 		} else {
 			// 当result有结果
 			if (null != result && null != result.getName()) {
-				return (JsKiss) buildStep.getResultTable().store(result);
-				// result无结果，当前任务中需要该浏览器进行测试
-			} else if (buildStep.getResultTable().getBrowserIndex(
-					result.getBrowser()) > 0) {
+				buildStep.getResultTable().store(result);
+			}
+			// result无结果，当前任务中需要该浏览器进行测试
+			if (buildStep.getResultTable().hasKiss(result.getBrowser())) {
 				return (JsKiss) buildStep.getResultTable()
 						.getNextExcutableKiss(result.getBrowser());
 			} else {
 				return null;
 			}
 		}
-		// else {
-		// buildStep.getResultTable().store(null);
-		// }
-		// if (null != result.getName()) {
-		// return (TangramKiss) buildStep.getResultTable().store(result);
-		// } else {
-		// return null;
-		// }
 	}
 
 	public Browser getBrowser(String id) {
@@ -73,6 +72,8 @@ public class BrowserManager implements Module {
 	}
 
 	public List<Browser> getBrowsers() {
+		if(browsers == null)
+			browsers = new CopyOnWriteList<Browser>();
 		return browsers.getView();
 	}
 
@@ -133,11 +134,12 @@ public class BrowserManager implements Module {
 		}
 	}
 
-	public BuildStep getBuildStep() {
-		return buildStep;
-	}
-
 	public void setBuildStep(JsBuildStep buildStep) {
 		this.buildStep = buildStep;
+	}
+	
+	@Override
+	public File getRootDir() {
+		throw new UnimplementedException();
 	}
 }

@@ -1,12 +1,14 @@
 package com.baidu.wamole.task;
 
-import java.io.IOException;
-
 import com.baidu.wamole.model.JsProject;
 
-public class JsBuild extends
-		AbstractBuild<JsBuild, JsProject> {
-	public JsBuild(JsProject project) throws IOException {
-		super(project);
+public class JsBuild extends AbstractBuild<JsProject, JsBuild> {
+
+	public String filter;
+	public JsBuild(JsProject project, int id, String filter){
+		super(project, id);
+		this.filter = filter;
+		this.buildSteps.add(new JsBuildStep(this));
 	}
+	
 }

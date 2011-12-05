@@ -2,9 +2,9 @@ package com.baidu.wamole.resource;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -17,7 +17,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import com.baidu.wamole.data.JsonParser;
-import com.baidu.wamole.model.JsProject;
 import com.baidu.wamole.model.Project;
 import com.baidu.wamole.model.Wamole;
 import com.baidu.wamole.template.ConfigurationFactory;
@@ -78,8 +77,10 @@ public class RootResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response getProjectListData() {
-		List<Project<?, ?>> list = Wamole.getInstance().getProjects();
-		return Response.ok(JsonParser.listToJson(list).toString()).build();
+		return Response.ok(
+				JsonParser.listToJson(
+						Wamole.getInstance().getModels(Project.class))
+						.toString()).build();
 	}
 
 	/**
@@ -88,7 +89,7 @@ public class RootResource {
 	 * @return
 	 */
 	@GET
-	@Path("/addproject")
+	@Path("/addProject")
 	public Response getProjectAddPage() {
 		StringWriter writer = new StringWriter();
 		try {
@@ -102,7 +103,7 @@ public class RootResource {
 	}
 
 	/**
-	 * Project添加接口的数据接口
+	 * Project添加接口的数据接口，以form表单形式提供
 	 * 
 	 * @param name
 	 * @param path
@@ -110,19 +111,17 @@ public class RootResource {
 	 * @return
 	 */
 	@POST
-	@Path("/project")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public void addProject() {
-		JsProject project = JsProject.class.cast(JsonParser.jsonToObject(uriInfo).get(""));
-		if (project != null)
-			Wamole.getInstance().addProject(project);
+	@Path("/addProject")
+	@Produces(MediaType.TEXT_HTML)
+	public void addProject(@FormParam("name") String name, @FormParam("path") String path) {
+		//TODO add return info
+		Wamole.getInstance().addProject(name, path);
 	}
 
 	@Path("/project/{name}")
 	public ProjectResource getProjectByName(@PathParam("name") String name) {
 		ProjectResource resource = context.getResource(ProjectResource.class);
-		resource.setName(name);
+		resource.setProject(Wamole.getInstance().getModel(Project.class, name));
 		return resource;
 	}
 
@@ -136,15 +135,10 @@ public class RootResource {
 		return context.getResource(BrowserResource.class);
 	}
 
-	//
-	// @Path("/data")
-	// public DataResource getData() {
-	// return context.getResource(DataResource.class);
-	// }
-
 	@Path("/build")
 	public BuildResource build() {
-		return context.getResource(BuildResource.class);
+		BuildResource b = context.getResource(BuildResource.class);
+		return b;
 	}
 
 	@Path("/enum")

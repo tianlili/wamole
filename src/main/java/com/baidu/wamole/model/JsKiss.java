@@ -1,7 +1,8 @@
 package com.baidu.wamole.model;
 
 
-public class JsKiss extends DefaultKiss{
+
+public class JsKiss extends DefaultKiss<JsProject>{
 	
 	public JsKiss(JsProject project, String name) {
 		super(project, name);

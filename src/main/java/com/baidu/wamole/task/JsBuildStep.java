@@ -1,36 +1,35 @@
 package com.baidu.wamole.task;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
+
+import org.eclipse.jetty.util.log.Log;
 
 import com.baidu.wamole.browser.Browser;
 import com.baidu.wamole.browser.BrowserManager;
+import com.baidu.wamole.model.JsProject;
 import com.baidu.wamole.model.Wamole;
-import com.baidu.wamole.template.ConfigurationFactory;
-import com.baidu.wamole.xml.CopyOnWriteList;
 
-public class JsBuildStep extends BuildStep {
-	private CopyOnWriteList<String> browsers;
-	private List<String> actives;
-	private ResultTable resultTable;
-	private BrowserManager bm;
-	private List<String> browserList;
+public class JsBuildStep extends AbstractBuildStep<JsProject, JsBuild> {
+	private transient JsResultTable resultTable;
 
+	public JsBuildStep(JsBuild build) {
+		this.build = build;
+		this.project = build.getProject();
+	}
+
+	/**
+	 * 此方法用于确认用例列表和浏览器列表并定制一个执行结果对象
+	 */
 	@Override
-	public boolean preBuild(AbstractBuild<?, ?> build) {
-		bm = (BrowserManager) Wamole.getInstance().getModule(
-				BrowserManager.class);
-		browserList = new ArrayList<String>();
-		for (String string : browsers.getView()) {
-			browserList.add(string.toLowerCase());
-		}
-		actives = config(bm.getBrowsers());
-		resultTable = new ResultTableImpl(browserList, actives, build
-				.getProject().getKisses(), bm.getStep());
-		return actives.size() > 0;
+	public boolean preBuild() {
+		List<Browser> bs = Wamole.getInstance().getModel(BrowserManager.class)
+				.getBrowsers();
+		// TODO 后续追加浏览器配置并设置
+		resultTable = new JsResultTable(bs, build, this);
+
+		return bs.size() > 0;
 	}
 
 	public ResultTable getResultTable() {
@@ -38,44 +37,24 @@ public class JsBuildStep extends BuildStep {
 	}
 
 	@Override
-	public boolean perform(AbstractBuild<?, ?> build) {
-		bm.setBuildStep(this);
+	public boolean perform() {
+		Wamole.getInstance().getModel(BrowserManager.class).setBuildStep(this);
+		resultTable.starttime = new Date().getTime();
 		while (!resultTable.isDead()) {
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 		try {
+			Log.info("dead and save");
+			resultTable.endtime = new Date().getTime();
 			this.resultTable.save();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		bm.setBuildStep(null);
-		System.out.println("result table :" + this.resultTable.toString());
+		Wamole.getInstance().getModel(BrowserManager.class).setBuildStep(null);
 		return true;
-	}
-
-	/**
-	 * 根据配置信息配置，检测当前active的浏览器，将浏览器遍历出来
-	 * 
-	 * @param list
-	 * @return
-	 */
-	private List<String> config(List<Browser> list) {
-		List<String> result = new ArrayList<String>();
-		for (Browser browser : list) {
-			if (browserList.contains(browser.getName().toLowerCase())) {
-				if (browser.getName().toLowerCase().equals("msie")) {
-					result.add(browser.getName() + browser.getVersion());
-				} else {
-					result.add(browser.getName());
-				}
-			}
-		}
-		return result;
 	}
 }

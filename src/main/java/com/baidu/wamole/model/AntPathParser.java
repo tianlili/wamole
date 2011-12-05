@@ -8,11 +8,11 @@ import com.baidu.wamole.data.Exported;
 import com.baidu.wamole.data.Imported;
 import com.baidu.wamole.util.AntPathMatcher;
 
-public class AntPathParser implements Parser<DefaultKiss, Project<?, ?>> {
+public class AntPathParser implements Parser<DefaultKiss<?>> {
 	private String casepattern;
 	private String filepath;
 	private AntPathMatcher matcher;
-	private Map<String, DefaultKiss> kisses;
+	private Map<String, DefaultKiss<?>> kisses;
 	
 	@Imported
 	public void setCasepattern(String pattern){
@@ -20,8 +20,8 @@ public class AntPathParser implements Parser<DefaultKiss, Project<?, ?>> {
 	}
 
 	@Override
-	public Map<String, DefaultKiss> parse(Project<?, ?> project) {
-		kisses = new HashMap<String, DefaultKiss>();
+	public Map<String, Kiss> parse(Project<?,?> project) {
+		kisses = new HashMap<String, DefaultKiss<?>>();
 		String filepath = project.getPath();
 		parse(project, new File(filepath));
 		return null;
@@ -32,7 +32,8 @@ public class AntPathParser implements Parser<DefaultKiss, Project<?, ?>> {
 	 * 
 	 * @param file
 	 */
-	private void parse(Project<?, ?> project, File file) {
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private void parse(Project<?,?> project, File file) {
 		File[] files = file.listFiles();
 		for (File file2 : files) {
 			if (file2.isDirectory()) {

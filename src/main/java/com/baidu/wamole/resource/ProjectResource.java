@@ -2,7 +2,6 @@ package com.baidu.wamole.resource;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -14,7 +13,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import javax.ws.rs.ext.Providers;
 
 import com.baidu.wamole.data.JsonParser;
 import com.baidu.wamole.data.ProjectFileData;
@@ -34,25 +32,23 @@ import freemarker.template.Template;
  */
 @Produces("text/html;charset=UTF-8")
 public class ProjectResource {
-	private Project<?, ?> project;
+	protected Project<?, ?> project;
 	String name;
 	@Context
 	UriInfo uriInfo;
 	@Context
 	ResourceContext context;
-	@Context
-	Providers ps;
 
 	public void setName(String name) {
-		List<Project<?, ?>> list = Wamole.getInstance().getProjects();
-		for (Project<?, ?> project : list) {
-			if (project.getName().equals(name)) {
-				this.project = project;
-			}
-		}
+		this.project = Wamole.getInstance().getModel(Project.class, name);
 		this.name = name;
 	}
 
+	@SuppressWarnings("rawtypes")
+	public void setProject(Project p){
+		this.project = p;
+	}
+	
 	@GET
 	public Response get() {
 		StringWriter writer = new StringWriter();
@@ -70,7 +66,7 @@ public class ProjectResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response getData() {
-		return Response.ok(JsonParser.objToJson(project).toString()).build();
+		return Response.ok(project).build();		
 	}
 
 	/**
@@ -78,16 +74,16 @@ public class ProjectResource {
 	 * 
 	 * @return
 	 */
-	@SuppressWarnings("rawtypes")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void updateProject() {
 		if (project instanceof JsProject) {
+			@SuppressWarnings("rawtypes")
 			Parser parser = (Parser) JsonParser.jsonToObject(uriInfo).get(
 					"parser");
-			if (parser != null)
-				JsProject.class.cast(parser).setParser(parser);
+			if (project != null && parser != null)
+				JsProject.class.cast(project).setParser(parser);
 		}
 	}
 
@@ -98,20 +94,15 @@ public class ProjectResource {
 
 	@Path("/frame")
 	public FrameResource importCase() {
-		return context.getResource(FrameResource.class);
+		FrameResource fr = context.getResource(FrameResource.class);
+		fr.setProject(project);
+		return fr;
 	}
 
 	@GET
 	@Path("/detail")
 	public Response getDetail() {
 		return Response.ok("detail").build();
-	}
-
-	@GET
-	@Path("/build")
-	public Response build() {
-		Wamole.getInstance().addBuild(project.getBuild());
-		return Response.ok("").build();
 	}
 
 	@GET

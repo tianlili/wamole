@@ -1,51 +1,20 @@
 package com.baidu.wamole.task;
 
-import java.io.IOException;
-
 import com.baidu.wamole.model.Kiss;
+import com.baidu.wamole.model.Savable;
 
 /**
  * 存储结果的2维表
  * 
  * @author dailiqi
  */
-public interface ResultTable {
+public interface ResultTable extends Savable{
 	/**
-	 * 存储一个结果，并且对超时时间减少一个interval,并返回下个可执行的kiss
+	 * 存储一个结果，并且对超时时间减少一个interval
 	 * 
 	 * @param result
 	 */
-	public Kiss store(Result result);
-
-	/**
-	 * 获取浏览器Index
-	 * 
-	 * @param browser
-	 * @return
-	 */
-	public int getBrowserIndex(String browser);
-
-	/**
-	 * 获取CaseIndex
-	 * 
-	 * @param kissName
-	 * @return
-	 */
-	public int getKissIndex(String kissName);
-
-	/**
-	 * 根据index获取结果
-	 * 
-	 * @param browserIndex
-	 * @param kissIndex
-	 * @return
-	 */
-	public Result getResult(int browserIndex, int kissIndex);
-
-	// /**
-	// * 报告
-	// */
-	public void save() throws IOException;
+	public void store(Result result);
 
 	/**
 	 * 获取下个需要执行的kiss
@@ -53,7 +22,14 @@ public interface ResultTable {
 	 * @param browser 浏览器种类
 	 * @return
 	 */
-	public Kiss getNextExcutableKiss(String browser);
+	public Kiss getNextExcutableKiss(String executorName);
 
 	public boolean isDead();
+	
+	public boolean hasKiss(String executorName);
+	
+	public int getTotal();
+	public int getFail();
+	public long getStarttime();
+	public long getEndtime();
 }

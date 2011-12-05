@@ -1,23 +1,24 @@
 package com.baidu.wamole.model;
 
 
-public class DefaultKiss implements Kiss {
+public class DefaultKiss<P extends Project<P, ?>>
+		implements Kiss {
 
 	protected String name;
 
-	protected Project<?,?> project;
+	protected P project;
 
-	public DefaultKiss(Project<?,?> project, String name) {
-		this.name = name;
+	public DefaultKiss(P project, String name) {
 		this.project = project;
+		this.name = name;
+	}
+
+	public P getProject() {
+		return project;
 	}
 
 	@Override
 	public String getName() {
-		return name;
-	}
-
-	public Project<?,?> getProject() {
-		return this.project;
+		return this.name;
 	}
 }

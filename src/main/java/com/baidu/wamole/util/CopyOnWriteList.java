@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.baidu.wamole.xml;
+package com.baidu.wamole.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,7 +29,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * {@link List}-like implementation that has copy-on-write semantics.
@@ -151,6 +150,6 @@ public class CopyOnWriteList<E> implements Iterable<E> {
 		return core.size();
 	}
 
-	private static final Logger LOGGER = Logger.getLogger(CopyOnWriteList.class
-			.getName());
+//	private static final Logger LOGGER = Logger.getLogger(CopyOnWriteList.class
+//			.getName());
 }

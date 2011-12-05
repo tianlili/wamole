@@ -18,11 +18,11 @@ public class WamoleTest {
 		File file = new File(this.getClass().getResource("").toURI());
 		wamole = new Wamole(file);
 	}
-
-	@Test
-	public void loadTest() {
-//		wamole.getConfig()wamole;
-		Assert.assertEquals(1, wamole.getProjectList().size());
-		Assert.assertEquals("t", wamole.getProjectList().get(0).getName());
-	}
+//
+//	@Test
+//	public void loadTest() {
+////		wamole.getConfig()wamole;
+//		Assert.assertEquals(1, wamole.getProjectList().size());
+//		Assert.assertEquals("t", wamole.getProjectList().get(0).getName());
+//	}
 }

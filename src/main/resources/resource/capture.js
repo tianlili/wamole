@@ -13,7 +13,7 @@ var probe = {
 	 * 
 	 * @returns {___anonymous326_559}
 	 */
-	interval : $("#step").val(),
+	interval : $("#step").val()*1000,
 	/**
 	 * 一次服务器心跳
 	 * 
@@ -29,42 +29,29 @@ var probe = {
 			fail : data ? data[0] : 1,
 			total : data ? data[1] : 1,
 			cov : cov
-		// caseinfo : probe.testframe.src// ,
-		// cov : probe.js
 		} : {};
-//		options.interval = probe.interval;
-//		options.browser = probe.browserName;
-//		options.id = probe.browserId;
-//		options.name = probe.kiss;
 		delete probe.starttime;
 		$.ajax({
-//			url : probe.srvApi,
 			url : location.pathname,
 			data : options,
 			type : 'put',
 			success : function(text) {
-					probe.lastNotice = new Date().getTime();
-					setTimeout(function() {
-						probe.runtest(text);
-						if(null != text && "" != text) {
-							probe.kiss = text;
-						}
-					}, 0);
-				},
-			error : function(text) {
-				if(text.status == 404) {
-					window.close();
-				}
-//				alert(text);
+				probe.lastNotice = new Date().getTime();
+				setTimeout(function() {
+					probe.runtest(text);
+					if(null != text && "" != text) {
+						probe.kiss = text;
+					}
+				}, 0);
+			},
+			error: function(xhr){
+				//在服务器重启后，此处用于重新注册浏览器到新的id
+				if(xhr.status == 404)
+					location.href = "/browser/register";
 			}
-			});
+		});
 		probe.timeoutHandle = setTimeout(probe.beat, probe.interval);
 	},
-//	register : function(id) {
-//		var search = location.search;
-//		search = search + "&id=" +id;
-//		location.search = search;
-//	},
 	/**
 	 * 执行一个用例
 	 * 

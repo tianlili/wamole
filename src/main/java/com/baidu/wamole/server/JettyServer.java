@@ -41,7 +41,7 @@ public class JettyServer {
 		collection.addHandler(new CommonResouceHandlerWrapper().getHandler());
 		
 		//project resource support
-		for(Project<?,?> project : Wamole.getInstance().getProjects()){//getProjectList().getView()){
+		for(Project<?,?> project : Wamole.getInstance().getModels(Project.class)){//getProjectList().getView()){
 			addPath(project);
 		}
 		
@@ -70,7 +70,7 @@ public class JettyServer {
 		public void handle(String target, Request baseRequest,
 				HttpServletRequest request, HttpServletResponse response)
 				throws IOException, ServletException {
-			System.out.println(target);
+//			System.out.println(target);
 			SubServer subServer = null;
 			for (JettyServer.SubServer ss : vector) {				
 				if (target.startsWith(ss.getURIPrefix())) {

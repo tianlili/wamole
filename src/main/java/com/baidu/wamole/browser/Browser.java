@@ -9,9 +9,17 @@ import org.eclipse.jetty.util.log.Log;
 
 import com.baidu.wamole.data.Exported;
 import com.baidu.wamole.exception.TestException;
+import com.baidu.wamole.model.Executor;
 import com.baidu.wamole.model.Wamole;
 
-public class Browser {
+/**
+ * 通过BrowserManager动态管理浏览器
+ * 
+ * @author yangbo
+ * 
+ */
+public class Browser implements Executor{
+
 	public static BrowserBuilder build(String ip, String userAgent) {
 		Browser browser = new Browser();
 		browser.setIp(ip);
@@ -45,18 +53,15 @@ public class Browser {
 		this.lastNoticeTime = lastNoticeTime;
 	}
 
-//	public void setActive(boolean active) {
-//		this.active = active;
-//	}
 	@Exported
 	public boolean isActive() {
-//		return active;
+		// return active;
 		long buffer = System.currentTimeMillis() - lastNoticeTime;
-		BrowserManager bm = (BrowserManager) Wamole.getInstance().getModule(
-				BrowserManager.class);
+		BrowserManager bm = Wamole.getInstance().getModel(BrowserManager.class,
+				"browsers");
 		long step = bm.getStep();
-		if(buffer > step *2) {
-			//当不active时 从管理中删除
+		if (buffer > step * 2) {//
+			// 当不active时 从管理中删除
 			bm.removeBrowser(this.id);
 			return false;
 		}

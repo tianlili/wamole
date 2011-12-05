@@ -19,7 +19,7 @@ public class TaskResource {
 	public Response addTask(@PathParam("project") String name) {
 //		Project<?, ?> project = Wamole.getInstance().getProject(name);
 //		Task task = new Task(project);
-		System.out.println("add");
+//		System.out.println("add");
 		return Response.ok("").build();
 	}
 	

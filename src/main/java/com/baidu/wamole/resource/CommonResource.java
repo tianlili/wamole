@@ -8,7 +8,7 @@ import javax.ws.rs.PathParam;
 public class CommonResource {
 	@GET
 	public String get(@PathParam("resource") String resourcePath) {
-		System.out.println("resource path: " + resourcePath);
+//		System.out.println("resource path: " + resourcePath);
 		return resourcePath;
 	}
 }
