@@ -5,15 +5,6 @@ $(function() {
 	var url = location.href;
 	var thead_html = $(".list thead .hDiv")[0].innerHTML;
 	
-	function iFrameHeight(id) { 
-		var ifm = parent.document.getElementById(id); 
-		document.title = ifm.contentDocument.title;
-		var subWeb = document.frames ? document.frames[id].document : ifm.contentDocument; 
-		if(ifm != null && subWeb != null) { 
-			ifm.height = subWeb.body.offsetHeight + 20; 
-		} 
-	};
-
 	function drawArea(){
 		 var chart = new Highcharts.Chart({
 		      chart: {
