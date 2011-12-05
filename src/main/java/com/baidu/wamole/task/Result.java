@@ -1,22 +1,26 @@
 package com.baidu.wamole.task;
 
 /**
- * record kiss result
+ * testcase
+ * <ul>字段列表
+ * <li>
  * @author yangbo
  *
  */
 public class Result {
 	private String name;
-	private int fail;
+	private int failure;
+	private int error = 0;
 	private int total;
-	private String browser;
-	private long timeStamp;
-	private String task;
-	private boolean isError;
+	private float time;
+	
+	private transient String browser;
+	private transient String task;
+	private transient boolean isError;
 
 	@Override
 	public String toString() {
-		return "result: name = " + name + "	fail:" + fail + "	total:" + total;
+		return "result: name = " + name + "	fail:" + failure + "total:" + total;
 	}
 
 	public String getName() {
@@ -28,7 +32,7 @@ public class Result {
 	}
 
 	public int getFail() {
-		return fail;
+		return failure;
 	}
 
 	public void setName(String name) {
@@ -36,7 +40,7 @@ public class Result {
 	}
 
 	public void setFail(int fail) {
-		this.fail = fail;
+		this.failure = fail;
 	}
 
 	public void setTotal(int total) {
@@ -51,12 +55,16 @@ public class Result {
 		this.browser = browser;
 	}
 
-	public long getTimeStamp() {
-		return timeStamp;
+	public float getTimeStamp() {
+		return time;
 	}
 
+	/**
+	 * 记录时长
+	 * @param timeStamp 单位毫秒
+	 */
 	public void setTimeStamp(long timeStamp) {
-		this.timeStamp = timeStamp;
+		this.time = ((float)timeStamp)/1000;
 	}
 
 	public String getTask() {
