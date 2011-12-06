@@ -3,6 +3,7 @@ package com.baidu.wamole.task;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.eclipse.jetty.util.log.Log;
@@ -18,6 +19,8 @@ public abstract class AbstractBuild<P extends AbstractProject<P, B>, B extends A
 	protected boolean started;
 	protected int id;
 	protected List<BuildStep<P, B>> buildSteps = new ArrayList<BuildStep<P, B>>();
+	protected long starttime;
+	protected long endtime;
 
 	@Exported
 	public int getId() {
@@ -30,6 +33,7 @@ public abstract class AbstractBuild<P extends AbstractProject<P, B>, B extends A
 	protected AbstractBuild(P project, int id) {
 		super(project, Integer.toString(id));
 		this.id = id;
+		this.starttime = new Date().getTime();
 	}
 
 	public P getProject() {
@@ -44,6 +48,7 @@ public abstract class AbstractBuild<P extends AbstractProject<P, B>, B extends A
 			step.perform();
 		}
 		this.finished = true;
+		this.endtime = new Date().getTime();
 		try {
 			this.save();
 		} catch (IOException e) {
@@ -55,6 +60,16 @@ public abstract class AbstractBuild<P extends AbstractProject<P, B>, B extends A
 	@Override
 	public boolean finished() {
 		return this.finished;
+	}
+	
+	@Exported
+	public long getStarttime(){
+		return this.starttime;
+	}
+	
+	@Exported
+	public long getEndtime(){
+		return this.endtime;
 	}
 
 	@Override
