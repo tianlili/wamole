@@ -48,20 +48,20 @@ public class BrowserResource {
 	@Context
 	HttpServletRequest request;
 
+	/**
+	 * 获取浏览器列表的HTML页面
+	 * 
+	 * @return
+	 */
 	@GET
 	public Response get() {
 		StringWriter writer = new StringWriter();
 		try {
 			Template template = ConfigurationFactory.getInstance().getTemplate(
 					"pages/page/browsers.html");
-			// Map<String, Object> map = new HashMap<String, Object>();
-			// map.put("project", project);
-			// template.process(map, writer);
 			template.dump(writer);
 		} catch (IOException e) {
 			e.printStackTrace();
-			// } catch (TemplateException e) {
-			// e.printStackTrace();
 		}
 		return Response.ok(writer.getBuffer().toString()).build();
 	}

@@ -114,6 +114,11 @@ public class Browser implements Executor{
 	public void setId(String id) {
 		this.id = id;
 	}
+	
+	@Exported
+	public String getType(){
+		return getClass().getName();
+	}
 
 	public boolean isEqual(Browser another) {
 		if (another.getIp().equals(this.getIp())

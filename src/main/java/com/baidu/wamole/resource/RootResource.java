@@ -34,6 +34,11 @@ public class RootResource {
 	@Context
 	ResourceContext context;
 
+	/**
+	 * 获取index页的HTML页面
+	 * 
+	 * @return
+	 */
 	@GET
 	public Response getView() {
 		StringWriter writer = new StringWriter();
@@ -84,7 +89,7 @@ public class RootResource {
 	}
 
 	/**
-	 * 请求Project添加页
+	 * 请求添加项目的HTML页面
 	 * 
 	 * @return
 	 */

@@ -49,18 +49,6 @@ public class ProjectResource {
 		this.project = p;
 	}
 
-	@GET
-	public Response get() {
-		StringWriter writer = new StringWriter();
-		try {
-			Template template = ConfigurationFactory.getInstance().getTemplate(
-					"pages/page/project.html");
-			template.dump(writer);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return Response.ok(writer.getBuffer().toString()).build();
-	}
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -114,6 +102,11 @@ public class ProjectResource {
 				.build();
 	}	
 
+	/**
+	 * 获取项目文件列表的HTML页面
+	 * 
+	 * @return
+	 */
 	@GET
 	@Path("/files{path:[^?]*}")
 	public Response getFile() {
